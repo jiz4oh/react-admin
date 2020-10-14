@@ -1,8 +1,8 @@
-import {notification} from "antd";
+import { notification } from "antd";
 import _ from 'lodash'
 
 import FormBuilder from "../../../common/js/builder/FormBuilder";
-import {renderInputBy} from "../../inputs";
+import { renderInputBy } from "../../inputs";
 import i18n from "../../../common/js/i18n";
 
 const inputsMap = new Map()
@@ -10,18 +10,18 @@ const inputsMap = new Map()
 export default {
   notifySuccess: (operationName = '操作') => {
     notification.success({
-      message: `${operationName}成功`,
-      description: `成功${operationName}1条数据`,
-      duration: 3,
-    })
+                           message: `${operationName}成功`,
+                           description: `成功${operationName}1条数据`,
+                           duration: 3,
+                         })
   },
 
   notifyError: (operationName = '操作') => {
     notification.error({
-      message: `${operationName}失败`,
-      description: `请检查您的输入`,
-      duration: 3,
-    })
+                         message: `${operationName}失败`,
+                         description: `请检查您的输入`,
+                         duration: 3,
+                       })
   },
 
   renderAntdError(errorMap = {}) {
@@ -29,9 +29,9 @@ export default {
     let errors = []
     _.forEach(errorMap, (value, key) =>
       errors.push({
-        name: key,
-        errors: value
-      }))
+                    name: key,
+                    errors: value
+                  }))
 
     return errors
   },
@@ -54,21 +54,21 @@ export default {
   createInputs(tableName, type, fields) {
     // 存储 input class
     return FormBuilder({
-      fields,
-      tableName,
-      onTypecast: renderInputBy,
-      formType: type
-    })
+                         fields,
+                         tableName,
+                         onTypecast: renderInputBy,
+                         formType: type
+                       })
   },
 
   /**
    *
    * @param data {Object} 远程下发的数据
    * @param inputsConfig {Object[]} 前端定义的 input 结构
-   * @param tableName {String} 当前表名，
+   * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
    * @return {*[]}
    */
-  getInputsConfigFromRemote: (data, inputsConfig, tableName) => {
+  getInputsConfigFromRemote: (data, inputsConfig, model) => {
     // 远程获取表单字段类型
     const inputMap = data['resource_type']
     const belongsToCollection = _.cloneDeep(data['belongs_to']) || {}
@@ -91,7 +91,7 @@ export default {
             as: 'select',
             rules: [{
               required: true,
-              message: `必须填写所属${i18n.t(`activerecord.attributes.${tableName}.${key}`)}`
+              message: `必须填写所属${i18n.t(`${model.i18nKey}.${model.name}.${key}`)}`
             }],
             collection: collection,
           }

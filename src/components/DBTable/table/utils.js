@@ -151,7 +151,7 @@ export default {
     }
   },
 
-  getColumns: (tableName, preColumns = []) => {
+  getColumns: (model, preColumns = []) => {
     let columns = [...preColumns]
     if (_.isEmpty(columns)) {
       logger.warn(`需要配置 columns`)
@@ -162,7 +162,7 @@ export default {
       column.dataIndex = column.name || column.dataIndex
       delete column.name
       // 默认使用 i18n 翻译，可通过 columns 中的 title 设置覆盖
-      column.title = column.title || i18n.t(`activerecord.attributes.${tableName}.${column.dataIndex}`) || column.dataIndex
+      column.title = column.title || i18n.t(`${model.i18nKey}.${model.name}.${column.dataIndex}`) || column.dataIndex
 
       switch (column.type) {
         case 'image':

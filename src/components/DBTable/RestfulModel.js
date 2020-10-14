@@ -8,6 +8,7 @@ class RestfulModel {
     const {name, url} = config
     this.name = name
     this.url = url
+    this.i18nKey = 'activerecord.attributes'
   }
 
   index({onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {

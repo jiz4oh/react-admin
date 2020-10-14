@@ -96,7 +96,7 @@ class RestfulTable extends React.PureComponent {
     canShow && actions.push(showAction(this.handleClickShow))
 
     // 获取表格具体列
-    this.columns = utils.getColumns(model.name, columns)
+    this.columns = utils.getColumns(model, columns)
     // 添加索引列
     this.columns.unshift({
                            title: '#',

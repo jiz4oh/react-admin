@@ -60,7 +60,7 @@ class RansackFilter extends React.PureComponent {
 
   render() {
     const meta = {
-      tableName: this.props.model.name,
+      model: this.props.model,
       columns: 3,
       fields: this.props.fields,
       onTypecast: renderFilterBy,

@@ -10,12 +10,12 @@ const logger = Logger.getLogger('FormBuilder')
 /**
  * 根据配置生成 filters 组件
  * @param field {Object} 字段的配置
- * @param tableName {String} 表明，用于查询 i18n 翻译
+ * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
  * @param onTypecast {Function} 类型转换使用的函数
  * @param formType {String} 结合 field 判断当前 form 是否渲染 builder
  * @returns {ReactNode}
  */
-const renderField = (field, {tableName, onTypecast, formType}) => {
+const renderField = (field, {model, onTypecast, formType}) => {
   const {
           name,
           label,
@@ -35,7 +35,7 @@ const renderField = (field, {tableName, onTypecast, formType}) => {
   const inputComponentConfig = {
     name: name,
     // 默认使用 i18n 翻译，可通过 formConfig 中的 label 设置覆盖
-    label: label || i18n.t(`activerecord.attributes.${tableName}.${name}`) || name,
+    label: label || i18n.t(`${model.i18nKey}.${model.name}.${name}`) || name,
     ...rest
   }
 
