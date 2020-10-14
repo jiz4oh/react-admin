@@ -1,0 +1,20 @@
+.image-preview-modal {
+  .ant-modal-close {
+    width: 24px;
+    height: 24px;
+
+    .ant-modal-close-x {
+      width: 100%;
+      height: 100%;
+      line-height: 0;
+
+      span {
+        margin: auto;
+
+        svg {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}

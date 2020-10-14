@@ -1,0 +1,17 @@
+$sidebarCollapsible: true; // 侧边栏是否可折叠, 这个变量是通过webpack less-loader传进来的
+$triggerBarHeight: 42px;
+
+.ant-layout-sidebar-trigger {
+  position: fixed;
+  text-align: center;
+  width: inherit;
+  bottom: 0;
+  cursor: pointer;
+  height: $triggerBarHeight;
+  line-height: 48px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  @if $sidebarCollapsible != true {
+    display: none;
+  }
+}

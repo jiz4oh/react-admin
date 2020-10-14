@@ -1,0 +1,60 @@
+.M-header {
+  padding: 0;
+  background: #fff;
+
+  .M-header-left {
+    float: left;
+  }
+
+  .M-header-right {
+    float: right;
+  }
+
+  .M-header-userMenu {
+    background: transparent;
+    color: #fff;
+    line-height: 64px;
+    display: inline-block;
+
+    .ant-menu-item {
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .M-header-avatar {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    line-height: 1;
+    border-radius: 500px;
+    white-space: nowrap;
+    font-weight: bold;
+
+    i {
+      position: absolute;
+      // 放入右下
+      left: auto;
+      top: auto;
+      bottom: 0;
+      right: 0;
+
+      width: 10px;
+      height: 10px;
+      margin: 1px;
+
+      border-width: 2px;
+      border-style: solid;
+      border-radius: 100%;
+      border-color: #ffffff;
+
+      background-color: #6cc788;
+    }
+
+    img {
+      border-radius: 500px;
+      width: 100%;
+    }
+  }
+}

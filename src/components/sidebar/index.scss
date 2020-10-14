@@ -1,0 +1,71 @@
+@import "logo_bar";
+@import "trigger_bar";
+
+@mixin sidebarBase {
+  background: #404040;
+  position: absolute;
+  overflow: auto;
+  padding-bottom: 24px;
+  transition: all 0.3s ease;
+
+  @if $sidebarCollapsible = true {
+    height: calc(100% - #{$triggerBarHeight});
+  } @else if $sidebarCollapsible = false {
+    height: 100%;
+  }
+}
+
+.ant-layout-sidebar {
+  width: 224px; // 正常的侧边栏宽度
+  @include sidebarBase;
+
+  > .ant-menu {
+    margin-bottom: 20px;
+    color: #fff;
+    background-color: transparent;
+
+    .ant-menu-item {
+      margin: 16px 0;
+
+      .nav-text {
+        vertical-align: baseline;
+        display: inline-block;
+        color: #fff;
+      }
+
+      .anticon {
+        transition: font-size .3s;
+      }
+    }
+
+    .invisible-nav-text {
+      font-size: 0;
+    }
+  }
+}
+
+.ant-layout-sidebar-collapse {
+  width: 64px; // 侧边栏折叠时的宽度
+  @include sidebarBase;
+
+  > .ant-menu {
+    .anticon {
+      font-size: 16px;
+      display: inline-block;
+    }
+
+    .ant-menu-submenu-title:after {
+      content: ''; // 去除submenu右方的箭头提示
+    }
+
+    .nav-text {
+      display: none; // 折叠时菜单项文字隐藏
+    }
+
+    .invisible-nav-text {
+      font-size: 16px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+  }
+}

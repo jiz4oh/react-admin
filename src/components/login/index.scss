@@ -1,0 +1,102 @@
+.P-login-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 40px 40px 15px 40px;
+  background-color: #f0f8ff;
+  transition: all 1s;
+  backface-visibility: hidden;
+
+  .P-owl {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    margin-left: -111px;
+    width: 211px;
+    height: 108px;
+    background-image: url("./img/owl-login.png");
+
+    .P-hand-container {
+      > div {
+        position: absolute;
+        left: 14px;
+        bottom: -8px;
+        width: 34px;
+        height: 34px;
+        border-radius: 40px;
+        background-color: #472d20;
+        transition: .3s ease-out;
+        transform: scaleY(0.6);
+
+        &.P-hand-left {
+          left: 170px;
+
+          &.P-hand-focus {
+            transform: translateX(-42px) translateY(-15px) scale(0.7);
+          }
+        }
+
+        &.P-hand-right.P-hand-focus {
+          transform: translateX(42px) translateY(-15px) scale(0.7);
+        }
+      }
+    }
+
+    .P-arms-container {
+      position: absolute;
+      top: 58px;
+      height: 41px;
+      width: 100%;
+      overflow: hidden;
+
+      > div {
+        position: absolute;
+        top: 40px;
+        width: 40px;
+        height: 65px;
+        transition: 0.3s ease-out;
+        background-image: url("./img/owl-login-arm.png");
+
+        &.P-arms-left {
+          left: 158px;
+          transform: rotate(20deg) scaleX(-1);
+
+          &.P-arms-focus {
+            transform: translateY(-40px) translateX(-40px) scaleX(-1)
+          }
+        }
+
+        &.P-arms-right {
+          left: 20px;
+          transform: rotate(-20deg);
+
+          &.P-arms-focus {
+            transform: translateY(-40px) translateX(40px);
+          }
+        }
+      }
+    }
+  }
+
+  .P-focus {
+    transform: scale(0.6);
+    width: 40px;
+  }
+
+  .ant-input {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .P-bottom {
+    padding: 15px 0;
+    text-align: right;
+  }
+
+  #verify-code {
+    height: 38px;
+  }
+}

@@ -1,0 +1,13 @@
+.M-filter-container {
+  background: #f8f8f8;
+  padding: 16px 8px;
+
+  button {
+    margin: 0 0 0 8px;
+  }
+
+  // 覆盖 ant design 默认的 label 字体大小
+  .ant-form-item-label > label {
+    font-size: 12px;
+  }
+}
