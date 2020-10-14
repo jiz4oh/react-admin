@@ -155,7 +155,11 @@ class RestfulTable extends React.PureComponent {
       nextPage,
       total,
       pageSize,
-      onChange: this.handlePageChange
+      onChange: this.handlePageChange,
+      responsive: true,
+      showSizeChanger: true,
+      onShowSizeChange: this.handleSizeChange,
+      showQuickJumper: true,
     }
   }
 
@@ -163,7 +167,14 @@ class RestfulTable extends React.PureComponent {
   handlePageChange = (page) => {
     logger.debug(`切换到第${page}页`)
     this.fetchTableData({
-                          page: page
+                          page
+                        })
+  }
+
+  handleSizeChange = (page, size) => {
+    logger.debug(`页码尺寸改为 ${size}`)
+    this.fetchTableData({
+                          size,
                         })
   }
 
