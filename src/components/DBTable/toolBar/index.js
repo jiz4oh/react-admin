@@ -1,1 +1,1 @@
-export {default as RestfulToolBar} from './RestfulToolBar'
+export {default as ToolBar} from './ToolBar'

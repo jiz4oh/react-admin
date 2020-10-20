@@ -1,4 +1,4 @@
-export {RestfulToolBar} from './toolBar'
+export {ToolBar} from './toolBar'
 export {RestfulTable} from './table'
 export {Filter} from './filter'
 export {RestfulEditForm, RestfulNewForm} from './form'
