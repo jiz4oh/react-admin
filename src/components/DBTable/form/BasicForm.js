@@ -10,7 +10,7 @@ const logger = Logger.getLogger('form')
 
 /**
  *
- * @param tableName {String} 表名，用于查找 i18n 翻译
+ * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
  * @param type {String} 当前 form 的类型，用于 field 中指定 form 渲染
  * @param children {ReactNode[]} 需要渲染的组件数组
  * @param form {Object} Antd 的 FormInstance
@@ -21,7 +21,7 @@ const logger = Logger.getLogger('form')
  * @param initialValues {[]} 表单默认值
  */
 function BasicForm({
-                     tableName,
+                     model,
                      type,
                      children,
                      form,
@@ -93,7 +93,7 @@ function BasicForm({
         onFinishFailed={finishFailed}
         scrollToFirstError
       >
-        {children || formUtils.getInputs(tableName, type, fields)}
+        {children || formUtils.getInputs(model, type, fields)}
         <Row
           align='middle'
           justify='center'

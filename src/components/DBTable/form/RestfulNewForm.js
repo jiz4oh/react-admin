@@ -65,7 +65,7 @@ function RestfulNewForm({
   return (
     <BasicForm
       type={'new'}
-      tableName={model.name}
+      model={model}
       form={form}
       fields={inputsConfig}
       onFinish={onFinish}
