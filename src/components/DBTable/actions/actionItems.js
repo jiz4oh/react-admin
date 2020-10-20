@@ -30,3 +30,21 @@ export const renderNewAction = onClickFn =>
     >
       <PlusOutlined/>新建
     </Button>
+
+export const renderSubmitAction = onclickFn =>
+  () =>
+    <Button
+      key='submitBtn'
+      type='primary'
+      onClick={onclickFn}
+    >
+      提交
+    </Button>
+
+export const renderBackAction = onClickFn =>
+  () =>
+    <Button
+      onClick={onClickFn}
+    >
+      返回
+    </Button>

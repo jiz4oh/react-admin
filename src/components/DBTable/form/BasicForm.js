@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom'
-import { Form, Button, Row, Space, Spin } from "antd";
+import { Form, Row, Space, Spin } from "antd";
 import _ from 'lodash'
 
 import formUtils from './utils'
 import Logger from "../../../common/js/Logger";
+import { renderBackAction, renderSubmitAction } from "../actions";
 
 const logger = Logger.getLogger('form')
 
@@ -19,6 +20,7 @@ const logger = Logger.getLogger('form')
  * @param fields {Object[]} form 表单字段，children 字段优先
  * @param isCloseForm {Boolean} 是否显示加载中，防抖
  * @param initialValues {[]} 表单默认值
+ * @param footer {Function[]} form 表单底部组件列表
  */
 function BasicForm({
                      model,
@@ -30,6 +32,7 @@ function BasicForm({
                      onFinishFailed,
                      isCloseForm,
                      initialValues = [],
+                     footer,
                    }) {
 
   const history = useHistory()
@@ -82,6 +85,11 @@ function BasicForm({
     }
   }, [onFinishFailed])
 
+  // 默认添加提交，返回按钮
+  if (_.isUndefined(footer)) {
+    footer = [renderSubmitAction(handleSubmit), renderBackAction(history.goBack)]
+  }
+
   return (
     <Spin spinning={spinning} delay={100}>
       <Form
@@ -94,15 +102,22 @@ function BasicForm({
         scrollToFirstError
       >
         {children || formUtils.getInputs(model, type, fields)}
-        <Row
-          align='middle'
-          justify='center'
-        >
-          <Space>
-            <Button type='primary' onClick={handleSubmit}>提交</Button>
-            <Button onClick={history.goBack}>返回</Button>
-          </Space>
-        </Row>
+        {
+          !_.isEmpty(footer) && (
+            <Row
+              align='middle'
+              justify='center'
+            >
+              <Space>
+                {
+                  footer.map(
+                    (Action, index) => <Action key={Action.name || index}/>
+                  )
+                }
+              </Space>
+            </Row>
+          )
+        }
       </Form>
     </Spin>
   )

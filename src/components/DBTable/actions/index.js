@@ -7,6 +7,11 @@
  */
 
 export { renderDeleteAction } from './batchActions'
-export { renderNewAction, renderRefreshAction } from './actionItems'
+export {
+  renderNewAction,
+  renderRefreshAction,
+  renderSubmitAction,
+  renderBackAction
+} from './actionItems'
 export { renderEditAction, renderShowAction } from './actions'
 
