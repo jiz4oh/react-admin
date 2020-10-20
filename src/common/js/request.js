@@ -139,6 +139,7 @@ const asyncRequest = ({
   method.toLowerCase() === 'get' ? options.params = data : options.data = data
   options.headers = _addDefaultHeaders(headers)
   options.url = _addApiPathToUrl(apiPath, url)
+  options.method = method.toLowerCase()
 
   try {
     axios(options).then(response => {
