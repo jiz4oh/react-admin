@@ -8,10 +8,12 @@ import './index.scss'
  *
  * @param actionItems {[]} 右侧按钮
  * @param batchActions {[]} 左侧批量操作按钮
+ * @param value {Object[]} 批量操作的记录
  */
 function ToolBar({
                    actionItems = [],
                    batchActions = [],
+                   value,
                  }) {
   return (
     <>
@@ -20,13 +22,23 @@ function ToolBar({
           key={'left'}
           className='M-table-tool-bar-batch-actions'
         >
-          {batchActions}
+          {
+            batchActions.map(
+              (Action, index) =>
+                <Action key={Action.name || index} records={value}/>
+            )
+          }
         </Space>
         <Space
           key={'right'}
           className="M-table-tool-bar-action-items"
         >
-          {actionItems}
+          {
+            actionItems.map(
+              (Action, index) =>
+                <Action key={Action.name || index}/>
+            )
+          }
         </Space>
       </div>
     </>

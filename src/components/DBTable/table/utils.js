@@ -142,9 +142,12 @@ export default {
         // 控制显示单独 详情 和 编辑按钮
         return (
           <Space>
-            {actions.map(
-              action => _.isFunction(action) ? action(record) : action
-            )}
+            {
+              actions.map(
+                (Action, index) =>
+                  <Action key={Action.name || index} record={record}/>
+              )
+            }
           </Space>
         )
       }
