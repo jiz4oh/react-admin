@@ -14,7 +14,7 @@ export const hasIndexPermission = hasPermission('index')
 export const hasShowPermission = hasPermission('show')
 export const hasCreatePermission = hasPermission('create')
 export const hasUpdatePermission = hasPermission('update')
-export const hasDeletePermission = hasPermission('destroy')
+export const hasDeletePermission = hasPermission('delete')
 
 export const hasVisitPermission = (location) => {
   // 首先验证是否登录
