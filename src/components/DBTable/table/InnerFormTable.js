@@ -52,6 +52,7 @@ function InnerFormTable(props) {
             fields={form}
             remote={remote}
             recordId={recordId}
+            footer={null}
           />
         </Modal>
       }
