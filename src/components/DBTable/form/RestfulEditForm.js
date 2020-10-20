@@ -52,11 +52,13 @@ function RestfulEditForm({
 
   const onFinish = useCallback(validatedValues => {
     const onSuccess = () => {
+      closeForm(false)
       formUtils.notifySuccess('更新')
       history.goBack()
     }
 
     const onFail = data => {
+      closeForm(false)
       formUtils.notifyError('更新')
       form.setFields(formUtils.renderAntdError(data.error))
     }
@@ -76,7 +78,8 @@ function RestfulEditForm({
       fields={inputsConfig}
       onFinish={onFinish}
       initialValues={initValues}
-      isCloseForm={isCloseForm}
+      onChange={closeForm}
+      value={isCloseForm}
       {...restProps}
     >
     </BasicForm>

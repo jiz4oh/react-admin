@@ -46,12 +46,14 @@ function RestfulNewForm({
 
   const onFinish = useCallback(validatedValues => {
     const onSuccess = () => {
+      closeForm(false)
       formUtils.notifySuccess('创建')
 
       history.goBack()
     }
 
     const onFail = data => {
+      closeForm(false)
       formUtils.notifyError('创建')
       form.setFields(formUtils.renderAntdError(data.error))
     }
@@ -69,7 +71,8 @@ function RestfulNewForm({
       form={form}
       fields={inputsConfig}
       onFinish={onFinish}
-      isCloseForm={isCloseForm}
+      onChange={closeForm}
+      value={isCloseForm}
       {...restProps}
     >
     </BasicForm>
