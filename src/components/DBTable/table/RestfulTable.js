@@ -308,6 +308,17 @@ class RestfulTable extends React.PureComponent {
         />
 
         <AntdTable
+          onRow={record => {
+            return {
+              onDoubleClick: e => {
+                if (selectedRowKeys.includes(record.key)) {
+                  this.handleTableSelectChange(selectedRowKeys.filter(key => key !== record.key))
+                } else {
+                  this.handleTableSelectChange([record.key])
+                }
+              },
+            }
+          }}
           rowSelection={rowSelection}
           columns={this.getColumns()}
           dataSource={this.getDataSource()}
