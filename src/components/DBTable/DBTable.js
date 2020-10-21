@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from 'lodash'
@@ -23,6 +23,13 @@ const defaultComponentMap = {
   edit: RestfulEditForm,
 }
 
+const can = {
+  new: (CRUD, url) => !_.isEmpty(CRUD) && CRUD.includes('new') && hasCreatePermission(url),
+  edit: (CRUD, url) => !_.isEmpty(CRUD) && CRUD.includes('edit') && hasUpdatePermission(url),
+  show: (CRUD, url) => !_.isEmpty(CRUD) && CRUD.includes('show') && hasShowPermission(url),
+  delete: (CRUD, url) => !_.isEmpty(CRUD) && CRUD.includes('delete') && hasDeletePermission(url),
+}
+
 /**
  *
  * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
@@ -45,12 +52,12 @@ function DBTable({
   const match = useRouteMatch()
   const history = useHistory()
 
-  const canNew = !_.isEmpty(CRUD) && CRUD.includes('new') && hasCreatePermission(model.url)
-  const canEdit = !_.isEmpty(CRUD) && CRUD.includes('edit') && hasUpdatePermission(model.url)
-  const canShow = !_.isEmpty(CRUD) && CRUD.includes('show') && hasShowPermission(model.url)
-  const canDelete = !_.isEmpty(CRUD) && CRUD.includes('delete') && hasDeletePermission(model.url)
+  const canNew = can.new(CRUD, model.url)
+  const canEdit = can.edit(CRUD, model.url)
+  const canShow = can.show(CRUD, model.url)
+  const canDelete = can.delete(CRUD, model.url)
 
-  const componentMap = _.defaults(components, defaultComponentMap)
+  const componentMap = useMemo(() => _.defaults(components, defaultComponentMap), [components])
   const List = componentMap.list
   const NewForm = componentMap.new
   const EditForm = componentMap.edit
