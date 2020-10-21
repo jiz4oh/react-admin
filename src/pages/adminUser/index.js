@@ -1,8 +1,9 @@
 import models from "../../models";
-import { DBTableBuilder } from "../../components/DBTable";
+import { DBTableBuilder, InnerFormTable } from "../../components/DBTable";
 
-const config =  {
+const config = {
   model: models.adminUser,
+  list: InnerFormTable,
   filter: [
     {
       name: 'id',
