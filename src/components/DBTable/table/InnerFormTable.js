@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
 import { Modal, Form } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 
 import RestfulTable from "./RestfulTable";
 import { RestfulEditForm, RestfulNewForm } from "../form";
 import { renderNewAction, renderEditAction } from "../actions";
 import formUtils from "../form/utils";
 import { actionCreators } from "../store";
+import { RestfulModel } from "../RestfulModel";
 
 const modalFormMap = {
   new: RestfulNewForm,
@@ -14,7 +18,7 @@ const modalFormMap = {
 }
 
 function InnerFormTable(props) {
-  let {model, form: formFields, remote} = props
+  let {model, form: formFields, remote, pageSize, onFetchList} = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
 
@@ -25,34 +29,28 @@ function InnerFormTable(props) {
 
   const handleClickNew = useCallback(e => setShowForm('new'), [])
 
-  const handleCancelModal = useCallback(e => {
+  // 隐藏 modal 并刷新列表
+  const handleHideModal = useCallback(e => {
     setRecordId('')
     setShowForm('')
-  }, [])
+    onFetchList(model, {
+      page: 1,
+      size: pageSize,
+    })
+  }, [onFetchList, model, pageSize])
 
   const [form] = Form.useForm()
   const handleOkModal = useCallback(e => form.submit(), [form])
 
-  const FormComponent = modalFormMap[showForm]
-  const dispatch = useDispatch()
-  const pageSize = useSelector(state => state.table.pageSize)
   const onNewFinish = useCallback(() => {
     formUtils.notifySuccess('创建')
-    setShowForm('')
-    dispatch(actionCreators.fetchList(model, {
-      page: 1,
-      size: pageSize,
-    }))
-  }, [dispatch, model, pageSize])
+    handleHideModal()
+  }, [handleHideModal])
 
   const onEditFinish = useCallback(() => {
     formUtils.notifySuccess('编辑')
-    setShowForm('')
-    dispatch(actionCreators.fetchList(model, {
-      page: 1,
-      size: pageSize,
-    }))
-  },[dispatch, model, pageSize])
+    handleHideModal()
+  }, [handleHideModal])
 
   const finishMap = {
     new: onNewFinish,
@@ -60,6 +58,7 @@ function InnerFormTable(props) {
   }
 
   const onFinish = finishMap[showForm]
+  const FormComponent = modalFormMap[showForm]
 
   return (
     <>
@@ -75,7 +74,7 @@ function InnerFormTable(props) {
         <Modal
           visible={FormComponent}
           cancelText={'取消'}
-          onCancel={handleCancelModal}
+          onCancel={handleHideModal}
           okText={'提交'}
           onOk={handleOkModal}
           destroyOnClose
@@ -96,4 +95,18 @@ function InnerFormTable(props) {
   )
 }
 
-export default React.memo(InnerFormTable)
+InnerFormTable.propTypes = {
+  model: PropTypes.instanceOf(RestfulModel).isRequired,
+  form: PropTypes.array,
+  remote: PropTypes.bool,
+  pageSize: PropTypes.number,
+  onFetchList: PropTypes.func.isRequired
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onFetchList: bindActionCreators(actionCreators.fetchList, dispatch),
+  };
+};
+
+export default React.memo(connect(null, mapDispatchToProps)(withRouter(InnerFormTable)))
