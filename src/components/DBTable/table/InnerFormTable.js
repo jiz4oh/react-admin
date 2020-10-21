@@ -46,7 +46,7 @@ function InnerFormTable(props) {
   }, [dispatch, model, pageSize])
 
   const onEditFinish = useCallback(() => {
-    formUtils.notifyError('编辑')
+    formUtils.notifySuccess('编辑')
     setShowForm('')
     dispatch(actionCreators.fetchList(model, {
       page: 1,
