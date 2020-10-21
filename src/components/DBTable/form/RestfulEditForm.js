@@ -7,12 +7,14 @@ import BasicForm from './BasicForm'
 import formUtils from './utils'
 import PropTypes from "prop-types";
 import { RestfulModel } from "../RestfulModel";
+import { FormInstance } from "antd/lib/form";
 
 const logger = Logger.getLogger('form')
 
 /**
  *
  * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
+ * @param form {Object} Antd 的 FormInstance
  * @param fields {Object[]} form 表单字段
  * @param remote {Boolean} 是否从远端更新表单字段，默认 true
  * @param recordId {Number} 发送给后端的 id
@@ -20,6 +22,7 @@ const logger = Logger.getLogger('form')
  */
 function RestfulEditForm({
                            model,
+                           form: antdFormInstance,
                            fields = [],
                            remote,
                            recordId,
@@ -27,7 +30,7 @@ function RestfulEditForm({
                          }) {
 
   const history = useHistory()
-  const [form] = Form.useForm()
+  const [form] = Form.useForm(antdFormInstance)
   const [inputsConfig, setInputsConfig] = useState(fields)
   const [isCloseForm, closeForm] = useState(true)
   let currentId = useParams()['id']
@@ -88,6 +91,7 @@ function RestfulEditForm({
 
 RestfulEditForm.propTypes = {
   model: PropTypes.instanceOf(RestfulModel).isRequired,
+  form: PropTypes.instanceOf(FormInstance),
   fields: PropTypes.array,
 }
 

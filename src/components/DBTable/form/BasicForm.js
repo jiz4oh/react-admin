@@ -6,6 +6,9 @@ import _ from 'lodash'
 import formUtils from './utils'
 import Logger from "../../../common/js/Logger";
 import { renderBackAction, renderSubmitAction } from "../actions";
+import PropTypes from "prop-types";
+import { RestfulModel } from "../RestfulModel";
+import { FormInstance } from "antd/lib/form";
 
 const logger = Logger.getLogger('form')
 
@@ -27,7 +30,7 @@ function BasicForm({
                      model,
                      type,
                      children,
-                     form,
+                     form: antdFormInstance,
                      fields = [],
                      onFinish,
                      onFinishFailed,
@@ -38,6 +41,7 @@ function BasicForm({
                    }) {
 
   const history = useHistory()
+  const [form] = Form.useForm(antdFormInstance)
   const [spinning, setSpinning] = useState(false)
   onChange = onChange || setSpinning
   value = value || spinning
@@ -121,6 +125,12 @@ function BasicForm({
       </Form>
     </Spin>
   )
+}
+
+BasicForm.propTypes = {
+  model: PropTypes.instanceOf(RestfulModel).isRequired,
+  form: PropTypes.instanceOf(FormInstance),
+  fields: PropTypes.array,
 }
 
 export default React.memo(BasicForm)
