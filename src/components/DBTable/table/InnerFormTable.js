@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from "react";
-import { Modal } from "antd";
+import { Modal, Form } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
 import RestfulTable from "./RestfulTable";
 import { RestfulEditForm, RestfulNewForm } from "../form";
 import { renderNewAction, renderEditAction } from "../actions";
+import formUtils from "../form/utils";
+import { actionCreators } from "../store";
 
 const modalFormMap = {
   new: RestfulNewForm,
@@ -11,7 +14,7 @@ const modalFormMap = {
 }
 
 function InnerFormTable(props) {
-  let {model, form, remote} = props
+  let {model, form: formFields, remote} = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
 
@@ -20,15 +23,43 @@ function InnerFormTable(props) {
     setShowForm('edit')
   }, [])
 
-  const handleClickNew = useCallback(e => setShowForm('new'),
-                                     [])
+  const handleClickNew = useCallback(e => setShowForm('new'), [])
 
   const handleCancelModal = useCallback(e => {
     setRecordId('')
     setShowForm('')
   }, [])
 
-  const Form = modalFormMap[showForm]
+  const [form] = Form.useForm()
+  const handleOkModal = useCallback(e => form.submit(), [form])
+
+  const FormComponent = modalFormMap[showForm]
+  const dispatch = useDispatch()
+  const pageSize = useSelector(state => state.table.pageSize)
+  const onNewFinish = () => {
+    formUtils.notifySuccess('创建')
+    setShowForm('')
+    dispatch(actionCreators.fetchList(model, {
+      page: 1,
+      size: pageSize,
+    }))
+  }
+
+  const onEditFinish = () => {
+    formUtils.notifyError('编辑')
+    setShowForm('')
+    dispatch(actionCreators.fetchList(model, {
+      page: 1,
+      size: pageSize,
+    }))
+  }
+
+  const finishMap = {
+    new: onNewFinish,
+    edit: onEditFinish
+  }
+
+  const onFinish = finishMap[showForm]
 
   return (
     <>
@@ -40,19 +71,24 @@ function InnerFormTable(props) {
         {...props}
       />
       {
-        Form &&
+        FormComponent &&
         <Modal
-          onCancel={handleCancelModal}
-          visible={Form}
-          okText={'提交'}
+          visible={FormComponent}
           cancelText={'取消'}
+          onCancel={handleCancelModal}
+          okText={'提交'}
+          onOk={handleOkModal}
+          destroyOnClose
         >
-          <Form
+          <FormComponent
             model={model}
-            fields={form}
+            form={form}
+            fields={formFields}
             remote={remote}
             recordId={recordId}
             footer={null}
+            onFinish={onFinish}
+            preserve={false}
           />
         </Modal>
       }

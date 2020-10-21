@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from 'lodash'
 
@@ -13,6 +13,7 @@ import {
 import { RestfulModel } from "./RestfulModel";
 import { RestfulTable } from "./index";
 import { RestfulEditForm, RestfulNewForm } from "./index";
+import formUtils from "./form/utils";
 
 const logger = Logger.getLogger('Resource')
 
@@ -36,6 +37,7 @@ function DBTable({
                  }) {
   logger.debug(`切换到 ${model.name}`)
   const match = useRouteMatch()
+  const history = useHistory()
 
   const canNew = !_.isEmpty(CRUD) && CRUD.includes('new') && hasCreatePermission(model.url)
   const canEdit = !_.isEmpty(CRUD) && CRUD.includes('edit') && hasUpdatePermission(model.url)
@@ -44,6 +46,15 @@ function DBTable({
   const List = list || RestfulTable
   const NewForm = newForm || RestfulNewForm
   const EditForm = editForm || RestfulEditForm
+  const onNewFinish = () => {
+    formUtils.notifySuccess('创建')
+    history.goBack()
+  }
+
+  const onEditFinish = () => {
+    formUtils.notifyError('编辑')
+    history.goBack()
+  }
 
   return (
     <Switch>
@@ -55,6 +66,7 @@ function DBTable({
             <NewForm
               model={model}
               fields={formFields}
+              onFinish={onNewFinish}
               {...restConfig}
             />
           }
@@ -68,6 +80,7 @@ function DBTable({
             <EditForm
               model={model}
               fields={formFields}
+              onFinish={onEditFinish}
               {...restConfig}
             />
           }
