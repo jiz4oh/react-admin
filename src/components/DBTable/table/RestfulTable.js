@@ -53,7 +53,6 @@ class RestfulTable extends React.PureComponent {
 
   state = {
     selectedRowKeys: [],  // 当前有哪些行被选中, 这里只保存key
-    selectedRows: [],
     recordId: null,
     showForm: '',
   };
@@ -74,14 +73,8 @@ class RestfulTable extends React.PureComponent {
   /**
    * 处理多选操作
    * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
-   * @param selectedRows {Object[]} 选中的 AntDesign Table 行
    */
-  handleTableSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({
-                    selectedRowKeys,
-                    selectedRows
-                  });
-  };
+  handleTableSelectChange = (selectedRowKeys) => this.setState({selectedRowKeys})
 
   /**
    * 从后端获取数据
@@ -177,6 +170,15 @@ class RestfulTable extends React.PureComponent {
       onShowSizeChange: this.handlePageSizeChange,
       showQuickJumper: true,
     }
+  }
+
+  /**
+   * 通过指定的 key，获取对应表格记录
+   * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
+   * @returns {Object[]} 选中的 AntDesign Table 行
+   */
+  getSelectedRows = (selectedRowKeys = this.state.selectedRowKeys) => {
+    return this.getDataSource().filter(record => selectedRowKeys.includes(record.key))
   }
 
   /**
@@ -281,7 +283,7 @@ class RestfulTable extends React.PureComponent {
           model, filter: filterFields,
           loading, rowSelection = {}, expandable
         } = this.props
-    const {selectedRowKeys, selectedRows} = this.state
+    const {selectedRowKeys} = this.state
 
     // 配置默认的 rowSelection
     // 因为 selectedRowKeys 需要从 state 中获取，所以放在 render 中
@@ -302,7 +304,7 @@ class RestfulTable extends React.PureComponent {
         <ToolBar
           actionItems={this.getActionItems()}
           batchActions={this.getBatchActions()}
-          value={selectedRows}
+          value={this.getSelectedRows()}
         />
 
         <AntdTable
