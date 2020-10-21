@@ -39,8 +39,8 @@ class RestfulTable extends React.PureComponent {
     columns: PropTypes.array.isRequired,
     pageSize: PropTypes.number,
     onFetchList: PropTypes.func.isRequired,
-    list: PropTypes.object.isRequired,
-    loading: PropTypes.bool,
+    listData: PropTypes.object.isRequired,
+    fetchListPending: PropTypes.bool,
     onRestList: PropTypes.func,
     actionItems: PropTypes.array,
     batchActions: PropTypes.array,
@@ -49,6 +49,7 @@ class RestfulTable extends React.PureComponent {
     rowSelection: PropTypes.object,
     expandable: PropTypes.object,
     tableWidth: PropTypes.number,
+    selectedRowKeys: PropTypes.array,
     onSelectRowKeys: PropTypes.func.isRequired,
   };
 
@@ -143,7 +144,7 @@ class RestfulTable extends React.PureComponent {
    * @returns {[]}
    */
   getDataSource = () => {
-    const {items = []} = this.props.list
+    const {items = []} = this.props.listData
     return items
   }
 
@@ -152,7 +153,7 @@ class RestfulTable extends React.PureComponent {
    * @returns {{current: Object.current, total: Object.total, onChange: RestfulTable.handlePageChange, nextPage: Object.nextPage, responsive: boolean, pageSize: Object.pageSize, prevPage: Object.prevPage, onShowSizeChange: RestfulTable.handlePageSizeChange, showQuickJumper: boolean, showSizeChanger: boolean}}
    */
   getPagination = () => {
-    const {current, prevPage, nextPage, total, pageSize} = this.props.list;
+    const {current, prevPage, nextPage, total, pageSize} = this.props.listData;
     return {
       current,
       prevPage,
@@ -277,7 +278,7 @@ class RestfulTable extends React.PureComponent {
     let {
           model, filter: filterFields,
           rowSelection = {}, expandable,
-          loading, selectedRowKeys,
+          fetchListPending, selectedRowKeys,
         } = this.props
 
     // 配置默认的 rowSelection
@@ -318,7 +319,7 @@ class RestfulTable extends React.PureComponent {
           columns={this.getColumns()}
           dataSource={this.getDataSource()}
           pagination={this.getPagination()}
-          loading={loading}
+          loading={fetchListPending}
           expandable={expandable}
           showSizeChanger={false}
           scroll={{
@@ -338,9 +339,9 @@ class RestfulTable extends React.PureComponent {
 const mapStateToProps = (state) => {
   const {fetchListPending, selectedRowKeys, ...restState} = state.table
   return {
-    selectedRowKeys: selectedRowKeys,
-    loading: fetchListPending,
-    list: restState
+    selectedRowKeys,
+    fetchListPending,
+    listData: restState
   };
 }
 
