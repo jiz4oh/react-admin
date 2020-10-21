@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Form } from "antd";
 
 import Logger from "../../../common/js/Logger";
@@ -8,6 +8,7 @@ import formUtils from './utils'
 import PropTypes from "prop-types";
 import { RestfulModel } from "../RestfulModel";
 import { FormInstance } from "antd/lib/form";
+import _ from "lodash";
 
 const logger = Logger.getLogger('form')
 
@@ -18,6 +19,8 @@ const logger = Logger.getLogger('form')
  * @param fields {Object[]} form 表单字段
  * @param remote {Boolean} 是否从远端更新表单字段，默认 true
  * @param recordId {Number} 发送给后端的 id
+ * @param onFinish {Function} 前后端同时验证成功回调
+ * @param onFinishFailed {Function} 前端或后端验证失败回调
  * @param restProps
  */
 function RestfulEditForm({
@@ -26,10 +29,10 @@ function RestfulEditForm({
                            fields = [],
                            remote,
                            recordId,
+                           onFinish,
+                           onFinishFailed,
                            ...restProps
                          }) {
-
-  const history = useHistory()
   const [form] = Form.useForm(antdFormInstance)
   const [inputsConfig, setInputsConfig] = useState(fields)
   const [isCloseForm, closeForm] = useState(true)
@@ -53,38 +56,42 @@ function RestfulEditForm({
     // eslint-disable-next-line
   }, [model, currentId])
 
-  const onFinish = useCallback(validatedValues => {
+  const handleFinishFailed = useCallback(data => {
+    closeForm(false)
+    if (_.isFunction(onFinishFailed)) return onFinishFailed()
+    else return formUtils.notifyError('创建')
+  }, [onFinishFailed])
+
+  const handleFinish = useCallback(validatedValues => {
     const onSuccess = () => {
       closeForm(false)
-      formUtils.notifySuccess('更新')
-      history.goBack()
+      if (_.isFunction(onFinish)) return onFinish(validatedValues)
+      else return formUtils.notifySuccess('更新')
     }
 
     const onFail = data => {
-      closeForm(false)
-      formUtils.notifyError('更新')
+      handleFinishFailed(data)
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    model.update(currentId, validatedValues, {
+    return model.update(currentId, validatedValues, {
       onSuccess,
       onFail,
     })
     // 前端校验不通过
-  }, [model, currentId, form, history])
+  }, [model, currentId, form, handleFinishFailed, onFinish])
 
   return (
     <BasicForm
-      type={'edit'}
-      model={model}
       form={form}
-      fields={inputsConfig}
-      onFinish={onFinish}
-      initialValues={initValues}
+      onFinish={handleFinish}
+      onFinishFailed={handleFinishFailed}
       onChange={closeForm}
       value={isCloseForm}
+      initialValues={initValues}
       {...restProps}
     >
+      {formUtils.getInputs(model, 'edit', fields)}
     </BasicForm>
   )
 }
@@ -93,6 +100,7 @@ RestfulEditForm.propTypes = {
   model: PropTypes.instanceOf(RestfulModel).isRequired,
   form: PropTypes.instanceOf(FormInstance),
   fields: PropTypes.array,
+  remote: PropTypes.bool,
 }
 
 export default React.memo(RestfulEditForm)

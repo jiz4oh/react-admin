@@ -1,13 +1,13 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useHistory } from 'react-router-dom'
+import _ from "lodash";
+import PropTypes from "prop-types";
 import { Form } from "antd";
+import { FormInstance } from "antd/lib/form";
 
 import Logger from "../../../common/js/Logger";
-import BasicForm from './BasicForm'
 import formUtils from './utils'
-import PropTypes from "prop-types";
 import { RestfulModel } from "../RestfulModel";
-import { FormInstance } from "antd/lib/form";
+import BasicForm from "./BasicForm";
 
 const logger = Logger.getLogger('form')
 
@@ -17,6 +17,8 @@ const logger = Logger.getLogger('form')
  * @param form {Object} Antd 的 FormInstance
  * @param fields {Object[]} form 表单字段
  * @param remote {Boolean} 是否从远端更新表单字段，默认 true
+ * @param onFinish {Function} 前后端同时验证成功回调
+ * @param onFinishFailed {Function} 前端或后端验证失败回调
  * @param restProps
  */
 function RestfulNewForm({
@@ -24,10 +26,11 @@ function RestfulNewForm({
                           form: antdFormInstance,
                           fields = [],
                           remote,
+                          onFinish,
+                          onFinishFailed,
                           ...restProps
                         }) {
 
-  const history = useHistory()
   const [form] = Form.useForm(antdFormInstance)
   const [inputsConfig, setInputsConfig] = useState(fields)
   const [isCloseForm, closeForm] = useState(remote)
@@ -47,37 +50,40 @@ function RestfulNewForm({
     // eslint-disable-next-line
   }, [model])
 
-  const onFinish = useCallback(validatedValues => {
+  const handleFinishFailed = useCallback(data => {
+    closeForm(false)
+    if (_.isFunction(onFinishFailed)) return onFinishFailed()
+    else return formUtils.notifyError('创建')
+  }, [onFinishFailed])
+
+  const handleFinish = useCallback(validatedValues => {
     const onSuccess = () => {
       closeForm(false)
-      formUtils.notifySuccess('创建')
-
-      history.goBack()
+      if (_.isFunction(onFinish)) return onFinish(validatedValues)
+      else return formUtils.notifySuccess('创建')
     }
 
     const onFail = data => {
-      closeForm(false)
-      formUtils.notifyError('创建')
+      handleFinishFailed(data)
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    model.create(validatedValues, {
+    return model.create(validatedValues, {
       onSuccess,
-      onFail
+      onFail,
     })
-  }, [model, form, history])
+  }, [model, form, handleFinishFailed, onFinish])
 
   return (
     <BasicForm
-      type={'new'}
-      model={model}
       form={form}
-      fields={inputsConfig}
-      onFinish={onFinish}
-      onChange={closeForm}
+      onFinish={handleFinish}
+      onFinishFailed={handleFinishFailed}
       value={isCloseForm}
+      onChange={closeForm}
       {...restProps}
     >
+      {formUtils.getInputs(model, 'new', fields)}
     </BasicForm>
   )
 }
@@ -86,6 +92,7 @@ RestfulNewForm.propTypes = {
   model: PropTypes.instanceOf(RestfulModel).isRequired,
   form: PropTypes.instanceOf(FormInstance),
   fields: PropTypes.array,
+  remote: PropTypes.bool,
 }
 
 export default React.memo(RestfulNewForm)
