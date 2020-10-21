@@ -17,11 +17,19 @@ import formUtils from "./form/utils";
 
 const logger = Logger.getLogger('Resource')
 
+const defaultComponentMap = {
+  list: RestfulTable,
+  new: RestfulNewForm,
+  edit: RestfulEditForm,
+}
+
 /**
  *
  * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
  * @param CRUD {[]} 允许的 CRUD 操作
- * @param filter {Object[]} 过滤器字段
+ * @param index {Object[]} 列表页字段
+ * @param form {Object[]} form 页字段
+ * @param components {{}} 指定 list，new，edit 组件
  * @param restConfig 其他需要传入的参数
  * @return {*}
  */
@@ -30,9 +38,7 @@ function DBTable({
                    CRUD,
                    form: formFields,
                    index,
-                   list,
-                   newForm,
-                   editForm,
+                   components,
                    ...restConfig
                  }) {
   logger.debug(`切换到 ${model.name}`)
@@ -43,9 +49,12 @@ function DBTable({
   const canEdit = !_.isEmpty(CRUD) && CRUD.includes('edit') && hasUpdatePermission(model.url)
   const canShow = !_.isEmpty(CRUD) && CRUD.includes('show') && hasShowPermission(model.url)
   const canDelete = !_.isEmpty(CRUD) && CRUD.includes('delete') && hasDeletePermission(model.url)
-  const List = list || RestfulTable
-  const NewForm = newForm || RestfulNewForm
-  const EditForm = editForm || RestfulEditForm
+
+  const componentMap = _.defaults(components, defaultComponentMap)
+  const List = componentMap.list
+  const NewForm = componentMap.new
+  const EditForm = componentMap.edit
+
   const onNewFinish = () => {
     formUtils.notifySuccess('创建')
     history.goBack()

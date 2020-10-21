@@ -3,7 +3,9 @@ import { DBTableBuilder, InnerFormTable } from "../../components/DBTable";
 
 const config = {
   model: models.adminUser,
-  list: InnerFormTable,
+  components: {
+    list: InnerFormTable
+  },
   filter: [
     {
       name: 'id',
