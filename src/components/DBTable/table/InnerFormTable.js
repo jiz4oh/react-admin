@@ -18,7 +18,7 @@ const modalFormMap = {
 }
 
 function InnerFormTable(props) {
-  let {model, form: formFields, remote, pageSize, onFetchList} = props
+  let {model, formFields, remote, pageSize, onFetchList} = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
 

@@ -102,7 +102,7 @@ function DBTable({
         render={() =>
           <List
             model={model}
-            form={formFields}
+            formFields={formFields}
             columns={index}
             canNew={canNew}
             canEdit={canEdit}
