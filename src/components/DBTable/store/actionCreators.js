@@ -60,3 +60,10 @@ export function fetchList(model,
     })
   }
 }
+
+export function selectRowKeys(keys) {
+  return {
+    type: constants.SELECT_ROW_KEYS,
+    selectedRowKeys: keys
+  }
+}

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import constants, {indexColumn, childrenColumnName} from './constants'
+import constants, { indexColumn, childrenColumnName } from './constants'
 
 export const defaultState = {
   fetchListPending: false,
@@ -15,6 +15,7 @@ export const defaultState = {
   nextPage: null,
   total: null,
   pageSize: 10,
+  selectedRowKeys: [],
 };
 
 const reducer = (state = defaultState, action = {}) => {
@@ -82,6 +83,13 @@ const reducer = (state = defaultState, action = {}) => {
       return {
         ...state,
         ...defaultState
+      }
+
+    case constants.SELECT_ROW_KEYS:
+      const {selectedRowKeys} = action
+      return {
+        ...state,
+        selectedRowKeys,
       }
     default:
       return state;

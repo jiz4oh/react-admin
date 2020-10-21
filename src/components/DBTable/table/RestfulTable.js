@@ -49,10 +49,7 @@ class RestfulTable extends React.PureComponent {
     rowSelection: PropTypes.object,
     expandable: PropTypes.object,
     tableWidth: PropTypes.number,
-  };
-
-  state = {
-    selectedRowKeys: [],  // 当前有哪些行被选中, 这里只保存key
+    onSelectRowKeys: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -72,7 +69,7 @@ class RestfulTable extends React.PureComponent {
    * 处理多选操作
    * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
    */
-  handleTableSelectChange = (selectedRowKeys) => this.setState({selectedRowKeys})
+  handleTableSelectChange = (selectedRowKeys) => this.props.onSelectRowKeys(selectedRowKeys)
 
   /**
    * 从后端获取数据
@@ -175,7 +172,7 @@ class RestfulTable extends React.PureComponent {
    * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
    * @returns {Object[]} 选中的 AntDesign Table 行
    */
-  getSelectedRows = (selectedRowKeys = this.state.selectedRowKeys) => {
+  getSelectedRows = (selectedRowKeys = this.props.selectedRowKeys) => {
     return this.getDataSource().filter(record => selectedRowKeys.includes(record.key))
   }
 
@@ -279,9 +276,9 @@ class RestfulTable extends React.PureComponent {
   render() {
     let {
           model, filter: filterFields,
-          loading, rowSelection = {}, expandable
+          rowSelection = {}, expandable,
+          loading, selectedRowKeys,
         } = this.props
-    const {selectedRowKeys} = this.state
 
     // 配置默认的 rowSelection
     // 因为 selectedRowKeys 需要从 state 中获取，所以放在 render 中
@@ -339,8 +336,9 @@ class RestfulTable extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const {fetchListPending, ...restState} = state.table
+  const {fetchListPending, selectedRowKeys, ...restState} = state.table
   return {
+    selectedRowKeys: selectedRowKeys,
     loading: fetchListPending,
     list: restState
   };
@@ -350,6 +348,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onFetchList: bindActionCreators(actionCreators.fetchList, dispatch),
     onRestList: bindActionCreators(actionCreators.resetList, dispatch),
+    onSelectRowKeys: bindActionCreators(actionCreators.selectRowKeys, dispatch),
   };
 };
 
