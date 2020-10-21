@@ -36,23 +36,23 @@ function InnerFormTable(props) {
   const FormComponent = modalFormMap[showForm]
   const dispatch = useDispatch()
   const pageSize = useSelector(state => state.table.pageSize)
-  const onNewFinish = () => {
+  const onNewFinish = useCallback(() => {
     formUtils.notifySuccess('创建')
     setShowForm('')
     dispatch(actionCreators.fetchList(model, {
       page: 1,
       size: pageSize,
     }))
-  }
+  }, [dispatch, model, pageSize])
 
-  const onEditFinish = () => {
+  const onEditFinish = useCallback(() => {
     formUtils.notifyError('编辑')
     setShowForm('')
     dispatch(actionCreators.fetchList(model, {
       page: 1,
       size: pageSize,
     }))
-  }
+  },[dispatch, model, pageSize])
 
   const finishMap = {
     new: onNewFinish,
@@ -96,4 +96,4 @@ function InnerFormTable(props) {
   )
 }
 
-export default InnerFormTable
+export default React.memo(InnerFormTable)
