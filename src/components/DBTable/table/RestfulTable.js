@@ -53,8 +53,6 @@ class RestfulTable extends React.PureComponent {
 
   state = {
     selectedRowKeys: [],  // 当前有哪些行被选中, 这里只保存key
-    recordId: null,
-    showForm: '',
   };
 
   componentDidMount() {
