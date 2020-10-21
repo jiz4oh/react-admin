@@ -4,7 +4,7 @@ import { Button } from "antd";
 /**
  * 接受点击事件，快速生成编辑按钮
  * @param onClickFn {Function} 点击事件
- * @returns {function({record?: Object}): JSX.Element} React 组件，接受 record 参数
+ * @returns {function({record?: Object}): JSX.ElementClass} React 组件，接受 record 参数
  */
 export const renderEditAction = onClickFn =>
     ({record}) => (
@@ -22,7 +22,7 @@ export const renderEditAction = onClickFn =>
 /**
  * 接受点击事件，快速生成详情按钮
  * @param onClickFn {Function} 点击事件
- * @returns {function({record?: Object}): JSX.Element} React 组件，接受 record 参数
+ * @returns {function({record?: Object}): JSX.ElementClass} React 组件，接受 record 参数
  */
 export const renderShowAction = onClickFn =>
   ({record}) => (
