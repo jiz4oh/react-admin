@@ -100,7 +100,7 @@ class RestfulTable extends React.PureComponent {
       show: actionButtons.renderShowAction(this.handleClickShow),
       delete: actionButtons.renderDeleteAction(this.handleClickDelete),
       new: actionButtons.renderNewAction(this.handleClickNew),
-      refresh: actionButtons.renderRefreshAction(this.fetchTableData)
+      refresh: actionButtons.renderRefreshAction(e => this.fetchTableData())
     })
   }
 
