@@ -1,9 +1,9 @@
 import React from 'react'
-import { Col, Row } from 'antd'
 import _ from 'lodash'
 
 import i18n from '../i18n'
 import Logger from '../Logger'
+import { PolymorphicLayout } from "../../../components/layouts";
 
 const logger = Logger.getLogger('FormBuilder')
 
@@ -53,45 +53,10 @@ const renderField = (field, {model, onTypecast, formType}) => {
   />
 }
 
-/**
- * 包装 filters 为多行多列
- * @param fields {Object[]} 要显示的字段名数组
- * @param meta {Object} Form 配置信息
- * @returns {ReactNode[]}
- */
-const renderLayout = (fields = [], {columns = 1, gutter = 0}) => {
-  if (columns === 1) return fields;
-  const rows = [];
-  const colspan = 24 / columns
-
-  for (let i = 0; i < fields.length; i += columns) {
-    const cols = []
-    for (let j = 0; j < columns; j += 1) {
-      !_.isEmpty(fields[i + j]) && cols.push(
-        <Col key={j} span={colspan.toString()}>
-          {fields[i + j]}
-        </Col>
-      );
-    }
-
-    rows.push(
-      <Row key={i} gutter={gutter}>
-        {cols}
-      </Row>
-    );
-  }
-
-  return rows
-}
-
 export default function FormBuilder({fields = [], columns, gutter, ...restMeta}) {
   return (
-    renderLayout(
-      fields.map(field => renderField(field, restMeta)),
-      {
-        columns,
-        gutter
-      }
-    )
+    <PolymorphicLayout columns={columns} gutter={gutter}>
+      {fields.map(field => renderField(field, restMeta))}
+    </PolymorphicLayout>
   )
 }
