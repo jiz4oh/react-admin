@@ -176,7 +176,7 @@ export default {
           break
         default:
           // render 为一个映射或者一个数组
-          if (_.isObject(column.render) || _.isArray(column.render)) {
+          if (_.isObjectLike(column.render)) {
             column.render = textRender(column.render)
           }
       }
