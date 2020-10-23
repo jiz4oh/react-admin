@@ -15,6 +15,7 @@ import { RestfulTable } from "./index";
 import { RestfulEditForm, RestfulNewForm } from "./index";
 import formUtils from "./form/utils";
 import globalConfig from "../../config"
+import { PolymorphicLayout } from "./layouts";
 
 const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
 const logger = Logger.getLogger('Resource')
@@ -48,6 +49,7 @@ function DBTable({
                    form: formFields,
                    index,
                    components,
+                   children,
                    ...restConfig
                  }) {
   logger.debug(`切换到 ${model.name}`)
@@ -109,16 +111,20 @@ function DBTable({
         path={match.path}
         key={match.path}
         render={() =>
-          <List
-            model={model}
-            formFields={formFields}
-            columns={index}
-            canNew={canNew}
-            canEdit={canEdit}
-            canShow={canShow}
-            canDelete={canDelete}
-            {...restConfig}
-          />}
+          <PolymorphicLayout>
+            <List
+              model={model}
+              formFields={formFields}
+              columns={index}
+              canNew={canNew}
+              canEdit={canEdit}
+              canShow={canShow}
+              canDelete={canDelete}
+              {...restConfig}
+            />
+            {children}
+          </PolymorphicLayout>
+        }
       />
     </Switch>
   )
