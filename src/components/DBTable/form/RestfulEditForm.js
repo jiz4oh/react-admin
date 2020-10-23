@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import { Form } from "antd";
+import { FormInstance } from "antd/lib/form";
+import _ from "lodash";
+import PropTypes from "prop-types";
 
 import Logger from "../../../common/js/Logger";
 import BasicForm from './BasicForm'
 import formUtils from './utils'
-import PropTypes from "prop-types";
 import { RestfulModel } from "../RestfulModel";
-import { FormInstance } from "antd/lib/form";
-import _ from "lodash";
+import globalConfig from "../../../config"
 
 const logger = Logger.getLogger('form')
+const defaultIsRemote = globalConfig.DBTable.remote || false
 
 /**
  *
@@ -27,7 +29,7 @@ function RestfulEditForm({
                            model,
                            form: antdFormInstance,
                            fields = [],
-                           remote,
+                           remote = defaultIsRemote,
                            recordId,
                            onFinish,
                            onFinishFailed,

@@ -1,5 +1,10 @@
+import React from "react";
+
 import models from "../../models";
-import { DBTableBuilder, InnerFormTable } from "../../components/DBTable";
+import {
+  DBTable,
+  InnerFormTable
+} from "../../components/DBTable";
 
 const config = {
   model: models.adminUser,
@@ -66,5 +71,9 @@ const config = {
   ],
 }
 
-export default DBTableBuilder(config)
+export default function (props){
+  return (
+    <DBTable {...props} {...config}/>
+  )
+}
 

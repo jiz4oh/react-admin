@@ -8,8 +8,10 @@ import Logger from "../../../common/js/Logger";
 import formUtils from './utils'
 import { RestfulModel } from "../RestfulModel";
 import BasicForm from "./BasicForm";
+import globalConfig from "../../../config"
 
 const logger = Logger.getLogger('form')
+const defaultIsRemote = globalConfig.DBTable.remote || false
 
 /**
  *
@@ -25,7 +27,7 @@ function RestfulNewForm({
                           model,
                           form: antdFormInstance,
                           fields = [],
-                          remote,
+                          remote = defaultIsRemote,
                           onFinish,
                           onFinishFailed,
                           ...restProps

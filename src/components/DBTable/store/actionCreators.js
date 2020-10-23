@@ -4,7 +4,7 @@ import constants from './constants'
 import { defaultState } from "./reducer";
 import globalConfig from '../../../config'
 
-const defaultSize = globalConfig.DBTable.pageSize
+const defaultSize = globalConfig.DBTable.pageSize || 10
 
 export function resetList() {
   return {type: constants.RESET_LIST}

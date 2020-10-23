@@ -14,7 +14,9 @@ import { RestfulModel } from "./RestfulModel";
 import { RestfulTable } from "./index";
 import { RestfulEditForm, RestfulNewForm } from "./index";
 import formUtils from "./form/utils";
+import globalConfig from "../../config"
 
+const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
 const logger = Logger.getLogger('Resource')
 
 const defaultComponentMap = {
@@ -42,7 +44,7 @@ const can = {
  */
 function DBTable({
                    model,
-                   CRUD,
+                   CRUD = defaultCRUD,
                    form: formFields,
                    index,
                    components,

@@ -11,14 +11,16 @@ import { renderNewAction, renderEditAction } from "../actions";
 import formUtils from "../form/utils";
 import { actionCreators } from "../store";
 import { RestfulModel } from "../RestfulModel";
+import globalConfig from "../../../config"
 
+const defaultIsRemote = globalConfig.DBTable.remote || false
 const modalFormMap = {
   new: RestfulNewForm,
   edit: RestfulEditForm
 }
 
 function InnerFormTable(props) {
-  let {model, formFields, remote, pageSize, onFetchList} = props
+  let {model, formFields, remote = defaultIsRemote, pageSize, onFetchList} = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
 

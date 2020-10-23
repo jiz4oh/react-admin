@@ -1,4 +1,6 @@
-import { DBTableBuilder } from "../../components/DBTable";
+import React from "react";
+
+import { DBTable } from "../../components/DBTable";
 import models from "../../models";
 
 const config = {
@@ -53,4 +55,8 @@ const config = {
   ]
 }
 
-export default DBTableBuilder(config)
+export default function (props){
+  return (
+    <DBTable {...props} {...config}/>
+  )
+}

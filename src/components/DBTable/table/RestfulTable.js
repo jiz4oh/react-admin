@@ -289,6 +289,12 @@ class RestfulTable extends React.PureComponent {
       checkStrictly: false
     })
 
+    expandable = _.defaultsDeep(expandable, {
+      // 通过点击行来展开子行
+      expandRowByClick: true,
+      indentSize: 20
+    })
+
     return (
       <>
         <Filter

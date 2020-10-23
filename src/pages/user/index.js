@@ -1,5 +1,7 @@
+import React from "react";
+
 import { enumMapToArray } from "../../common/js/utils";
-import { DBTableBuilder } from "../../components/DBTable";
+import { DBTable } from "../../components/DBTable";
 import models from "../../models";
 
 const genderMap = {
@@ -90,5 +92,9 @@ const config = {
   ]
 }
 
-export default DBTableBuilder(config)
+export default function (props){
+  return (
+    <DBTable {...props} {...config}/>
+  )
+}
 
