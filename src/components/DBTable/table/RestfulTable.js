@@ -297,11 +297,15 @@ class RestfulTable extends React.PureComponent {
 
     return (
       <>
-        <Filter
-          model={model}
-          onQuery={this.fetchTableData}
-          fields={filterFields}
-        />
+        {
+          !_.isEmpty(filterFields) && (
+            <Filter
+              model={model}
+              onQuery={this.fetchTableData}
+              fields={filterFields}
+            />
+          )
+        }
 
         <ToolBar
           actionItems={this.getActionItems()}
