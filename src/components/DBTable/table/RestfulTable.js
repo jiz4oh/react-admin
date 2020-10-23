@@ -1,13 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom'
 import { Modal, notification, Table as AntdTable } from "antd";
 import _ from 'lodash'
 
 import './index.scss'
-import { actionCreators, constants } from "../store";
 import Logger from "../../../common/js/Logger";
 import utils from './utils'
 import * as actionButtons from "../actions";
@@ -17,6 +14,9 @@ import { RestfulModel } from "../RestfulModel";
 import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('RestfulTable')
+const defaultSize = globalConfig.DBTable.pageSize || 10
+const childrenColumnName = "children"
+const indexColumn = "indexColumn"
 
 /**
  *
@@ -29,8 +29,7 @@ const logger = Logger.getLogger('RestfulTable')
  * @param actions {[]} 列表页单条记录的操作按钮
  * @param defaultActionMap {{}} 默认按钮组件的映射
  * @param tableWidth {Number} 表格宽度
- * @param rowSelection {{}} 传入 antd 的表格选择项
- * @param expandable {{}} 传入 antd 的表格扩展项
+ * @param listNeedReload {boolean} 是否需要刷新列表数据
  */
 class RestfulTable extends React.PureComponent {
   static propTypes = {
@@ -38,20 +37,28 @@ class RestfulTable extends React.PureComponent {
     filter: PropTypes.array,
     columns: PropTypes.array.isRequired,
     pageSize: PropTypes.number,
-    onFetchList: PropTypes.func.isRequired,
-    listData: PropTypes.object.isRequired,
-    fetchListPending: PropTypes.bool,
-    onRestList: PropTypes.func,
     actionItems: PropTypes.array,
     batchActions: PropTypes.array,
     actions: PropTypes.array,
     defaultActionMap: PropTypes.object,
-    rowSelection: PropTypes.object,
-    expandable: PropTypes.object,
     tableWidth: PropTypes.number,
-    selectedRowKeys: PropTypes.array,
-    onSelectRowKeys: PropTypes.func.isRequired,
+    listNeedReload: PropTypes.bool
   };
+
+  state = {
+    selectedRowKeys: [],
+    fetchListPending: false,
+    listNeedReload: this.props.listNeedReload,
+    fetchListError: null,
+    byId: {},
+    ids: [],
+    items: [],
+    currentPage: 1,
+    prevPage: null,
+    nextPage: null,
+    total: null,
+    pageSize: this.props.pageSize || defaultSize,
+  }
 
   componentDidMount() {
     // 从后端获取数据
@@ -61,32 +68,95 @@ class RestfulTable extends React.PureComponent {
                                                          })
   }
 
-  componentWillUnmount() {
-    // 重置 store 中数据
-    this.props.onRestList()
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const {fetchListPending, listNeedReload, pageSize, currentPage} = this.state
+    // 当未在拉取数据且需要刷新列表时向后端拉取数据
+    if (!fetchListPending && listNeedReload) {
+      this.fetchTableData({
+                            page: currentPage,
+                            size: pageSize
+                          })
+    }
   }
 
   /**
    * 处理多选操作
    * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
    */
-  handleTableSelectChange = (selectedRowKeys) => this.props.onSelectRowKeys(selectedRowKeys)
+  handleTableSelectChange = (selectedRowKeys) => this.setState({selectedRowKeys})
 
   /**
    * 从后端获取数据
    * @param params
    */
   fetchTableData = (params = {}) => {
-    const {model, pageSize, onFetchList} = this.props
+    const {model} = this.props
+    const {currentPage, pageSize} = this.state
     params = _.defaultsDeep(params, {
-      page: 1,
+      page: currentPage,
       size: pageSize
     })
     logger.debug('从后端获取数据。。。')
-    onFetchList(
-      model,
-      params,
-    )
+    this.setState({
+                    fetchListPending: true,
+                    fetchListError: null,
+                    listNeedReload: false,
+                  })
+    model.index(
+      {
+        data: params,
+        showErrorMessage: true,
+        onSuccess: data => {
+          const {resources, pagination = {}} = data
+          const {
+                  current_page: currentPage,
+                  prev_page: prevPage,
+                  next_page: nextPage,
+                  total_count: total
+                } = pagination
+
+          const byId = {};
+          const ids = [];
+          let num = 1
+          const items = _.cloneDeep(resources)
+
+          const handleData = arr =>
+            _.forEach(arr, item => {
+              item['key'] = item.id
+              // 增加索引列
+              item[indexColumn] = num
+              num++
+
+              // 处理表格中可能的 children 数据
+              !_.isEmpty(item[childrenColumnName]) && handleData(item[childrenColumnName])
+
+              // 创建一个 id 数组
+              ids.push(item.id);
+              // 可通过 id 查找每一行
+              byId[item.id] = item;
+            })
+
+          handleData(items)
+          this.setState({
+                          byId,
+                          ids,
+                          items,
+                          currentPage,
+                          prevPage,
+                          nextPage,
+                          total,
+                          pageSize,
+                          fetchListPending: false,
+                          fetchListError: null,
+                        })
+        },
+        onFail: data => {
+          this.setState({
+                          fetchListPending: false,
+                          fetchListError: data,
+                        })
+        }
+      })
   }
 
   /**
@@ -100,7 +170,7 @@ class RestfulTable extends React.PureComponent {
       show: actionButtons.renderShowAction(this.handleClickShow),
       delete: actionButtons.renderDeleteAction(this.handleClickDelete),
       new: actionButtons.renderNewAction(this.handleClickNew),
-      refresh: actionButtons.renderRefreshAction(e => this.fetchTableData())
+      refresh: actionButtons.renderRefreshAction(e => this.setState({listNeedReload: true}))
     })
   }
 
@@ -127,7 +197,7 @@ class RestfulTable extends React.PureComponent {
     // 添加索引列
     columns.unshift({
                       title: '#',
-                      dataIndex: constants.indexColumn,
+                      dataIndex: indexColumn,
                       // 固定 # 列
                       fixed: 'left',
                       width: 130
@@ -144,18 +214,17 @@ class RestfulTable extends React.PureComponent {
    * @returns {[]}
    */
   getDataSource = () => {
-    const {items = []} = this.props.listData
+    const {items = []} = this.state
     return items
   }
 
   /**
    * 设置 AntDesign 的页码属性
-   * @returns {{current: Object.current, total: Object.total, onChange: RestfulTable.handlePageChange, nextPage: Object.nextPage, responsive: boolean, pageSize: Object.pageSize, prevPage: Object.prevPage, onShowSizeChange: RestfulTable.handlePageSizeChange, showQuickJumper: boolean, showSizeChanger: boolean}}
    */
   getPagination = () => {
-    const {current, prevPage, nextPage, total, pageSize} = this.props.listData;
+    const {currentPage, prevPage, nextPage, total, pageSize} = this.state;
     return {
-      current,
+      currentPage,
       prevPage,
       nextPage,
       total,
@@ -173,7 +242,7 @@ class RestfulTable extends React.PureComponent {
    * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
    * @returns {Object[]} 选中的 AntDesign Table 行
    */
-  getSelectedRows = (selectedRowKeys = this.props.selectedRowKeys) => {
+  getSelectedRows = (selectedRowKeys = this.state.selectedRowKeys) => {
     return this.getDataSource().filter(record => selectedRowKeys.includes(record.key))
   }
 
@@ -219,16 +288,15 @@ class RestfulTable extends React.PureComponent {
   // 点击按钮页
   handlePageChange = (page) => {
     logger.debug(`切换到第${page}页`)
-    this.fetchTableData({
-                          page
-                        })
+    this.fetchTableData({page})
   }
 
   // 点击修改每页大小
   handlePageSizeChange = (page, size) => {
     logger.debug(`页码尺寸改为 ${size}`)
     this.fetchTableData({
-                          size,
+                          page,
+                          size
                         })
   }
 
@@ -277,10 +345,10 @@ class RestfulTable extends React.PureComponent {
   render() {
     let {
           model, filter: filterFields,
-          rowSelection = {}, expandable,
-          fetchListPending, selectedRowKeys,
+          rowSelection = {}, expandable = {},
         } = this.props
 
+    const {selectedRowKeys, fetchListPending} = this.state
     // 配置默认的 rowSelection
     // 因为 selectedRowKeys 需要从 state 中获取，所以放在 render 中
     rowSelection = !_.isEmpty(this.getBatchActions()) && _.defaultsDeep(rowSelection, {
@@ -346,21 +414,5 @@ class RestfulTable extends React.PureComponent {
   }
 }
 
-const mapStateToProps = (state) => {
-  const {fetchListPending, selectedRowKeys, ...restState} = state.table
-  return {
-    selectedRowKeys,
-    fetchListPending,
-    listData: restState
-  };
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onFetchList: bindActionCreators(actionCreators.fetchList, dispatch),
-    onRestList: bindActionCreators(actionCreators.resetList, dispatch),
-    onSelectRowKeys: bindActionCreators(actionCreators.selectRowKeys, dispatch),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RestfulTable))
+export default withRouter(RestfulTable)

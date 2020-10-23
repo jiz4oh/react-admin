@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import { Modal, Form } from "antd";
 
@@ -9,7 +7,6 @@ import RestfulTable from "./RestfulTable";
 import { RestfulEditForm, RestfulNewForm } from "../form";
 import { renderNewAction, renderEditAction } from "../actions";
 import formUtils from "../form/utils";
-import { actionCreators } from "../store";
 import { RestfulModel } from "../RestfulModel";
 import globalConfig from "../../../config"
 
@@ -20,9 +17,10 @@ const modalFormMap = {
 }
 
 function InnerFormTable(props) {
-  let {model, formFields, remote = defaultIsRemote, pageSize, onFetchList} = props
+  let {model, formFields, remote = defaultIsRemote} = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
+  const [listNeedReload, setListNeedReload] = useState(false)
 
   const handleClickEdit = useCallback(record => e => {
     setRecordId(record.id)
@@ -35,11 +33,8 @@ function InnerFormTable(props) {
   const handleHideModal = useCallback(e => {
     setRecordId('')
     setShowForm('')
-    onFetchList(model, {
-      page: 1,
-      size: pageSize,
-    })
-  }, [onFetchList, model, pageSize])
+    setListNeedReload(true)
+  }, [])
 
   const [form] = Form.useForm()
   const handleOkModal = useCallback(e => form.submit(), [form])
@@ -69,6 +64,7 @@ function InnerFormTable(props) {
           new: renderNewAction(handleClickNew),
           edit: renderEditAction(handleClickEdit)
         }}
+        listNeedReload={listNeedReload}
         {...props}
       />
       {
@@ -105,10 +101,4 @@ InnerFormTable.propTypes = {
   onFetchList: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onFetchList: bindActionCreators(actionCreators.fetchList, dispatch),
-  };
-};
-
-export default React.memo(connect(null, mapDispatchToProps)(withRouter(InnerFormTable)))
+export default React.memo(withRouter(InnerFormTable))
