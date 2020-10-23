@@ -42,7 +42,7 @@ const can = {
  * @param components {{}} 指定 list，new，edit 组件
  * @param children {[]|{}}
  * @param columns {Number} 将列表页分成几列，默认 1
- * @param gutter {Number} 每列中的间隔大小，默认 8
+ * @param gutter {Number|Array} 每列中的间隔大小，默认恒纵向都为 8
  * @param restConfig 其他需要传入的参数
  * @return {*}
  */
