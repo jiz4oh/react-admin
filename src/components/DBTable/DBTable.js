@@ -40,6 +40,9 @@ const can = {
  * @param index {Object[]} 列表页字段
  * @param form {Object[]} form 页字段
  * @param components {{}} 指定 list，new，edit 组件
+ * @param children {[]|{}}
+ * @param columns {Number} 将列表页分成几列，默认 1
+ * @param gutter {Number} 每列中的间隔大小，默认 8
  * @param restConfig 其他需要传入的参数
  * @return {*}
  */
