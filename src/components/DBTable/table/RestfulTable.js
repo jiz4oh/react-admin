@@ -9,7 +9,6 @@ import Logger from "../../../common/js/Logger";
 import utils from './utils'
 import * as actionButtons from "../actions";
 import { Filter, ToolBar } from "../index";
-import { ImagePreviewModal } from "../../ImagePreviewModal";
 import { RestfulModel } from "../RestfulModel";
 import globalConfig from "../../../config";
 
@@ -407,8 +406,6 @@ class RestfulTable extends React.PureComponent {
             // y: 800
           }}
         />
-
-        <ImagePreviewModal/>
       </>
     );
   }
