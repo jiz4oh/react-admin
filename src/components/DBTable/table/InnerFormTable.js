@@ -7,7 +7,6 @@ import RestfulTable from "./RestfulTable";
 import { RestfulEditForm, RestfulNewForm } from "../form";
 import { renderNewAction, renderEditAction } from "../actions";
 import formUtils from "../form/utils";
-import { RestfulModel } from "../RestfulModel";
 import globalConfig from "../../../config"
 
 const defaultIsRemote = globalConfig.DBTable.remote || false
@@ -94,7 +93,6 @@ function InnerFormTable(props) {
 }
 
 InnerFormTable.propTypes = {
-  model: PropTypes.instanceOf(RestfulModel).isRequired,
   form: PropTypes.array,
   remote: PropTypes.bool,
   pageSize: PropTypes.number,

@@ -2,11 +2,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import { Form } from "antd";
-import { FormInstance } from "antd/lib/form";
 
 import Logger from "../../../common/js/Logger";
 import formUtils from './utils'
-import { RestfulModel } from "../RestfulModel";
 import BasicForm from "./BasicForm";
 import globalConfig from "../../../config"
 
@@ -15,7 +13,9 @@ const defaultIsRemote = globalConfig.DBTable.remote || false
 
 /**
  *
- * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
+ * @param model {Object} 需要具有 new，create 方法
+ * @param model.new {Function}
+ * @param model.create {Function}
  * @param form {Object} Antd 的 FormInstance
  * @param fields {Object[]} form 表单字段
  * @param remote {Boolean} 是否从远端更新表单字段，默认 true
@@ -91,8 +91,10 @@ function RestfulNewForm({
 }
 
 RestfulNewForm.propTypes = {
-  model: PropTypes.instanceOf(RestfulModel).isRequired,
-  form: PropTypes.instanceOf(FormInstance),
+  model: PropTypes.shape({
+                           new: PropTypes.func.isRequired,
+                           create: PropTypes.func.isRequired,
+                         }),
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }

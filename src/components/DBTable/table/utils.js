@@ -38,7 +38,8 @@ const notifyAfterDeleted = () => {
 export default {
   /**
    * 真正去删除数据
-   * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
+   * @param model {Object} 需要具有 delete 方法
+   * @param model.delete {Function}
    * @param ids {Number[]} 数据的 id 数组
    * @param onSuccess {Function} 成功的回调函数
    * @param onFail {Function} 失败的回调函数

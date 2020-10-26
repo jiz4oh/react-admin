@@ -5,8 +5,6 @@ import _ from 'lodash'
 
 import formUtils from './utils'
 import { renderBackAction, renderSubmitAction } from "../actions";
-import PropTypes from "prop-types";
-import { FormInstance } from "antd/lib/form";
 import GenericFormLayout from "./GenericFormLayout";
 
 // antd 校验成功后的回调
@@ -84,10 +82,6 @@ function BasicForm({
       </Form>
     </GenericFormLayout>
   )
-}
-
-BasicForm.propTypes = {
-  form: PropTypes.instanceOf(FormInstance),
 }
 
 export default React.memo(BasicForm)

@@ -10,7 +10,6 @@ import {
   hasUpdatePermission,
   hasDeletePermission
 } from "../session";
-import { RestfulModel } from "./RestfulModel";
 import { RestfulTable } from "./index";
 import { RestfulEditForm, RestfulNewForm } from "./index";
 import formUtils from "./form/utils";
@@ -35,7 +34,8 @@ const can = {
 
 /**
  *
- * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
+ * @param model {Object} 需要具有 name，url 属性
+ * @param model.url {string} 用于判断 增删改查 权限
  * @param CRUD {[]} 允许的 CRUD 操作
  * @param index {Object[]} 列表页字段
  * @param form {Object[]} form 页字段
@@ -136,11 +136,19 @@ function DBTable({
 }
 
 DBTable.propTypes = {
-  model: PropTypes.instanceOf(RestfulModel).isRequired,
+  model: PropTypes.shape({
+                           index: PropTypes.func.isRequired,
+                           new: PropTypes.func.isRequired,
+                           create: PropTypes.func.isRequired,
+                           edit: PropTypes.func.isRequired,
+                           update: PropTypes.func.isRequired,
+                           delete: PropTypes.func.isRequired,
+                           name: PropTypes.string,
+                           url: PropTypes.string.isRequired,
+                         }),
   CRUD: PropTypes.array,
   form: PropTypes.array,
   index: PropTypes.array,
 };
-
 
 export default React.memo(DBTable)

@@ -10,7 +10,9 @@ const logger = Logger.getLogger('FormBuilder')
 /**
  * 根据配置生成 filters 组件
  * @param field {Object} 字段的配置
- * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
+ * @param model {Object} 指定 name，i18nKey
+ * @param model.name {string} 当前 model 名
+ * @param model.i18nKey {string} i18n 前缀
  * @param onTypecast {Function} 类型转换使用的函数
  * @param formType {String} 结合 field 判断当前 form 是否渲染 builder
  * @returns {ReactNode}

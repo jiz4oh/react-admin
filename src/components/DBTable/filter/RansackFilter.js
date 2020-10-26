@@ -1,21 +1,21 @@
 import React from "react";
-import {Button, Col, Form, Row} from "antd";
-import {DeleteOutlined, SearchOutlined} from "@ant-design/icons";
+import { Button, Col, Form, Row } from "antd";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import _ from 'lodash'
+import PropTypes from "prop-types";
 
 import './index.scss'
 import FormBuilder from "../../../common/js/builder/FormBuilder";
-import {renderFilterBy} from "./index";
-import {PREDICATE, RANGE_FIELD} from './constants'
+import { renderFilterBy } from "./index";
+import { PREDICATE, RANGE_FIELD } from './constants'
 
 import Logger from "../../../common/js/Logger";
-import PropTypes from "prop-types";
-import { RestfulModel } from "../RestfulModel";
+
 const logger = Logger.getLogger('RansackFilter')
 
 /**
  *
- * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel，用于查找 i18n 翻译
+ * @param model {Object} 传入 FormBuilder
  * @param fields {Object[]} 查询条件的字段
  * @param onQuery {Function} 查询按钮的回调函数，接受参数为 filters 组织的数据
  * @param onRest {Function} 重置条件的回调函数
@@ -90,7 +90,10 @@ class RansackFilter extends React.PureComponent {
 }
 
 RansackFilter.propTypes = {
-  model: PropTypes.instanceOf(RestfulModel).isRequired,
+  model: PropTypes.shape({
+                           name: PropTypes.string.isRequired,
+                           i18nKey: PropTypes.string,
+                         }),
   fields: PropTypes.array,
 };
 

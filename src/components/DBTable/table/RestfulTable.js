@@ -9,7 +9,6 @@ import Logger from "../../../common/js/Logger";
 import utils from './utils'
 import * as actionButtons from "../actions";
 import { Filter, ToolBar } from "../index";
-import { RestfulModel } from "../RestfulModel";
 import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('RestfulTable')
@@ -19,7 +18,8 @@ const indexColumn = "indexColumn"
 
 /**
  *
- * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
+ * @param model {Object} 需要具有 index 方法
+ * @param model.index {Function}
  * @param filter {Object[]} 过滤器字段
  * @param columns {Object[]} 列表页字段
  * @param pageSize {Number} 列表页字段
@@ -32,7 +32,9 @@ const indexColumn = "indexColumn"
  */
 class RestfulTable extends React.PureComponent {
   static propTypes = {
-    model: PropTypes.instanceOf(RestfulModel).isRequired,
+    model: PropTypes.shape({
+                             index: PropTypes.func.isRequired,
+                           }),
     filter: PropTypes.array,
     columns: PropTypes.array.isRequired,
     pageSize: PropTypes.number,
