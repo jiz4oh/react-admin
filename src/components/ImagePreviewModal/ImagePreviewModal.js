@@ -1,24 +1,33 @@
-import React, {useCallback} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {Modal} from "antd";
+import React, { useCallback, useState } from "react";
+import { Modal } from "antd";
 
 import './ImagePreviewModal.scss'
 import ImageSlider from "./ImageSlider";
-import {actionCreators} from "./store";
 
-function ImagePreviewModal() {
-  const dispatch = useDispatch()
-  const cancelPreview = useCallback(() => dispatch(actionCreators.cancelPreview()), [dispatch])
-  const previewVisible = useSelector(state => state.imagePreview.previewVisible)
-  const previewImages = useSelector(state => state.imagePreview.previewImages)
+function ImagePreviewModal({
+                             visible = false,
+                             items,
+                             onCancel,
+                           }) {
+  const [previewVisible, setVisitable] = useState(visible)
+  const [previewImages, setPreviewImages] = useState(items || [])
+
+  const handleCancel = useCallback(() => {
+    setVisitable(false)
+    setPreviewImages([])
+  }, [])
+
+  onCancel = onCancel || handleCancel
+  items = items || previewImages
 
   return (
     <Modal
       className='image-preview-modal'
-      visible={previewVisible} footer={null}
-      onCancel={cancelPreview}
+      visible={previewVisible}
+      onCancel={onCancel}
+      footer={null}
     >
-      <ImageSlider items={previewImages}/>
+      <ImageSlider items={items}/>
     </Modal>
   )
 }
