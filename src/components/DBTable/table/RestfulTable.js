@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withRouter } from 'react-router-dom'
 import { Modal, notification, Table as AntdTable } from "antd";
 import _ from 'lodash'
 
@@ -414,4 +413,4 @@ class RestfulTable extends React.PureComponent {
 }
 
 
-export default withRouter(RestfulTable)
+export default RestfulTable

@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Modal, Form } from "antd";
 
@@ -98,4 +97,4 @@ InnerFormTable.propTypes = {
   pageSize: PropTypes.number,
 };
 
-export default React.memo(withRouter(InnerFormTable))
+export default React.memo(InnerFormTable)
