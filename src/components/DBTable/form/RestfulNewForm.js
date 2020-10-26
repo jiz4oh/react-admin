@@ -7,6 +7,8 @@ import Logger from "../../../common/js/Logger";
 import formUtils from './utils'
 import BasicForm from "./BasicForm";
 import globalConfig from "../../../config"
+import { renderInputBy } from "../../inputs";
+import FormBuilder from "../../FormBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = globalConfig.DBTable.remote || false
@@ -85,7 +87,12 @@ function RestfulNewForm({
       onChange={closeForm}
       {...restProps}
     >
-      {formUtils.getInputs(model, 'new', fields)}
+      <FormBuilder
+        model={model}
+        fields={fields}
+        onTypecast={renderInputBy}
+        formType={'new'}
+      />
     </BasicForm>
   )
 }

@@ -8,6 +8,8 @@ import Logger from "../../../common/js/Logger";
 import BasicForm from './BasicForm'
 import formUtils from './utils'
 import globalConfig from "../../../config"
+import { renderInputBy } from "../../inputs";
+import FormBuilder from "../../FormBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = globalConfig.DBTable.remote || false
@@ -93,7 +95,12 @@ function RestfulEditForm({
       initialValues={initValues}
       {...restProps}
     >
-      {formUtils.getInputs(model, 'edit', fields)}
+      <FormBuilder
+        model={model}
+        fields={fields}
+        onTypecast={renderInputBy}
+        formType={'edit'}
+      />
     </BasicForm>
   )
 }

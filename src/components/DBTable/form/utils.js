@@ -1,12 +1,7 @@
-import React from "react";
 import { notification } from "antd";
 import _ from 'lodash'
 
-import FormBuilder from "../../FormBuilder";
-import { renderInputBy } from "../../inputs";
 import i18n from "../../../common/js/i18n";
-
-const inputsMap = new Map()
 
 export default {
   notifySuccess: (operationName = '操作') => {
@@ -35,34 +30,6 @@ export default {
                   }))
 
     return errors
-  },
-
-  getInputs(model, type, rows, ignoreCache = false) {
-    const tableName = model.name
-    // 忽略缓存的情况下，每次都自动重新生成
-    if (!!ignoreCache) {
-      return this.createInputs(tableName, type, rows)
-    }
-
-    if (inputsMap.has(tableName)) {
-      return inputsMap.get(tableName);
-    }
-
-    const newInputs = this.createInputs(model, type, rows);
-    inputsMap.set(tableName, newInputs);
-    return newInputs;
-  },
-
-  createInputs(model, type, fields) {
-    // 存储 input class
-    return (
-      <FormBuilder
-        model={model}
-        fields={fields}
-        onTypecast={renderInputBy}
-        formType={type}
-      />
-    )
   },
 
   /**
