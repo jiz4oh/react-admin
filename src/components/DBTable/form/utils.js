@@ -1,7 +1,8 @@
+import React from "react";
 import { notification } from "antd";
 import _ from 'lodash'
 
-import FormBuilder from "../../../common/js/builder/FormBuilder";
+import FormBuilder from "../../FormBuilder";
 import { renderInputBy } from "../../inputs";
 import i18n from "../../../common/js/i18n";
 
@@ -54,12 +55,14 @@ export default {
 
   createInputs(model, type, fields) {
     // 存储 input class
-    return FormBuilder({
-                         fields,
-                         model,
-                         onTypecast: renderInputBy,
-                         formType: type
-                       })
+    return (
+      <FormBuilder
+        model={model}
+        fields={fields}
+        onTypecast={renderInputBy}
+        formType={type}
+      />
+    )
   },
 
   /**

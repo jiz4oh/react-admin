@@ -1,11 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
 
-import i18n from '../i18n'
-import Logger from '../Logger'
-import { PolymorphicLayout } from "../../../components/layouts";
+import i18n from '../../common/js/i18n'
+import Logger from '../../common/js/Logger'
+import { PolymorphicLayout } from "../layouts";
 
-const logger = Logger.getLogger('FormBuilder')
+const logger = Logger.getLogger('Form')
 
 /**
  * 根据配置生成 filters 组件
@@ -55,7 +55,7 @@ const renderField = (field, {model, onTypecast, formType}) => {
   />
 }
 
-export default function FormBuilder({fields = [], columns, gutter, ...restMeta}) {
+export default function Index({fields = [], columns, gutter, ...restMeta}) {
   return (
     <PolymorphicLayout columns={columns} gutter={gutter}>
       {fields.map(field => renderField(field, restMeta))}

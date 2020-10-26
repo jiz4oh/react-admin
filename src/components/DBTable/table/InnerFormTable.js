@@ -96,7 +96,6 @@ InnerFormTable.propTypes = {
   form: PropTypes.array,
   remote: PropTypes.bool,
   pageSize: PropTypes.number,
-  onFetchList: PropTypes.func.isRequired
 };
 
 export default React.memo(withRouter(InnerFormTable))

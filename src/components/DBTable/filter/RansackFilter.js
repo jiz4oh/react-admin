@@ -5,7 +5,7 @@ import _ from 'lodash'
 import PropTypes from "prop-types";
 
 import './index.scss'
-import FormBuilder from "../../../common/js/builder/FormBuilder";
+import FormBuilder from "../../FormBuilder";
 import { renderFilterBy } from "./index";
 import { PREDICATE, RANGE_FIELD } from './constants'
 
@@ -21,6 +21,16 @@ const logger = Logger.getLogger('RansackFilter')
  * @param onRest {Function} 重置条件的回调函数
  */
 class RansackFilter extends React.PureComponent {
+  static propTypes = {
+    model: PropTypes.shape({
+                             name: PropTypes.string.isRequired,
+                             i18nKey: PropTypes.string,
+                           }),
+    fields: PropTypes.array,
+    onQuery: PropTypes.func,
+    onRest: PropTypes.func,
+  };
+
   formRef = React.createRef()
 
   // 点击查询按钮
@@ -59,17 +69,17 @@ class RansackFilter extends React.PureComponent {
   }
 
   render() {
-    const meta = {
-      model: this.props.model,
-      columns: 3,
-      fields: this.props.fields,
-      onTypecast: renderFilterBy,
-      formType: 'filter'
-    }
+    const {model, fields} = this.props
     return (
       <div className='M-filter-container'>
         <Form ref={this.formRef}>
-          {FormBuilder(meta)}
+          <FormBuilder
+            model={model}
+            fields={fields}
+            columns={3}
+            onTypecast={renderFilterBy}
+            formType={'filter'}
+          />
         </Form>
 
         <Row>
@@ -88,13 +98,5 @@ class RansackFilter extends React.PureComponent {
     )
   }
 }
-
-RansackFilter.propTypes = {
-  model: PropTypes.shape({
-                           name: PropTypes.string.isRequired,
-                           i18nKey: PropTypes.string,
-                         }),
-  fields: PropTypes.array,
-};
 
 export default RansackFilter
