@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import i18n from "../../../common/js/i18n";
 import Logger from "../../../common/js/Logger";
-import { ImageRender } from "../../ImagePreviewModal";
+import { textRender } from "../renders";
 
 const logger = Logger.getLogger('tableUtils')
 
@@ -33,46 +33,6 @@ const notifyAfterDeleted = () => {
                          duration: 3,
                        })
   }
-}
-
-const textRender = fieldMap =>
-  (rawText, record) => {
-    // 默认为 0
-    let num = rawText || 0
-    // 这里的 num 应为 number
-    if (num === true) {
-      // 对于 true 值做处理, false 值已经为 0
-      num = Number(num)
-    }
-    // fieldMap 可能有两种形式
-    // [男，女]
-    // {1: 男}, {2: 女}
-    return fieldMap[num] || rawText
-  }
-
-const renderATag = url => (
-  <a
-    href={url}
-    rel="noopener noreferrer"
-    target="_blank">{_.last(url.split('/'))}
-  </a>
-)
-const FileRender = (rawText, record) => {
-  let result
-  if (_.isString(rawText) && rawText.length > 0) {
-    // 单个文件, 显示为超链接
-    result = renderATag(rawText);
-  } else if (!_.isEmpty(rawText)) {
-    // 多个文件, 显示为一组超链接
-    const urlArray = [];
-    for (const i of rawText) {
-      urlArray.push(renderATag(rawText[i]))
-      urlArray.push(<br key={`br${i}`}/>)
-    }
-    result = <div>{urlArray}</div>;
-  }
-
-  return result;
 }
 
 export default {
@@ -167,18 +127,9 @@ export default {
       // 默认使用 i18n 翻译，可通过 columns 中的 title 设置覆盖
       column.title = column.title || i18n.t(`${model.i18nKey}.${model.name}.${column.dataIndex}`) || column.dataIndex
 
-      switch (column.type) {
-        case 'image':
-          column.render = ImageRender
-          break
-        case 'file':
-          column.render = FileRender
-          break
-        default:
-          // render 为一个映射或者一个数组
-          if (_.isObjectLike(column.render)) {
-            column.render = textRender(column.render)
-          }
+      // render 为一个映射或者一个数组
+      if (_.isObjectLike(column.render)) {
+        column.render = textRender(column.render)
       }
     })
 
