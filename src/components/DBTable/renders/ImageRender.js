@@ -3,9 +3,9 @@ import _ from "lodash";
 
 import { logger } from '../../ImagePreviewModal/utils'
 
-const renderImageArr = (strOrArr = []) => {
+const renderImageArr = (strOrArr) => {
   let result = _.cloneDeep(strOrArr);
-  if (_.isString(strOrArr) && strOrArr.length > 0) {
+  if (!_.isArray(result)) {
     result = [result]
   }
   return result.map(str => {
