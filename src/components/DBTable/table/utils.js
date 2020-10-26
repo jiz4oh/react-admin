@@ -5,8 +5,10 @@ import _ from 'lodash'
 import i18n from "../../../common/js/i18n";
 import Logger from "../../../common/js/Logger";
 import { textRender } from "../renders";
+import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('tableUtils')
+const i18nKey = globalConfig.i18nKey || 'activerecord.attributes'
 
 const deleting = () => message.loading('正在删除...', 5)
 let successCount = 0
@@ -115,7 +117,7 @@ export default {
     }
   },
 
-  getColumns: (model, preColumns = []) => {
+  getColumns: (tableName, preColumns = []) => {
     let columns = [...preColumns]
     if (_.isEmpty(columns)) {
       logger.warn(`需要配置 columns`)
@@ -126,7 +128,7 @@ export default {
       column.dataIndex = column.name || column.dataIndex
       delete column.name
       // 默认使用 i18n 翻译，可通过 columns 中的 title 设置覆盖
-      column.title = column.title || i18n.t(`${model.i18nKey}.${model.name}.${column.dataIndex}`) || column.dataIndex
+      column.title = column.title || i18n.t(`${i18nKey}.${tableName}.${column.dataIndex}`) || column.dataIndex
 
       // render 为一个映射或者一个数组
       if (_.isObjectLike(column.render)) {

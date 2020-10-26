@@ -193,7 +193,7 @@ class RestfulTable extends React.PureComponent {
   getColumns = () => {
     const {model, columns: columnsConfig} = this.props
     // 获取表格具体列
-    const columns = utils.getColumns(model, columnsConfig)
+    const columns = utils.getColumns(model.name, columnsConfig)
     // 添加索引列
     columns.unshift({
                       title: '#',
@@ -368,7 +368,7 @@ class RestfulTable extends React.PureComponent {
         {
           !_.isEmpty(filterFields) && (
             <Filter
-              model={model}
+              tableName={model.name}
               onQuery={this.fetchTableData}
               fields={filterFields}
             />

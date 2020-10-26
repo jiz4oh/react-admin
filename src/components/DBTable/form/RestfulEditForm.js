@@ -96,7 +96,7 @@ function RestfulEditForm({
       {...restProps}
     >
       <FormBuilder
-        model={model}
+        tableName={model.name}
         fields={fields}
         onTypecast={renderInputBy}
         formType={'edit'}

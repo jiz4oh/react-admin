@@ -7,14 +7,12 @@ const debug = globalConfig.debug
  * rest 风格的 model，用于和后端传输数据，封装 index show new edit create update destroy 方法
  * @param name {String} model 名，用于做缓存，i18n 查找等
  * @param url {String} 后端地址路径
- * @param i18nKey {String} i18n 插件查找的前置 key，以 . 划分层级
  */
 class RestfulModel {
   constructor(config) {
     const {name, url} = config
     this.name = name
     this.url = url
-    this.i18nKey = 'activerecord.attributes'
   }
 
   /**

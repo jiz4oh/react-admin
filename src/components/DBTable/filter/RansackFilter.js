@@ -15,17 +15,14 @@ const logger = Logger.getLogger('RansackFilter')
 
 /**
  *
- * @param model {Object} 传入 FormBuilder
+ * @param tableName {string} 用于 i18n
  * @param fields {Object[]} 查询条件的字段
  * @param onQuery {Function} 查询按钮的回调函数，接受参数为 filters 组织的数据
  * @param onRest {Function} 重置条件的回调函数
  */
 class RansackFilter extends React.PureComponent {
   static propTypes = {
-    model: PropTypes.shape({
-                             name: PropTypes.string.isRequired,
-                             i18nKey: PropTypes.string,
-                           }),
+    tableName: PropTypes.string,
     fields: PropTypes.array,
     onQuery: PropTypes.func,
     onRest: PropTypes.func,
@@ -69,12 +66,12 @@ class RansackFilter extends React.PureComponent {
   }
 
   render() {
-    const {model, fields} = this.props
+    const {tableName, fields} = this.props
     return (
       <div className='M-filter-container'>
         <Form ref={this.formRef}>
           <FormBuilder
-            model={model}
+            tableName={tableName}
             fields={fields}
             columns={3}
             onTypecast={renderFilterBy}

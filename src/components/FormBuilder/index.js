@@ -4,20 +4,20 @@ import _ from 'lodash'
 import i18n from '../../common/js/i18n'
 import Logger from '../../common/js/Logger'
 import { PolymorphicLayout } from "../layouts";
+import globalConfig from "../../config";
 
 const logger = Logger.getLogger('Form')
+const i18nKey = globalConfig.i18nKey || 'activerecord.attributes'
 
 /**
  * 根据配置生成 filters 组件
  * @param field {Object} 字段的配置
- * @param model {Object} 指定 name，i18nKey
- * @param model.name {string} 当前 model 名
- * @param model.i18nKey {string} i18n 前缀
+ * @param tableName {string} 表明，用于 i18n
  * @param onTypecast {Function} 类型转换使用的函数
  * @param formType {String} 结合 field 判断当前 form 是否渲染 builder
  * @returns {ReactNode}
  */
-const renderField = (field, {model, onTypecast, formType}) => {
+const renderField = (field, {tableName, onTypecast, formType}) => {
   const {
           name,
           label,
@@ -37,7 +37,7 @@ const renderField = (field, {model, onTypecast, formType}) => {
   const inputComponentConfig = {
     name: name,
     // 默认使用 i18n 翻译，可通过 formConfig 中的 label 设置覆盖
-    label: label || i18n.t(`${model.i18nKey}.${model.name}.${name}`) || name,
+    label: label || i18n.t(`${i18nKey}.${tableName}.${name}`) || name,
     ...rest
   }
 

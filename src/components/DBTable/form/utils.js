@@ -2,6 +2,9 @@ import { notification } from "antd";
 import _ from 'lodash'
 
 import i18n from "../../../common/js/i18n";
+import globalConfig from "../../../config";
+
+const i18nKey = globalConfig.i18nKey || 'activerecord.attributes'
 
 export default {
   notifySuccess: (operationName = '操作') => {
@@ -36,10 +39,10 @@ export default {
    *
    * @param data {Object} 远程下发的数据
    * @param inputsConfig {Object[]} 前端定义的 input 结构
-   * @param model {Object} 模型类实例，对接后端 api 接口，需要继承 RestfulModel
-   * @return {*[]}
+   * @param tableName {string} 用于 i18n
+   * @return {Object[]}
    */
-  getInputsConfigFromRemote: (data, inputsConfig, model) => {
+  getInputsConfigFromRemote: (data, inputsConfig, tableName) => {
     // 远程获取表单字段类型
     const inputMap = data['resource_type']
     const belongsToCollection = _.cloneDeep(data['belongs_to']) || {}
@@ -62,7 +65,7 @@ export default {
             as: 'select',
             rules: [{
               required: true,
-              message: `必须填写所属${i18n.t(`${model.i18nKey}.${model.name}.${key}`)}`
+              message: `必须填写所属${i18n.t(`${i18nKey}.${tableName}.${key}`)}`
             }],
             collection: collection,
           }
