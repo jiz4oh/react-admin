@@ -3,18 +3,17 @@ import _ from "lodash";
 
 import { logger } from '../../ImagePreviewModal/utils'
 
-const renderImageArr = strOrArr => {
+const renderImageArr = (strOrArr = []) => {
   let result = _.cloneDeep(strOrArr);
   if (_.isString(strOrArr) && strOrArr.length > 0) {
     result = [result]
   }
-  result.map(str => {
+  return result.map(str => {
     return {
       url: str,
       alt: '图片加载失败',
     }
   })
-  return result
 }
 
 const ImageRender = (onClick) =>
