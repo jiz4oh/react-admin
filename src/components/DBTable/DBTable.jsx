@@ -47,16 +47,16 @@ const can = {
  * @return {*}
  */
 function DBTable({
-                   model,
-                   CRUD = defaultCRUD,
-                   form: formFields,
-                   index,
-                   components,
-                   children,
-                   columns,
-                   gutter,
-                   ...restConfig
-                 }) {
+  model,
+  CRUD = defaultCRUD,
+  form: formFields,
+  index,
+  components,
+  children,
+  columns,
+  gutter,
+  ...restConfig
+}) {
   logger.debug(`切换到 ${model.name}`)
   const match = useRouteMatch()
   const history = useHistory()
@@ -101,10 +101,11 @@ function DBTable({
         <Route
           path={`${match.path}/:id/edit`}
           key={`${match.path}/:id/edit`}
-          render={() =>
+          render={props =>
             <EditForm
               model={model}
               fields={formFields}
+              pk={props.match.params.id}
               onFinish={onEditFinish}
               {...restConfig}
             />
@@ -137,15 +138,15 @@ function DBTable({
 
 DBTable.propTypes = {
   model: PropTypes.shape({
-                           index: PropTypes.func.isRequired,
-                           new: PropTypes.func.isRequired,
-                           create: PropTypes.func.isRequired,
-                           edit: PropTypes.func.isRequired,
-                           update: PropTypes.func.isRequired,
-                           delete: PropTypes.func.isRequired,
-                           name: PropTypes.string,
-                           url: PropTypes.string.isRequired,
-                         }),
+    index: PropTypes.func.isRequired,
+    new: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+    delete: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    url: PropTypes.string.isRequired,
+  }),
   CRUD: PropTypes.array,
   form: PropTypes.array,
   index: PropTypes.array,

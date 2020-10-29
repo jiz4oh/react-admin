@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from 'react-router-dom'
 import { Form } from "antd";
 import _ from "lodash";
 import PropTypes from "prop-types";
@@ -22,33 +21,30 @@ const defaultIsRemote = globalConfig.DBTable.remote || false
  * @param form {Object} Antd 的 FormInstance
  * @param fields {Object[]} form 表单字段
  * @param remote {Boolean} 是否从远端更新表单字段，默认 true
- * @param recordId {Number} 发送给后端的 id
+ * @param pk {Number} 发送给后端的主键
  * @param onFinish {Function} 前后端同时验证成功回调
  * @param onFinishFailed {Function} 前端或后端验证失败回调
  * @param restProps
  */
 function RestfulEditForm({
-                           model,
-                           form: antdFormInstance,
-                           fields = [],
-                           remote = defaultIsRemote,
-                           recordId,
-                           onFinish,
-                           onFinishFailed,
-                           ...restProps
-                         }) {
+  model,
+  form: antdFormInstance,
+  fields = [],
+  remote = defaultIsRemote,
+  pk,
+  onFinish,
+  onFinishFailed,
+  ...restProps
+}) {
   const [form] = Form.useForm(antdFormInstance)
   const [inputsConfig, setInputsConfig] = useState(fields)
   const [isCloseForm, closeForm] = useState(true)
-  let currentId = useParams()['id']
-  currentId = recordId || currentId
-
   const [initValues, setInitValues] = useState({})
 
   useEffect(() => {
     logger.debug('从后端获取编辑表单数据。。。')
 
-    model.edit(currentId, {
+    model.edit(pk, {
       showErrorMessage: true,
       onSuccess: data => {
         // 获取 edit form 所需要的 initValues
@@ -58,12 +54,12 @@ function RestfulEditForm({
       }
     })
     // eslint-disable-next-line
-  }, [model, currentId])
+  }, [model, pk])
 
   const handleFinishFailed = useCallback(data => {
     closeForm(false)
     if (_.isFunction(onFinishFailed)) return onFinishFailed()
-    else return formUtils.notifyError('创建')
+    else return formUtils.notifyError('更新')
   }, [onFinishFailed])
 
   const handleFinish = useCallback(validatedValues => {
@@ -78,12 +74,12 @@ function RestfulEditForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    return model.update(currentId, validatedValues, {
+    return model.update(pk, validatedValues, {
       onSuccess,
       onFail,
     })
     // 前端校验不通过
-  }, [model, currentId, form, handleFinishFailed, onFinish])
+  }, [model, pk, form, handleFinishFailed, onFinish])
 
   return (
     <BasicForm
@@ -107,9 +103,9 @@ function RestfulEditForm({
 
 RestfulEditForm.propTypes = {
   model: PropTypes.shape({
-                           edit: PropTypes.func.isRequired,
-                           update: PropTypes.func.isRequired,
-                         }),
+    edit: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+  }),
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }
