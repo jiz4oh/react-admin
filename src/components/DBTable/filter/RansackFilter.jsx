@@ -5,7 +5,7 @@ import _ from 'lodash'
 import PropTypes from "prop-types";
 
 import './index.scss'
-import FormBuilder from "../../FormBuilder";
+import {FormBuilder} from "../../FormBuilder";
 import { renderFilterBy } from "./index";
 import { PREDICATE, RANGE_FIELD } from './constants'
 

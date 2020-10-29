@@ -2,7 +2,7 @@ import React from 'react';
 import {HashRouter as Router, Route, Switch} from 'react-router-dom'
 
 import Login from '../../pages/login'
-import NotFound from '../../components/NotFound'
+import {NotFound} from '../../components/NotFound'
 import Logger from "./Logger";
 import RouteBuilder from "./builder/RouteBuilder";
 import {menus} from '../../config/menus'

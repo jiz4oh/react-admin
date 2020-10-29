@@ -26,7 +26,7 @@ const defaultInputType = (fieldName, type) => {
     case 'decimal':
       return 'float'
     case 'datetime':
-    case'timestamp':
+    case 'timestamp':
       return 'datetime'
     case 'time':
       return 'time'
@@ -74,9 +74,9 @@ const renderInputBy = (fieldName, type, as = '') => {
   const inputName = upperCamelCase(as + '_input')
   let result
   try {
-    result = require(`./${inputName}.js`).default
+    result = require(`./${inputName}`).default
   } catch (e) {
-    result = require(`./${upperCamelCase(`${defaultType}_input`)}.js`).default
+    result = require(`./${upperCamelCase(`${defaultType}_input`)}`).default
     logger.warn('can not find input %s, use default instead', inputName);
   }
   return result
@@ -102,13 +102,13 @@ function withFormItem(WrappedComponent) {
    *
    */
   return function ({
-                     name,
-                     label,
-                     extra,
-                     rules,
-                     formOptions = {},
-                     ...restProps
-                   }) {
+    name,
+    label,
+    extra,
+    rules,
+    formOptions = {},
+    ...restProps
+  }) {
     logger.debug(`transform field ${JSON.stringify(restProps)} to ${WrappedComponent.name} component`);
 
     return (
@@ -118,10 +118,10 @@ function withFormItem(WrappedComponent) {
         label={label}
         rules={rules}
         extra={extra}
-        labelCol={{span: 8}}
+        labelCol={{ span: 8 }}
         {...formOptions}
       >
-        <WrappedComponent name={name} {...restProps}/>
+        <WrappedComponent name={name} {...restProps} />
       </Form.Item>
     )
   }
@@ -129,7 +129,7 @@ function withFormItem(WrappedComponent) {
 
 function collectionWrapper(WrappedComponent) {
   return function (props) {
-    const {collection: preCollection} = props
+    const { collection: preCollection } = props
 
     const [spinning, setSpinning] = useState(_.isFunction(preCollection))
     const [collection, setCollection] = useState([])
@@ -166,9 +166,9 @@ function collectionWrapper(WrappedComponent) {
     );
 
     const collectionInput = withFormItem(WrappedComponent)({
-                                                             ...props,
-                                                             collection
-                                                           })
+      ...props,
+      collection
+    })
 
     return (
       <Spin spinning={spinning}>

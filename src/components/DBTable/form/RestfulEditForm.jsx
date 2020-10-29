@@ -8,7 +8,7 @@ import BasicForm from './BasicForm'
 import formUtils from './utils'
 import globalConfig from "../../../config"
 import { renderInputBy } from "../../inputs";
-import FormBuilder from "../../FormBuilder";
+import { FormBuilder } from "../../FormBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = globalConfig.DBTable.remote || false

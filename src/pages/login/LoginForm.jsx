@@ -2,11 +2,11 @@ import React from "react";
 import { Button, Col, Form, Input, Row, message, Space } from "antd";
 import { withRouter } from 'react-router-dom';
 
-import './index.scss'
+import "./LoginForm.scss"
 import VerifyCodeFactory from "../../common/js/verifyCode";
 import Logger from "../../common/js/Logger";
 import globalConfig from '../../config'
-import { setUserInfo } from "../session";
+import { setUserInfo } from "../../components/session";
 import Session from "../../models/session";
 
 const logger = Logger.getLogger('login')
@@ -29,8 +29,8 @@ class Login extends React.Component {
     this.verifyCode = ''
   }
 
-  handleBlur = () => this.setState({focusItem: -1})
-  handleFocus = item => () => this.setState({focusItem: item})
+  handleBlur = () => this.setState({ focusItem: -1 })
+  handleFocus = item => () => this.setState({ focusItem: item })
 
   handleLoginSubmit = () => {
     const fieldsValue = this.formRef.current.getFieldsValue()
@@ -46,7 +46,7 @@ class Login extends React.Component {
     }
 
     this.handleFocus(-1)()
-    this.setState({requesting: true})
+    this.setState({ requesting: true })
     try {
       // 服务端验证
       loading();
@@ -63,7 +63,7 @@ class Login extends React.Component {
         setUserInfo(data.message)
         message.destroy()
         message.success("登录成功");
-        let {from} = this.props.location.state || {from: {pathname: "/dashboard"}}
+        let { from } = this.props.location.state || { from: { pathname: "/dashboard" } }
         this.props.history.replace(from)
       }
       const onFail = (data, status) => {
@@ -75,21 +75,21 @@ class Login extends React.Component {
           message.error(`服务器开小差了，请稍候重试: ${JSON.stringify(status)}`);
         }
 
-        this.setState({requesting: false});
+        this.setState({ requesting: false });
         this.verifyCode.refresh()
       }
 
       session.login({
-                      data: data,
-                      showErrorMessage: false,
-                      onSuccess,
-                      onFail
-                    })
+        data: data,
+        showErrorMessage: false,
+        onSuccess,
+        onFail
+      })
     } catch (exception) {
       logger.warn(exception)
       message.destroy()
       message.error(`网络请求出错: ${exception.message}`);
-      this.setState({requesting: false});
+      this.setState({ requesting: false });
       this.verifyCode.refresh()
     }
   }
@@ -100,7 +100,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const {focusItem} = this.state;
+    const { focusItem } = this.state;
     const isCover = focusItem === 1
     return (
       <div className={`P-login-container ${this.props.className}`}>
@@ -126,8 +126,8 @@ class Login extends React.Component {
           onFinish={this.handleLoginSubmit}
           ref={this.formRef}
           labelCol={{
-            xs: {span: 24},
-            sm: {span: 5},
+            xs: { span: 24 },
+            sm: { span: 5 },
           }}
           // wrapperCol={{
           //   xs: {span: 24},
@@ -180,16 +180,16 @@ class Login extends React.Component {
                 />
               </Col>
               <Col span={8}>
-                <div id='verify-code'/>
+                <div id='verify-code' />
               </Col>
             </Row>
           </Form.Item>
           <Row justify={'end'} className='P-bottom'>
             <Space>
               <Button type='primary' htmlType="submit"
-                      disabled={this.state.requesting}>登录</Button>
+                disabled={this.state.requesting}>登录</Button>
               <Button onClick={this.handleChangeRegister}
-                      disabled={this.state.requesting}>注册</Button>
+                disabled={this.state.requesting}>注册</Button>
             </Space>
           </Row>
         </Form>

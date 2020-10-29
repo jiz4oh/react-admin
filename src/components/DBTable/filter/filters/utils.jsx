@@ -47,9 +47,9 @@ const renderFilterBy = (fieldName, type, as = '') => {
   const filterName = upperCamelCase(as + '_filter')
   let result
   try {
-    result = require(`./${filterName}.js`).default
+    result = require(`./${filterName}`).default
   } catch (e) {
-    result = require(`./${upperCamelCase(`${defaultType}_filter`)}.js`).default
+    result = require(`./${upperCamelCase(`${defaultType}_filter`)}`).default
     logger.warn('can not find filters %s, use default instead', filterName);
   }
   return result

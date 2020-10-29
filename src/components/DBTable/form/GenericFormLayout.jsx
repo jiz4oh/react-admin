@@ -3,11 +3,11 @@ import { Row, Space, Spin } from "antd";
 import _ from "lodash";
 
 export default function GenericFormLayout({
-                                     spinning,
-                                     delay,
-                                     children,
-                                     footer,
-                                   }) {
+  spinning,
+  delay,
+  children,
+  footer,
+}) {
   return (
     <Spin spinning={spinning} delay={delay || 100}>
       {children}
@@ -20,7 +20,7 @@ export default function GenericFormLayout({
             <Space>
               {
                 footer.map(
-                  (Action, index) => <Action key={Action.name || index}/>
+                  (Action, index) => <Action key={Action.name || index} />
                 )
               }
             </Space>
