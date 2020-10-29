@@ -22,6 +22,7 @@ const finishFailed = err => formUtils.notifyError()
  * @param footer {Function[]} form 表单底部组件列表
  * @param onChange {Function} 表单显示控制函数
  * @param value {Boolean} 是否显示表单加载中
+ * @param staticContext {any} 接收该参数避免 react warning
  * @param restProps 其他传入 AntDesign 中的参数
  */
 function BasicForm({
@@ -32,6 +33,7 @@ function BasicForm({
                      footer,
                      onChange,
                      value,
+                     staticContext,
                      ...restProps
                    }) {
 
