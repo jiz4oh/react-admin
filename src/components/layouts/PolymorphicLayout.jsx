@@ -25,9 +25,17 @@ export default function PolymorphicLayout({
 
   for (let i = 0; i < children.length; i += columns) {
     const cols = []
-    for (let j = 0; j < columns; j += 1) {
-      const Component = children[i + j]
-
+    for (let j = 0; j < Math.min(columns, children.length); j += 1) {
+      let Component = children[i + j]
+      if (React.isValidElement(Component)) {
+        Component = React.cloneElement(Component)
+      } else {
+        try {
+          Component = <Component/>
+        } catch (e) {
+          console.log(`未知组件类型，${Component}`)
+        }
+      }
       !_.isEmpty(Component) && cols.push(
         <Col key={j} span={colspan.toString()}>
           {Component}
