@@ -25,7 +25,7 @@ export default function PolymorphicLayout({
 
   for (let i = 0; i < children.length; i += columns) {
     const cols = []
-    for (let j = 0; j < Math.min(columns, children.length); j += 1) {
+    for (let j = 0; i + j < children.length; j += 1) {
       let Component = children[i + j]
       if (React.isValidElement(Component)) {
         Component = React.cloneElement(Component)
