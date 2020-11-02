@@ -1,24 +1,41 @@
 import React from 'react';
-import {Route, Redirect, Switch} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import queryString from 'query-string';
 import _ from 'lodash'
+import { Result, Button } from "antd";
 
 import ProtectedComponent from "../ProtectedComponent";
 
 export const appRootPath = ''
 
-const _404 = (<Route render={() => <Redirect to="/404"/>}/>)
+const _404 = (
+  <Route
+    render={props =>
+      <Result
+        status="404"
+        title="404"
+        subTitle="对不起，页面不存在"
+        extra={
+          <Button
+            type="primary"
+            onClick={() => props.history.push('/dashboard')}
+          >
+            返回控制面板
+          </Button>
+        }
+      />
+    }/>)
 
 // 生成路由
 const generateRoute = (rule, parentPaths) => {
   const {
-    component: Component,
-    path,
-    label,
-    layout: Layout,
-    rules
-  } = rule
+          component: Component,
+          path,
+          label,
+          layout: Layout,
+          rules
+        } = rule
   // Component 存在才挂载路由
   if (!Component) return
 
@@ -50,7 +67,8 @@ const generateRoute = (rule, parentPaths) => {
         };
 
         const rawComponent = <Component {...merge} />
-        const decoratedComponent = Layout ? <Layout children={rawComponent}/> : rawComponent
+        const decoratedComponent = Layout ?
+          <Layout children={rawComponent}/> : rawComponent
         const isProtected = rules
           ? <ProtectedComponent rules={rules} children={decoratedComponent}/>
           : decoratedComponent
@@ -83,11 +101,7 @@ const generateNestRoutes = (item, parentPaths) => {
 }
 
 const recurseRoutes = (subs, currentPaths) =>
-  subs && subs.map(item =>
-    !_.isEmpty(item.subs)
-      ? generateNestRoutes(item, currentPaths)
-      : generateRoute(item, currentPaths)
-  )
+  subs && subs.map(item => !_.isEmpty(item.subs) ? generateNestRoutes(item, currentPaths) : generateRoute(item, currentPaths))
 
 /**
  *

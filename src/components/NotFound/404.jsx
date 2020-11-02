@@ -2,9 +2,8 @@ import React, { useState, useMemo } from 'react';
 
 import img from './img/404.png';
 import './index.scss'
-import { defaultLayout } from "../../layouts";
 
-function NotFound({ layout: Layout = defaultLayout }) {
+function NotFound({ layout: Layout }) {
   const [animated, setAnimated] = useState('')
 
   const onEnter = useMemo(() => setAnimated('hinge'), [])
