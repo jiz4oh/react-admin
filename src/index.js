@@ -1,14 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
+import { Alert } from 'antd';
 
-import App from './common/js/App'
-import './common/style/frame.scss'
+import App from './App'
 import store from './store'
 
+const { ErrorBoundary } = Alert;
+
 ReactDOM.render(
-  <Provider store={store}>
-    <App/>
-  </Provider>,
+  <ErrorBoundary>
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  </ErrorBoundary>,
   document.getElementById('root')
 )
