@@ -46,7 +46,7 @@ class RansackFilter extends React.PureComponent {
       let predicate = fieldsValue[`${name}${PREDICATE}`] || 'eq'
       if (predicate === RANGE_FIELD) {
         // 当是 range 字段时，value 对应的是一个数组或者 undefined
-        if (_.isArray(value)) return
+        if (_.isEmpty(value)) return
         name = name.split('-')[0]
         data[`q[${name}_gteq]`] = value[0]
         data[`q[${name}_lteq]`] = value[1]
@@ -55,7 +55,7 @@ class RansackFilter extends React.PureComponent {
       }
     })
 
-    this.props.onQuery(data)
+    this.props.onQuery(_.cloneDeep(data))
   }
 
   // 点击清除条件按钮
