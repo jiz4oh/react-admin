@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, Input } from "antd";
 import React from "react";
 
 import Logger from "../../../../common/js/Logger";
@@ -83,10 +83,16 @@ function withFormItem(WrappedComponent, predicate = '') {
 
     return (
       <>
-        {!!predicate && <Form.Item key={`${name}${PREDICATE}`}
-                                   name={`${name}${PREDICATE}`}
-                                   initialValue={predicate}
-                                   hidden={true}/>}
+        {!!predicate && (
+          <Form.Item
+            key={`${name}${PREDICATE}`}
+            name={`${name}${PREDICATE}`}
+            initialValue={predicate}
+            hidden={true}
+          >
+            <Input/>
+          </Form.Item>
+        )}
         <Form.Item
           key={name}
           name={name}

@@ -5,7 +5,7 @@ import _ from 'lodash'
 import PropTypes from "prop-types";
 
 import './index.scss'
-import {FormBuilder} from "../../FormBuilder";
+import { FormBuilder } from "../../FormBuilder";
 import { renderFilterBy } from "./index";
 import { PREDICATE, RANGE_FIELD } from './constants'
 
@@ -43,15 +43,15 @@ class RansackFilter extends React.PureComponent {
       if (name.endsWith(PREDICATE) || _.isNil(value)) return
 
       // 获取当前字段的谓语
-      let predicate = fieldsValue[`${name}${PREDICATE}`] || 'eq'
-      if (predicate === RANGE_FIELD) {
+      const predicate = fieldsValue[`${name}${PREDICATE}`]
+      if (predicate === RANGE_FIELD || _.isArray(value)) {
         // 当是 range 字段时，value 对应的是一个数组或者 undefined
         if (_.isEmpty(value)) return
         name = name.split('-')[0]
         data[`q[${name}_gteq]`] = value[0]
         data[`q[${name}_lteq]`] = value[1]
       } else {
-        data[`q[${name}_${predicate}]`] = value
+        data[`q[${name}_${predicate || 'eq'}]`] = value
       }
     })
 
