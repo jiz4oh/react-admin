@@ -1,9 +1,9 @@
-import {Form, message, Spin} from "antd";
-import React, {useEffect, useState} from "react";
-import _ from "lodash";
+import { Form } from "antd";
+import React from "react";
 
 import Logger from "../../../../common/js/Logger";
-import {PREDICATE, RANGE_FIELD} from '../constants'
+import { PREDICATE, RANGE_FIELD } from '../constants'
+import { GetCollection, upperCamelCase } from "../../../inputs/utils";
 
 const logger = Logger.getLogger('filter');
 
@@ -27,10 +27,6 @@ const defaultFilterType = (fieldName, type) => {
       if (fieldName.match(/ed_at$/)) return 'datetime_range'
       return defaultType
   }
-}
-
-const upperCamelCase = function (str) {
-  return _.upperFirst(_.camelCase(str))
 }
 
 /**
@@ -72,7 +68,7 @@ function withFormItem(WrappedComponent, predicate = '') {
    * @param colOptions {{}} col 组件的属性,
    * @param formOptions {{}} item 组件的属性,
    *
-   * @return {Component} 返回修改后的组件
+   * @return {React.ReactElement} 返回修改后的组件
    *
    */
   return function ({
@@ -116,52 +112,13 @@ function withRange(WrappedComponent) {
 }
 
 function withIn(WrappedComponent) {
-  return function ({collection: preCollection, ...resetProps}) {
-    const [spinning, setSpinning] = useState(_.isFunction(preCollection))
-    const [collection, setCollection] = useState(preCollection)
-
-    useEffect(
-      () => {
-        // 如果传入的是一个函数，执行并传入成功回调函数
-        if (_.isFunction(preCollection)) {
-          preCollection(
-            (res) => {
-              setSpinning(false)
-              setCollection(res)
-            }
-          )
-        }
-      }, [preCollection]
-    );
-
-    useEffect(
-      () => {
-        const timeId = setTimeout(() => {
-          // 2 秒之后网络请求尚未完毕
-          if (_.isFunction(preCollection) && !!spinning) {
-            setSpinning(false)
-            message.warn('您的网络不稳定，刷新后再试')
-          }
-        }, 2000)
-
-        // 清除 effect
-        return () => clearTimeout(timeId)
-      }, [preCollection, spinning]
-    );
-
-    !_.isArray(preCollection) && !_.isFunction(preCollection) && logger.error(`${WrappedComponent.name} 未正确传入 collection，支持 Array 及 Function`)
-
-    const collectionInput = withFormItem(WrappedComponent, 'in')({
-      ...resetProps,
-      collection
-    })
-
-    return spinning
-      ? <Spin>
-        {collectionInput}
-      </Spin>
-      : collectionInput
+  return function (props) {
+    return (
+      <GetCollection {...props}>
+        {withFormItem(WrappedComponent, 'in')}
+      </GetCollection>
+    )
   }
 }
 
-export {withFormItem, withIn, withEq, withRange, renderFilterBy}
+export { withFormItem, withIn, withEq, withRange, renderFilterBy }

@@ -98,17 +98,17 @@ function withFormItem(WrappedComponent) {
    * @param colOptions {{}} col 组件的属性,
    * @param formOptions {{}} item 组件的属性,
    *
-   * @return {Component} 返回修改后的组件
+   * @return {React.ReactElement} 返回修改后的组件
    *
    */
   return function ({
-    name,
-    label,
-    extra,
-    rules,
-    formOptions = {},
-    ...restProps
-  }) {
+                     name,
+                     label,
+                     extra,
+                     rules,
+                     formOptions = {},
+                     ...restProps
+                   }) {
     logger.debug(`transform field ${JSON.stringify(restProps)} to ${WrappedComponent.name} component`);
 
     return (
@@ -118,7 +118,7 @@ function withFormItem(WrappedComponent) {
         label={label}
         rules={rules}
         extra={extra}
-        labelCol={{ span: 8 }}
+        labelCol={{span: 8}}
         {...formOptions}
       >
         <WrappedComponent name={name} {...restProps} />
@@ -127,34 +127,30 @@ function withFormItem(WrappedComponent) {
   }
 }
 
-function collectionWrapper(WrappedComponent) {
-  return function (props) {
-    const { collection: preCollection } = props
+/**
+ * 选择框的 collection 如果是个函数，则从执行函数从后端获取 collection
+ * @param fnOrArray {Function | Object[]} 函数或者数组
+ * @param children {React.ReactComponentElement} input 组件
+ * @param restProps {[]} 其他传入 input 组件的参数
+ * @returns {JSX.Element}
+ */
+function GetCollection({collection: fnOrArray, children: CollectionInputComponent, ...restProps}) {
+  const [spinning, setSpinning] = useState(!!_.isFunction(fnOrArray))
+  const [collection, setCollection] = useState([])
+  // collection 可能会被远端更新
+  useEffect(() => setCollection(fnOrArray), [fnOrArray])
 
-    const [spinning, setSpinning] = useState(_.isFunction(preCollection))
-    const [collection, setCollection] = useState([])
-    // collection 可能会被远端更新
-    useEffect(() => setCollection(preCollection), [preCollection])
-
-    useEffect(
-      () => {
-        // 如果传入的是一个函数，执行并传入成功回调函数
-        if (_.isFunction(preCollection)) {
-          preCollection(
-            (res) => {
-              setSpinning(false)
-              setCollection(res)
-            }
-          )
-        }
-      }, [preCollection]
-    );
-
-    useEffect(
-      () => {
+  useEffect(
+    () => {
+      // 如果传入的是一个函数，执行并传入成功回调函数
+      if (_.isFunction(fnOrArray)) {
+        fnOrArray((res) => {
+          setSpinning(false)
+          setCollection(res)
+        })
         const timeId = setTimeout(() => {
           // 2 秒之后网络请求尚未完毕
-          if (_.isFunction(preCollection) && !!spinning) {
+          if (!!spinning) {
             setSpinning(false)
             message.warn('您的网络不稳定，刷新后再试')
           }
@@ -162,20 +158,31 @@ function collectionWrapper(WrappedComponent) {
 
         // 清除 effect
         return () => clearTimeout(timeId)
-      }, [preCollection, spinning]
-    );
+      }
+    }, [fnOrArray, spinning]
+  )
 
-    const collectionInput = withFormItem(WrappedComponent)({
-      ...props,
-      collection
-    })
+  return (
+    <Spin spinning={spinning}>
+      <CollectionInputComponent collection={collection} {...restProps}/>
+    </Spin>
+  )
+}
 
+function collectionWrapper(WrappedComponent) {
+  return (props) => {
     return (
-      <Spin spinning={spinning}>
-        {collectionInput}
-      </Spin>
+      <GetCollection {...props}>
+        {withFormItem(WrappedComponent)}
+      </GetCollection>
     )
   }
 }
 
-export { withFormItem, collectionWrapper, renderInputBy }
+export {
+  withFormItem,
+  collectionWrapper,
+  renderInputBy,
+  GetCollection,
+  upperCamelCase
+}
