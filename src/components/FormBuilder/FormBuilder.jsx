@@ -9,7 +9,7 @@ import {
 import globalConfig from "../../config";
 
 const logger = Logger.getLogger('Form')
-const i18nKey = globalConfig.i18nKey || 'activerecord.attributes'
+const i18nKey = globalConfig.i18nKey
 
 /**
  * 根据配置生成 filters 组件
@@ -39,11 +39,12 @@ const renderField = (field, {
   if (_.isArray(form) && !form.includes(formType)) return
   if (_.isString(form) && form !== formType) return
 
+  const i18nName = [i18nKey, tableName, name].filter(Boolean).join('.')
   // 创建传入 input 的配置
   const inputComponentConfig = {
     name: name,
     // 默认使用 i18n 翻译，可通过 formConfig 中的 label 设置覆盖
-    label: label || i18n.t(`${i18nKey}.${tableName}.${name}`) || name,
+    label: label || i18n.t(`${i18nName}`) || name,
     ...rest
   }
 
@@ -56,11 +57,8 @@ const renderField = (field, {
   }
 
   return <InputComponent
-    key={
-      `form-item-${name}`
-    } {
-    ...inputComponentConfig
-    }
+    key={`form-item-${name}`}
+    {...inputComponentConfig}
   />
 }
 
@@ -72,9 +70,7 @@ export default function ({
 }) {
   return (
     <PolymorphicLayout columns={columns} gutter={gutter} >
-      {
-        fields.map(field => renderField(field, restMeta))
-      }
+      {fields.map(field => renderField(field, restMeta))}
     </PolymorphicLayout>
   )
 }

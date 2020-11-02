@@ -4,7 +4,7 @@ import _ from 'lodash'
 import i18n from "../../../common/js/i18n";
 import globalConfig from "../../../config";
 
-const i18nKey = globalConfig.i18nKey || 'activerecord.attributes'
+const i18nKey = globalConfig.i18nKey
 
 export default {
   notifySuccess: (operationName = '操作') => {
@@ -59,13 +59,14 @@ export default {
           // 获取当前 belongs_to 的集合数据
           collection = _.cloneDeep(belongsToCollection[key])
           if (_.isEmpty(collection)) return
+          const i18nName = [i18nKey, tableName, key].filter(Boolean).join('.')
 
           const belongsToDefaultInputConfig = {
             name: key,
             as: 'select',
             rules: [{
               required: true,
-              message: `必须填写所属${i18n.t(`${i18nKey}.${tableName}.${key}`)}`
+              message: `必须填写所属${i18n.t(`${i18nName}`)}`
             }],
             collection: collection,
           }

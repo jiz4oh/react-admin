@@ -8,7 +8,7 @@ import { textRender } from "../renders";
 import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('tableUtils')
-const i18nKey = globalConfig.i18nKey || 'activerecord.attributes'
+const i18nKey = globalConfig.i18nKey
 
 const deleting = () => message.loading('正在删除...', 5)
 let successCount = 0
@@ -128,7 +128,8 @@ export default {
       column.dataIndex = column.name || column.dataIndex
       delete column.name
       // 默认使用 i18n 翻译，可通过 columns 中的 title 设置覆盖
-      column.title = column.title || i18n.t(`${i18nKey}.${tableName}.${column.dataIndex}`) || column.dataIndex
+      const i18nName = [i18nKey, tableName, column.dataIndex].filter(Boolean).join('.')
+      column.title = column.title || i18n.t(`${i18nName}`) || column.dataIndex
 
       // render 为一个映射或者一个数组
       if (_.isObjectLike(column.render)) {
