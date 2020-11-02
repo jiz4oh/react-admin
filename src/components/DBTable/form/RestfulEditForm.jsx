@@ -27,15 +27,15 @@ const defaultIsRemote = globalConfig.DBTable.remote || false
  * @param restProps
  */
 function RestfulEditForm({
-  model,
-  form: antdFormInstance,
-  pk,
-  fields = [],
-  remote = defaultIsRemote,
-  onFinish,
-  onFinishFailed,
-  ...restProps
-}) {
+                           model,
+                           form: antdFormInstance,
+                           pk,
+                           fields = [],
+                           remote = defaultIsRemote,
+                           onFinish,
+                           onFinishFailed,
+                           ...restProps
+                         }) {
   const [form] = Form.useForm(antdFormInstance)
   const [inputsConfig, setInputsConfig] = useState(fields)
   const [isCloseForm, closeForm] = useState(true)
@@ -103,10 +103,13 @@ function RestfulEditForm({
 
 RestfulEditForm.propTypes = {
   model: PropTypes.shape({
-    edit: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired,
-  }),
-  pk: PropTypes.number.isRequired,
+                           edit: PropTypes.func.isRequired,
+                           update: PropTypes.func.isRequired,
+                         }),
+  pk: PropTypes.oneOfType([
+                            PropTypes.string,
+                            PropTypes.number
+                          ]).isRequired,
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }
