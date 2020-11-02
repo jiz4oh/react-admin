@@ -14,7 +14,7 @@ import { RestfulTable } from "./index";
 import { RestfulEditForm, RestfulNewForm } from "./index";
 import formUtils from "./form/utils";
 import globalConfig from "../../config"
-import { PolymorphicLayout } from "../layouts";
+import PolymorphicGrid from "../PolymorphicGrid";
 
 const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
 const logger = Logger.getLogger('Resource')
@@ -117,7 +117,7 @@ function DBTable({
         path={match.path}
         key={match.path}
         render={() =>
-          <PolymorphicLayout columns={columns} gutter={gutter}>
+          <PolymorphicGrid columns={columns} gutter={gutter}>
             <List
               model={model}
               formFields={formFields}
@@ -129,7 +129,7 @@ function DBTable({
               {...restConfig}
             />
             {children}
-          </PolymorphicLayout>
+          </PolymorphicGrid>
         }
       />
     </Switch>

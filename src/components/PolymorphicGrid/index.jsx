@@ -12,7 +12,7 @@ const BASE_ROW_LENGTH = 24
  * @returns {JSX.Element|[]}
  * @constructor
  */
-export default function PolymorphicLayout({
+export default function PolymorphicGrid({
                                             children,
                                             columns = 1,
                                             gutter = [8, 8]

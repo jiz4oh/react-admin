@@ -1,11 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
 
+import PolymorphicGrid from "../PolymorphicGrid";
 import i18n from '../../common/js/i18n'
 import Logger from '../../common/js/Logger'
-import {
-  PolymorphicLayout
-} from "../layouts";
 import globalConfig from "../../config";
 
 const logger = Logger.getLogger('Form')
@@ -69,8 +67,8 @@ export default function ({
   ...restMeta
 }) {
   return (
-    <PolymorphicLayout columns={columns} gutter={gutter} >
+    <PolymorphicGrid columns={columns} gutter={gutter} >
       {fields.map(field => renderField(field, restMeta))}
-    </PolymorphicLayout>
+    </PolymorphicGrid>
   )
 }
