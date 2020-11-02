@@ -5,7 +5,7 @@ import Login from '../../pages/login'
 import {NotFound} from '../../components/NotFound'
 import Logger from "./Logger";
 import RouteBuilder from "./builder/RouteBuilder";
-import {menus} from '../../config/menus'
+import menus from '../../config/menus'
 import {defaultLayout as DefaultLayout} from "../../layouts";
 
 const logger = Logger.getLogger('app')
