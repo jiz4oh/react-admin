@@ -77,7 +77,7 @@ function DBTable({
   }
 
   const onEditFinish = () => {
-    formUtils.notifyError('编辑')
+    formUtils.notifySuccess('编辑')
     history.goBack()
   }
 
