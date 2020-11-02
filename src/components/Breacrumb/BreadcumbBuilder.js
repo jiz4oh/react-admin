@@ -1,9 +1,9 @@
 import React from "react";
-import {Breadcrumb as AntdBreadcrumb} from "antd";
-import {Link} from "react-router-dom";
+import { Breadcrumb as AntdBreadcrumb } from "antd";
+import { Link } from "react-router-dom";
 import _ from 'lodash'
 
-import {appRootPath} from "./RouteBuilder";
+import { appRootPath } from "../../common/js/builder/RouteBuilder";
 
 const notBreadcrumbs = [appRootPath, 'dashboard']
 
@@ -65,6 +65,12 @@ const recurseBreadcrumbs = (subMenus, paths, currentPaths) => {
     : renderBreadcrumb(menu, paths)
 }
 
-export default function BreadcrumbBuilder({currentPaths, menus}) {
-  return [recurseBreadcrumbs(menus, [appRootPath], currentPaths)].flat().filter(Boolean)
+/**
+ * 因为 antd 的原因，不要将 BreadcrumbBuilder 作为组件使用，会导致分割符插入不正确
+ * @param paths {[]} 当前路由表
+ * @param menus {[]} 预设路由表
+ * @return {ReactNode} 返回一份菜单表
+ */
+export default function (paths, menus) {
+  return [recurseBreadcrumbs(menus, [appRootPath], paths)].flat().filter(Boolean)
 }

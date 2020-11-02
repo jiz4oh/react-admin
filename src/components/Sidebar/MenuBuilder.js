@@ -1,9 +1,9 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {Menu} from "antd";
+import { Link } from "react-router-dom";
+import { Menu } from "antd";
 import _ from 'lodash'
 
-import {appRootPath} from "./RouteBuilder";
+import { appRootPath } from "../../common/js/builder/RouteBuilder";
 
 const renderMenuItem = (item, parentPaths, restProps) => {
   const {path, label} = item
@@ -43,19 +43,16 @@ const renderSubMenu = (item, parentPaths, restProps) => {
   )
 }
 
-const subMenusMap = (subs, currentPaths, restProps) =>
-  subs && subs.map(item =>
-    !_.isEmpty(item.subs)
-      ? renderSubMenu(item, currentPaths, restProps)
-      : renderMenuItem(item, currentPaths, restProps)
-  )
+const subMenusMap = (subs, currentPaths, restProps) => subs && subs.map(
+  item => !_.isEmpty(item.subs) ? renderSubMenu(item, currentPaths, restProps) : renderMenuItem(item, currentPaths, restProps)
+)
 
 /**
  * 因为 antd 的原因，不要将 MenuBuilder 作为组件使用，否则导致高亮不正确等问题
- * @param menus {Object} Json 菜单表
- * @param restProps {Array} 其他传递给 Menu 组件的 props
- * @return {ReactNode} 返回一份菜单表
+ * @param menus {Object[]} 预设菜单表
+ * @param restProps {any[]} 其他传递给 Menu 组件的 props
+ * @return {React.ReactElement[]} 返回一份菜单表
  */
-const MenuBuilder = ({menus, ...restProps}) => subMenusMap(menus, [appRootPath], restProps)
+const MenuBuilder = (menus, ...restProps) => subMenusMap(menus, [appRootPath], restProps)
 
 export default MenuBuilder

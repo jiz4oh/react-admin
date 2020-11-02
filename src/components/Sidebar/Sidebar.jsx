@@ -1,24 +1,20 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { useLocation } from 'react-router-dom'
+import React, { useCallback, useState } from "react";
 import { Layout, Menu } from 'antd';
+import _ from "lodash"
+import PropTypes from "prop-types";
 
-import menus from "../../config/menus";
 import Logger from "../../common/js/Logger";
-import MenuBuilder from "../../common/js/builder/MenuBuilder";
 
 const logger = Logger.getLogger('sidebar')
 
 const Sidebar = ({
-  mode: PreMode = 'inline',
-  currentPath
-}) => {
+                   mode: PreMode = 'inline',
+                   currentPaths,
+                   children,
+                 }) => {
   // eslint-disable-next-line
   const [mode, changeMenu] = useState(PreMode)
   const [openKeys, setOpenKeys] = useState([])
-  // eslint-disable-next-line
-  const [selectedKey, selectKey] = useState(currentPath)
-
-  const location = useLocation()
 
   const handleClickOpenMenu = useCallback(
     key => {
@@ -27,11 +23,8 @@ const Sidebar = ({
     }, []
   )
 
-  const sidebarMenus = useMemo(() =>
-    MenuBuilder({ menus: menus() })
-    , []
-  )
-
+  currentPaths = _.isArray(currentPaths) ? currentPaths : [currentPaths]
+  currentPaths = currentPaths.flat().filter(Boolean)
   return (
     <Layout.Sider collapsible>
       <div
@@ -45,14 +38,22 @@ const Sidebar = ({
       <Menu
         theme="dark"
         mode={mode}
-        selectedKeys={[selectedKey || location.pathname]}
+        selectedKeys={currentPaths}
         openKeys={openKeys}
         onOpenChange={handleClickOpenMenu}
       >
-        {sidebarMenus}
+        {children}
       </Menu>
     </Layout.Sider>
   )
+}
+
+Sidebar.propTypes = {
+  mode: PropTypes.string,
+  currentPaths: PropTypes.oneOfType([
+                                      PropTypes.array,
+                                      PropTypes.string
+                                    ]),
 }
 
 export default React.memo(Sidebar)

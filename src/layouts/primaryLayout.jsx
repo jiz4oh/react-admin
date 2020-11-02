@@ -1,19 +1,34 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout } from 'antd';
+import { useLocation } from "react-router-dom";
 
-import { Sidebar } from "../components/sidebar";
 import { Header } from "../components/Header";
+import { Sidebar, MenuBuilder } from "../components/Sidebar";
+import { Breadcrumb, BreadcrumbBuilder } from "../components/Breacrumb";
+import { getUserInfo, clearUserInfo } from "../components/session";
+import menus from "../config/menus";
 
-const { Content, Footer } = Layout
+const {Content, Footer} = Layout
 
-function PrimaryLayout(props) {
-  const { children } = props
+function PrimaryLayout({children}) {
+  const userName = getUserInfo('userName')
+  const avatar = getUserInfo('avatar')
+  const location = useLocation()
+  const currentPaths = location.pathname.split('/')
+  const sidebarMenus = useMemo(() => MenuBuilder(menus()), [])
+  const breadcrumbs = useMemo(() => BreadcrumbBuilder(currentPaths, menus()), [currentPaths])
 
   return (
     <Layout className="G-app-layout">
-      <Sidebar />
-      <Layout style={{ flexDirection: 'column' }}>
-        <Header />
+      <Sidebar currentPaths={location.pathname}>
+        {sidebarMenus}
+      </Sidebar>
+      <Layout style={{flexDirection: 'column'}}>
+        <Header userName={userName} avatar={avatar} logout={clearUserInfo}>
+          <Breadcrumb>
+            {breadcrumbs}
+          </Breadcrumb>
+        </Header>
         <Content className='clearfix G-app-content'>
           <div className='G-site-main-layout clearfix'>
             {children}
