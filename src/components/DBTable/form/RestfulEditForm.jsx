@@ -29,9 +29,9 @@ const defaultIsRemote = globalConfig.DBTable.remote || false
 function RestfulEditForm({
   model,
   form: antdFormInstance,
+  pk,
   fields = [],
   remote = defaultIsRemote,
-  pk,
   onFinish,
   onFinishFailed,
   ...restProps
@@ -106,6 +106,7 @@ RestfulEditForm.propTypes = {
     edit: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
   }),
+  pk: PropTypes.number.isRequired,
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }

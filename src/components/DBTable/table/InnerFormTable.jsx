@@ -80,7 +80,7 @@ function InnerFormTable(props) {
             form={form}
             fields={formFields}
             remote={remote}
-            recordId={recordId}
+            pk={recordId}
             footer={null}
             onFinish={onFinish}
             preserve={false}
