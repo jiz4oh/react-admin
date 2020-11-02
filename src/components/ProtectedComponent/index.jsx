@@ -1,6 +1,7 @@
-import React from 'react'
-import {Redirect, useLocation} from 'react-router-dom'
+import React, { useCallback } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import PropTypes from "prop-types";
+import { Button, Result } from "antd";
 
 /**
  * 访问子组件需要权限
@@ -12,12 +13,28 @@ import PropTypes from "prop-types";
  */
 const ProtectedComponent = ({children, rules}) => {
   const location = useLocation()
+  const history = useHistory()
+  const defaultFailFn = useCallback(p => (
+    <Result
+      status="403"
+      title={"403"}
+      subTitle={"对不起，您没有权限访问该页面"}
+      extra={
+        <>
+          <Button type="primary" onClick={() => history.push('/dashboard')}>
+            返回控制面板
+          </Button>
+          <Button onClick={() => history.goBack()}>
+            返回上一页
+          </Button>
+        </>
+      }
+    />
+    // eslint-disable-next-line
+  ), [])
 
   for (let i = 0; i < rules.length; i++) {
-    const {
-      require,
-      onFail = p => <Redirect to="/404"/>
-    } = rules[i]
+    const {require, onFail = defaultFailFn} = rules[i]
 
     if (!(require({location}))) {
       // 如果验证不通过，执行失败回调

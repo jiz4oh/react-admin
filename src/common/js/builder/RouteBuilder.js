@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import _ from 'lodash'
 import { Result, Button } from "antd";
 
-import ProtectedComponent from "../ProtectedComponent";
+import ProtectedComponent from "../../../components/ProtectedComponent";
 
 export const appRootPath = ''
 
@@ -17,12 +17,15 @@ const _404 = (
         title="404"
         subTitle="对不起，页面不存在"
         extra={
-          <Button
-            type="primary"
-            onClick={() => props.history.push('/dashboard')}
-          >
-            返回控制面板
-          </Button>
+          <>
+            <Button type="primary"
+                    onClick={() => props.history.push('/dashboard')}>
+              返回控制面板
+            </Button>
+            <Button onClick={() => props.history.goBack()}>
+              返回上一页
+            </Button>
+          </>
         }
       />
     }/>)
