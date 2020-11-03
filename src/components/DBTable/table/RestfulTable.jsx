@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, notification, Table as AntdTable } from "antd";
+import { Button, Modal, notification, Table as AntdTable } from "antd";
+import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import _ from 'lodash'
 
 import './index.scss'
@@ -58,7 +59,14 @@ class RestfulTable extends React.PureComponent {
     nextPage: null,
     total: null,
     pageSize: this.props.pageSize || defaultSize,
+    //检测全屏状态
+    isFullScreen: false,
   }
+
+  toggleFullScreen = () => {
+    this.state.isFullScreen ? utils.exitFullscreen() : utils.requestFullScreen()
+    this.setState({isFullScreen: !this.state.isFullScreen})
+  };
 
   componentDidMount() {
     // 从后端获取数据
@@ -282,6 +290,18 @@ class RestfulTable extends React.PureComponent {
     canNew && actionItems.push(this.defaultActionMap.new)
     // 添加刷新按钮
     actionItems.push(this.defaultActionMap.refresh)
+    // 添加全屏按钮
+    actionItems.push(
+      () => (
+        <Button
+          key='fullScreenBtn'
+          onClick={this.toggleFullScreen}
+        >
+          {this.state.isFullScreen ? <FullscreenExitOutlined/> :
+            <FullscreenOutlined/>}
+        </Button>
+      )
+    )
     return actionItems
   }
 

@@ -155,5 +155,20 @@ export default {
       }
     }
     return result
-  }
+  },
+
+  //进入全屏
+  requestFullScreen: element => {
+    element = element || document.documentElement
+    element.requestFullscreen && element.requestFullscreen()
+    element.mozRequestFullScreen && element.mozRequestFullScreen()
+    element.webkitRequestFullScreen && element.webkitRequestFullScreen()
+  },
+
+  //退出全屏
+  exitFullscreen: () => {
+    document.exitFullscreen && document.exitFullscreen()
+    document.mozCancelFullScreen && document.mozCancelFullScreen()
+    document.webkitCancelFullScreen && document.webkitCancelFullScreen()
+  },
 }
