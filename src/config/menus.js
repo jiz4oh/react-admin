@@ -6,10 +6,7 @@ import {
 } from '@ant-design/icons';
 
 import { permissionRequired } from "../components/session";
-import Dashboard from "../pages/dashboard";
-import User from '../pages/user'
-import AdminUser from '../pages/adminUser'
-import Role from '../pages/role'
+import dynamic from "../pages";
 
 const menus = [
   // 菜单相关路由
@@ -17,7 +14,7 @@ const menus = [
     path: 'dashboard',
     label: '首页',
     icon: <HomeOutlined/>,
-    component: Dashboard,
+    component: dynamic('dashboard'),
     rules: [permissionRequired.isLoggedIn]
   },
   {
@@ -30,7 +27,7 @@ const menus = [
         label: '用户',
         path: 'users',
         rules: [permissionRequired.isLoggedIn, permissionRequired.hasVisitPermission],
-        component: User
+        component: dynamic('user')
       },
     ]
   },
@@ -44,14 +41,14 @@ const menus = [
         label: '管理员',
         path: 'admin_users',
         rules: [permissionRequired.isLoggedIn, permissionRequired.hasVisitPermission],
-        component: AdminUser
+        component: dynamic('adminUser')
       },
       {
         name: 'role',
         label: '角色',
         path: 'roles',
         rules: [permissionRequired.isLoggedIn, permissionRequired.hasVisitPermission],
-        component: Role
+        component: dynamic('role')
       },
     ],
   }
