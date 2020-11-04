@@ -16,7 +16,7 @@ function SelectFilter({
   return (
     <Select
       key={`${name}-filter`}
-      allowClear
+      mode='multiple'
       placeholder={placeholder || '请选择'}
       size="default"
       showSearch
