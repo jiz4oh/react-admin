@@ -4,7 +4,7 @@ import loadable from "@loadable/component";
 
 import './common/style/frame.scss'
 import PageContainer from "./PageContainer";
-import RouteBuilder from "./common/js/builder/RouteBuilder";
+import RouteBuilder from "./components/RouteBuilder";
 import menus from './config/menus'
 import PageLoading from "./components/PageLoading"
 

@@ -5,9 +5,10 @@ import queryString from 'query-string';
 import _ from 'lodash'
 import { Result, Button } from "antd";
 
-import ProtectedComponent from "../../../components/ProtectedComponent";
+import ProtectedComponent from "../ProtectedComponent";
+import globalConfig from "../../config"
 
-export const appRootPath = ''
+const appRootPath = globalConfig.appRootPath || ''
 
 const _404 = (
   <Route

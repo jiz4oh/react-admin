@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import _ from 'lodash'
 
-import { appRootPath } from "../../common/js/builder/RouteBuilder";
+import globalConfig from "../../config";
+const appRootPath = globalConfig.appRootPath || ''
 
 const renderMenuItem = (item, parentPaths, restProps) => {
   const {path, label} = item
