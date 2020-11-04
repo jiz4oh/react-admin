@@ -188,10 +188,8 @@ class RestfulTable extends React.PureComponent {
    * @returns {Number}
    */
   getTableWidth = (length = this.getColumns().length) => {
-    const {tableWidth} = this.props
-
     // 获取全表宽度
-    return utils.getTableWidth(length, tableWidth)
+    return this.props.tableWidth || utils.getTableWidth(length)
   }
 
   /**

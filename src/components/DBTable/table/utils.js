@@ -140,21 +140,17 @@ export default {
     return columns
   },
 
-  getTableWidth: (columnsLength, preTableWidth) => {
-    let result = preTableWidth
+  getTableWidth: (columnsLength) => {
     // 默认自动判断
-    if (_.isNil(preTableWidth)) {
-      if (columnsLength < 8) {
-        result = 800
-      } else if (columnsLength < 13) {
-        result = 1300
-      } else if (columnsLength < 20) {
-        result = 2000
-      } else {
-        result = 3000
-      }
+    if (columnsLength < 8) {
+      return 800
+    } else if (columnsLength < 13) {
+      return 1300
+    } else if (columnsLength < 20) {
+      return 2000
+    } else {
+      return 3000
     }
-    return result
   },
 
   //进入全屏
