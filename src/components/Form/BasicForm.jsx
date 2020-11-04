@@ -4,7 +4,7 @@ import { Form } from "antd";
 import _ from 'lodash'
 
 import formUtils from './utils'
-import { renderBackAction, renderSubmitAction } from "../actions";
+import { renderBackAction, renderSubmitAction } from "../DBTable/actions";
 import GenericFormLayout from "./GenericFormLayout";
 
 // antd 校验成功后的回调

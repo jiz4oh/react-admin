@@ -11,8 +11,8 @@ import {
   hasDeletePermission
 } from "../session";
 import { RestfulTable } from "./index";
-import { RestfulEditForm, RestfulNewForm } from "./index";
-import formUtils from "./form/utils";
+import { RestfulNewForm, RestfulEditForm } from "../Form";
+import formUtils from "../Form/utils";
 import globalConfig from "../../config"
 import PolymorphicGrid from "../PolymorphicGrid";
 
@@ -47,16 +47,16 @@ const can = {
  * @return {*}
  */
 function DBTable({
-  model,
-  CRUD = defaultCRUD,
-  form: formFields,
-  index,
-  components,
-  children,
-  columns,
-  gutter,
-  ...restConfig
-}) {
+                   model,
+                   CRUD = defaultCRUD,
+                   form: formFields,
+                   index,
+                   components,
+                   children,
+                   columns,
+                   gutter,
+                   ...restConfig
+                 }) {
   logger.debug(`切换到 ${model.name}`)
   const match = useRouteMatch()
   const history = useHistory()
@@ -138,15 +138,15 @@ function DBTable({
 
 DBTable.propTypes = {
   model: PropTypes.shape({
-    index: PropTypes.func.isRequired,
-    new: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
-    edit: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired,
-    delete: PropTypes.func.isRequired,
-    name: PropTypes.string,
-    url: PropTypes.string.isRequired,
-  }),
+                           index: PropTypes.func.isRequired,
+                           new: PropTypes.func.isRequired,
+                           create: PropTypes.func.isRequired,
+                           edit: PropTypes.func.isRequired,
+                           update: PropTypes.func.isRequired,
+                           delete: PropTypes.func.isRequired,
+                           name: PropTypes.string,
+                           url: PropTypes.string.isRequired,
+                         }),
   CRUD: PropTypes.array,
   form: PropTypes.array,
   index: PropTypes.array,

@@ -4,12 +4,12 @@ import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import _ from 'lodash'
 import PropTypes from "prop-types";
 
-import './index.scss'
-import { FormBuilder } from "../../FormBuilder";
-import { renderFilterBy } from "../../inputs";
-import { PREDICATE, RANGE_FIELD } from '../../inputs/constants'
+import './RansackFilter.scss'
+import { FormBuilder } from "../FormBuilder";
+import { renderFilterBy } from "../inputs";
+import { PREDICATE, RANGE_FIELD } from '../inputs/constants'
 
-import Logger from "../../../common/js/Logger";
+import Logger from "../../common/js/Logger";
 
 const logger = Logger.getLogger('RansackFilter')
 

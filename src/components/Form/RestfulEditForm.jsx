@@ -3,12 +3,12 @@ import { Form } from "antd";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
-import Logger from "../../../common/js/Logger";
+import Logger from "../../common/js/Logger";
 import BasicForm from './BasicForm'
 import formUtils from './utils'
-import globalConfig from "../../../config"
-import { renderInputBy } from "../../inputs";
-import { FormBuilder } from "../../FormBuilder";
+import globalConfig from "../../config"
+import { renderInputBy } from "../inputs";
+import { FormBuilder } from "../FormBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = globalConfig.DBTable.remote || false

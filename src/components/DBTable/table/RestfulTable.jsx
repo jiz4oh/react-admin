@@ -8,7 +8,8 @@ import './index.scss'
 import Logger from "../../../common/js/Logger";
 import utils from './utils'
 import * as actionButtons from "../actions";
-import { Filter, ToolBar } from "../index";
+import { RansackFilter } from "../../RansackFilter";
+import { ToolBar } from "../../ToolBar";
 import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('RestfulTable')
@@ -385,7 +386,7 @@ class RestfulTable extends React.PureComponent {
       <>
         {
           !_.isEmpty(filterFields) && (
-            <Filter
+            <RansackFilter
               tableName={model.name}
               onQuery={this.fetchTableData}
               fields={filterFields}

@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { Modal, Form } from "antd";
 
 import RestfulTable from "./RestfulTable";
-import { RestfulEditForm, RestfulNewForm } from "../form";
+import { RestfulEditForm, RestfulNewForm } from "../../Form";
+import formUtils from "../../Form/utils";
 import { renderNewAction, renderEditAction } from "../actions";
-import formUtils from "../form/utils";
 import globalConfig from "../../../config"
 
 const defaultIsRemote = globalConfig.DBTable.remote || false
