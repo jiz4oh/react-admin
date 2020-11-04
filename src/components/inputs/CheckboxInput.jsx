@@ -1,7 +1,7 @@
 import {Checkbox} from "antd";
 import React from "react";
 
-import {collectionWrapper} from "./utils";
+import {withCollection} from "./utils";
 
 function CheckboxInput(props) {
   const {
@@ -25,4 +25,4 @@ function CheckboxInput(props) {
   )
 }
 
-export default collectionWrapper(CheckboxInput)
+export default withCollection(CheckboxInput)

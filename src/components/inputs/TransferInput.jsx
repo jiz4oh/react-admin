@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from "react";
 import {Transfer, Button} from "antd";
 
-import {collectionWrapper} from "./utils";
+import {withCollection} from "./utils";
 
 const renderItem = item => item.name
 
@@ -54,4 +54,4 @@ const TransferInput = (props) => {
   )
 }
 
-export default collectionWrapper(TransferInput)
+export default withCollection(TransferInput)

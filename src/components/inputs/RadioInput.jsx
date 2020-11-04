@@ -2,7 +2,7 @@ import {Radio} from "antd";
 import React from "react";
 
 import './index.scss'
-import {collectionWrapper} from "./utils";
+import {withCollection} from "./utils";
 
 function RadioInput(props) {
   const {
@@ -32,4 +32,4 @@ function RadioInput(props) {
   )
 }
 
-export default collectionWrapper(RadioInput)
+export default withCollection(RadioInput)

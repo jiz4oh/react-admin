@@ -1,7 +1,7 @@
 import {Cascader} from "antd";
 import React from "react";
 
-import {collectionWrapper} from "./utils";
+import {withCollection} from "./utils";
 
 function CascaderInput(props) {
   const {
@@ -32,4 +32,4 @@ function CascaderInput(props) {
   )
 }
 
-export default collectionWrapper(CascaderInput)
+export default withCollection(CascaderInput)

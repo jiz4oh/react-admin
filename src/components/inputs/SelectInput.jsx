@@ -1,7 +1,7 @@
 import {Select} from "antd";
 import React from "react";
 
-import {collectionWrapper} from "./utils";
+import {withCollection} from "./utils";
 
 function SelectInput(props) {
   const {
@@ -32,4 +32,4 @@ function SelectInput(props) {
   )
 }
 
-export default collectionWrapper(SelectInput)
+export default withCollection(SelectInput)

@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 
 import './index.scss'
 import { FormBuilder } from "../../FormBuilder";
-import { renderFilterBy } from "./index";
-import { PREDICATE, RANGE_FIELD } from './constants'
+import { renderFilterBy } from "../../inputs";
+import { PREDICATE, RANGE_FIELD } from '../../inputs/constants'
 
 import Logger from "../../../common/js/Logger";
 

@@ -1,1 +1,1 @@
-export {renderInputBy} from './utils'
+export { renderInputBy, renderFilterBy } from './utils'

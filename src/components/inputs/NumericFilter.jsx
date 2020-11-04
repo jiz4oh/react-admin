@@ -2,7 +2,7 @@ import {Form, Input, Select} from "antd";
 import React, {useMemo} from "react";
 
 import {withFormItem} from "./utils";
-import {PREDICATE} from '../constants'
+import {PREDICATE} from './constants'
 
 const selectBefore = name => (
   <Form.Item

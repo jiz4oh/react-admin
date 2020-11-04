@@ -1,7 +1,7 @@
 import {Select} from "antd";
 import React from "react";
 
-import {collectionWrapper} from "./utils";
+import {withCollection} from "./utils";
 
 const MultiSelectInput = (props) => {
   let {
@@ -31,4 +31,4 @@ const MultiSelectInput = (props) => {
   )
 }
 
-export default collectionWrapper(MultiSelectInput)
+export default withCollection(MultiSelectInput)
