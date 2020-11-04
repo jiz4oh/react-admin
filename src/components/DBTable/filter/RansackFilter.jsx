@@ -44,7 +44,7 @@ class RansackFilter extends React.PureComponent {
 
       // 获取当前字段的谓语
       const predicate = fieldsValue[`${name}${PREDICATE}`]
-      if (predicate === RANGE_FIELD || _.isArray(value)) {
+      if (predicate === RANGE_FIELD) {
         // 当是 range 字段时，value 对应的是一个数组或者 undefined
         if (_.isEmpty(value)) return
         name = name.split('-')[0]
