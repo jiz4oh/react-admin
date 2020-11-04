@@ -5,7 +5,7 @@ import _ from 'lodash'
 import PropTypes from "prop-types";
 
 import './RansackFilter.scss'
-import { FormBuilder } from "../FormBuilder";
+import { FormItemBuilder } from "../FormItemBuilder";
 import { renderFilterBy } from "../inputs";
 import { PREDICATE, RANGE_FIELD } from '../inputs/constants'
 
@@ -70,7 +70,7 @@ class RansackFilter extends React.PureComponent {
     return (
       <div className='M-filter-container'>
         <Form ref={this.formRef}>
-          <FormBuilder
+          <FormItemBuilder
             tableName={tableName}
             fields={fields}
             columns={3}
