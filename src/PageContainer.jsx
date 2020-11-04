@@ -3,16 +3,16 @@ import { Layout } from 'antd';
 import _ from "lodash";
 import { useLocation } from "react-router-dom";
 
-import { Header } from "../components/Header";
-import { Sidebar, MenuBuilder } from "../components/Sidebar";
-import { Breadcrumb, BreadcrumbBuilder } from "../components/Breacrumb";
+import { Header } from "./components/Header";
+import { Sidebar, MenuBuilder } from "./components/Sidebar";
+import { Breadcrumb, BreadcrumbBuilder } from "./components/Breacrumb";
 import {
   getUserInfo,
   clearUserInfo,
   hasIndexPermission,
   hasVisitPermission,
-} from "../components/session";
-import menus from "../config/menus";
+} from "./components/session";
+import menus from "./config/menus";
 
 const currentUserMenus = () => {
   if (hasIndexPermission('all')) {
@@ -53,7 +53,7 @@ const currentUserMenus = () => {
 
 const {Content, Footer} = Layout
 
-function PrimaryLayout({children}) {
+function PageContainer({children}) {
   const userName = getUserInfo('userName')
   const avatar = getUserInfo('avatar')
   const location = useLocation()
@@ -85,4 +85,4 @@ function PrimaryLayout({children}) {
   );
 }
 
-export default PrimaryLayout
+export default PageContainer
