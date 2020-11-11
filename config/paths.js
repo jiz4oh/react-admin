@@ -66,9 +66,9 @@ module.exports = {
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
   proxySetup: resolveApp('src/setupProxy.js'),
   appNodeModules: resolveApp('node_modules'),
-  i18nJsFile: resolveApp('src/common/js/i18n.js'),
+  i18nBuildScript: resolveApp('scripts/buildI18n.js'),
+  i18nOutputPath: resolveApp('src/assets/i18n.json'),
   i18nLocalesDir: resolveApp(appConfig.i18nLocalesDir),
-  i18nOutputPath: resolveApp('src/common/assets/i18n.json'),
   publicUrlOrPath,
 };
 

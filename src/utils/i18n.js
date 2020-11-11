@@ -1,65 +1,8 @@
-const yaml = require('js-yaml');
-const fs = require('fs');
 const globalConfig = require('../config')
 // 因为 babel 限制，不能读取 src 目录以外文件，所以这里不能使用需要硬编码形式指定文件路径
 const i18nFile = require('../assets/i18n.json')
 
-/**
- *
- * @param fileObj {Object} 需要合并的对象
- * @param result {Object} i18n 翻译文件合成的对象
- * @returns {Object} i18n 翻译文件合成的对象
- */
-const recurseToI18n = (fileObj, result) => {
-  Object.keys(fileObj).forEach((key) => {
-    const value = fileObj[key]
-    // 判断当前是不是一个对象
-    if (Object.prototype.toString.call(value).slice(8, -1) === 'Object') {
-      result[key] = result[key] || {}
-      return recurseToI18n(value, result[key])
-    }
-    result[key] = value
-  })
-  return result
-}
-
-/**
- *
- * @param dirPath {String} 文件夹地址
- * @param result {Object} i18n 翻译文件合成的对象
- * @returns {Object} i18n 翻译文件合成的对象
- */
-const recurseFilesBy = (dirPath, result) => {
-  // 获取所有文件
-  const files = fs.readdirSync(dirPath, (err, files) => {
-    if (err) {
-      console.info(`未找到 ${dirPath} 文件夹`)
-      return []
-    }
-    // files是一个数组，每个元素是此目录下的文件或文件夹的名称
-    return files
-  })
-
-  files.forEach(fileOrDir => {
-    // 判断 yml 后缀
-    if (fileOrDir.endsWith('.yml')) {
-      let fileObj = yaml.safeLoad(fs.readFileSync(dirPath + '/' + fileOrDir, 'utf8'));
-      recurseToI18n(fileObj, result)
-    } else {
-      recurseFilesBy(dirPath + '/' + fileOrDir, result)
-    }
-  })
-
-  return result
-}
-
-/**
- *
- * @param localesDir {String} i18n 文件夹存放地址
- * @returns {Object} i18n 翻译文件合成的对象
- */
-const createI18nFileBy = localesDir => recurseFilesBy(localesDir, {})
-
+const locate = globalConfig.locate || 'zh-CN'
 /**
  * @param path {Array} 对象的嵌套 key 数组
  * @example ["activerecord", "attributes", "commodity", "name"]
@@ -67,7 +10,7 @@ const createI18nFileBy = localesDir => recurseFilesBy(localesDir, {})
  */
 const findBy = (path) => {
   const current = path.pop()
-  let result = i18nFile[globalConfig.locate || 'zh-CN']
+  let result = i18nFile[locate]
   if (path.length !== 0) {
     result = findBy(path)
   }
@@ -111,8 +54,7 @@ const translate = (name) => {
 
 const t = translate
 
-module.exports = {
-  createI18nFileBy,
+export default {
   t,
   translate,
 }

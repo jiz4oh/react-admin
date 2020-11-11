@@ -40,10 +40,9 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
-// begin
-// 自动构建 i18n 文件
-if (checkRequiredFiles([paths.i18nJsFile])) {
-  const createI18nFileBy = require(paths.i18nJsFile).createI18nFileBy
+// begin 自动构建 i18n 文件
+if (checkRequiredFiles([paths.i18nBuildScript])) {
+  const createI18nFileBy = require(paths.i18nBuildScript)
   const i18n = createI18nFileBy(paths.i18nLocalesDir)
   // 每次都重新构建文件
   fs.existsSync(paths.i18nOutputPath) && fs.unlinkSync(paths.i18nOutputPath)
