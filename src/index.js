@@ -20,7 +20,7 @@ ReactDOM.render(
         <Router>
           <Switch>
             <Route exec path="/login" component={loadable(() => import('./pages/login'))}/>
-            <Route exec path="/404" component={loadable(() => import('./components/NotFound'))}/>
+            <Route exec path="/404" component={loadable(() => import('./pages/NotFound'))}/>
             <RouteBuilder routes={menus}/>
           </Switch>
         </Router>
