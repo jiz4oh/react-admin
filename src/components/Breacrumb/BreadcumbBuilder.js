@@ -57,7 +57,7 @@ const recurseBreadcrumbs = (subMenus, paths, currentPaths) => {
   }
 
   // 查找符合条件的 menu
-  const menu = subMenus.find(menu => menu.path === currentPath) || {}
+  const menu = subMenus.find(menu => menu.path.split('/').join('') === currentPath) || {}
   const {subs, path} = menu
 
   return !_.isEmpty(subs)
