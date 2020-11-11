@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import { useLocation } from "react-router-dom";
 
 import { Header } from "./components/Header";
-import { Sidebar, MenuBuilder } from "./components/Sidebar";
+import { Sidebar } from "./components/Sidebar";
 import { Breadcrumb, BreadcrumbBuilder } from "./components/Breacrumb";
 import {
   getUserInfo,
@@ -12,7 +12,7 @@ import {
   hasVisitPermission,
 } from "./components/session";
 import menus from "./config/menus";
-import { authoriseMenu } from "./components/Sidebar/MenuBuilder";
+import { MenuItemBuilder, authoriseMenu } from "./components/MenuItemBuilder";
 
 const defaultVisitablePaths = ['dashboard']
 
@@ -28,7 +28,7 @@ function PageContainer({children}) {
   const avatar = getUserInfo('avatar')
   const location = useLocation()
   const currentPaths = location.pathname.split('/')
-  const sidebarMenus = useMemo(() => MenuBuilder(currentUserMenus()), [])
+  const sidebarMenus = useMemo(() => MenuItemBuilder(currentUserMenus()), [])
   const breadcrumbs = useMemo(() => BreadcrumbBuilder(currentPaths, currentUserMenus()), [currentPaths])
 
   return (
