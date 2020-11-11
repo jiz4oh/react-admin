@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 
 import { Header } from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
-import { Breadcrumb, BreadcrumbBuilder } from "./components/Breacrumb";
+import { Breadcrumb } from "./components/Breacrumb";
+import { breadcrumbItemBuilder } from "./components/breadcumbItemBuilder";
 import {
   getUserInfo,
   clearUserInfo,
@@ -29,7 +30,7 @@ function PageContainer({children}) {
   const location = useLocation()
   const currentPaths = location.pathname.split('/')
   const sidebarMenus = useMemo(() => MenuItemBuilder(currentUserMenus()), [])
-  const breadcrumbs = useMemo(() => BreadcrumbBuilder(currentPaths, currentUserMenus()), [currentPaths])
+  const breadcrumbs = useMemo(() => breadcrumbItemBuilder(currentPaths, currentUserMenus()), [currentPaths])
 
   return (
     <Layout className="G-app-layout">
