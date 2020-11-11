@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DBTable, InnerFormTable } from "../../layouts/DBTable";
+import { DBTable, InnerFormTable } from "../../components/DBTable";
 import models from "../../models";
 
 const config = {

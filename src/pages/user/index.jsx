@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 import { enumMapToArray } from "../../utils/utils";
-import { DBTable } from "../../layouts/DBTable";
+import { DBTable } from "../../components/DBTable";
 import models from "../../models";
-import { ImageRender } from "../../layouts/DBTable/renders";
+import { ImageRender } from "../../components/DBTable/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
 
 const genderMap = {

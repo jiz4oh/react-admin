@@ -14,7 +14,7 @@ import { RestfulTable } from "./index";
 import { RestfulNewForm, RestfulEditForm } from "../Form";
 import formUtils from "../Form/utils";
 import globalConfig from "../../config"
-import PolymorphicGrid from "../../components/PolymorphicGrid";
+import PolymorphicGrid from "../PolymorphicGrid";
 
 const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
 const logger = Logger.getLogger('Resource')
