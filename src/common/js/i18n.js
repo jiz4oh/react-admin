@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const globalConfig = require('../../config')
 // 因为 babel 限制，不能读取 src 目录以外文件，所以这里不能使用需要硬编码形式指定文件路径
-const i18nFile = require('../assets/i18n.json')
+const i18nFile = require('../../assets/i18n.json')
 
 /**
  *
