@@ -2,8 +2,8 @@ import { message, notification, Space } from "antd";
 import React from "react";
 import _ from 'lodash'
 
-import i18n from "../../../common/js/i18n";
-import Logger from "../../../common/js/Logger";
+import i18n from "../../../utils/i18n";
+import Logger from "../../../utils/Logger";
 import { textRender } from "../renders";
 import globalConfig from "../../../config";
 

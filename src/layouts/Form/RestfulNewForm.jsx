@@ -3,7 +3,7 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import { Form } from "antd";
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 import formUtils from './utils'
 import BasicForm from "./BasicForm";
 import globalConfig from "../../config"

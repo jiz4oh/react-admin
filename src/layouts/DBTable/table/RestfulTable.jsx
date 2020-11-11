@@ -5,7 +5,7 @@ import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import _ from 'lodash'
 
 import './index.scss'
-import Logger from "../../../common/js/Logger";
+import Logger from "../../../utils/Logger";
 import utils from './utils'
 import * as actionButtons from "../actions";
 import { RansackFilter } from "../../../components/RansackFilter";

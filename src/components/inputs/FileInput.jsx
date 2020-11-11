@@ -3,7 +3,7 @@ import {InboxOutlined} from "@ant-design/icons";
 import React from "react";
 
 import {withFormItem} from "./utils";
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 import globalConfig from "../../config";
 
 const fileUploadUrl = globalConfig.fileUploadUrl

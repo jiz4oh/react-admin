@@ -3,8 +3,8 @@ import { Button, Col, Form, Input, Row, message, Space } from "antd";
 import { withRouter } from 'react-router-dom';
 
 import "./LoginForm.scss"
-import VerifyCodeFactory from "../../common/js/verifyCode";
-import Logger from "../../common/js/Logger";
+import VerifyCodeFactory from "../../utils/verifyCode";
+import Logger from "../../utils/Logger";
 import globalConfig from '../../config'
 import { setUserInfo } from "../../components/session";
 import Session from "../../models/session";

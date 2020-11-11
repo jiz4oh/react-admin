@@ -1,4 +1,4 @@
-import { asyncRequest, syncRequest } from "../../common/js/request"
+import { asyncRequest, syncRequest } from "../../utils/request"
 import globalConfig from "../../config";
 
 const debug = globalConfig.debug

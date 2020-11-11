@@ -9,7 +9,7 @@ import { FormItemBuilder } from "../FormItemBuilder";
 import { renderFilterBy } from "../inputs";
 import { PREDICATE, RANGE_FIELD } from '../inputs/constants'
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 
 const logger = Logger.getLogger('RansackFilter')
 

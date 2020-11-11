@@ -2,8 +2,8 @@ import React from 'react'
 import _ from 'lodash'
 
 import PolymorphicGrid from "../PolymorphicGrid";
-import i18n from '../../common/js/i18n'
-import Logger from '../../common/js/Logger'
+import i18n from '../../utils/i18n'
+import Logger from '../../utils/Logger'
 import globalConfig from "../../config";
 
 const logger = Logger.getLogger('Form')

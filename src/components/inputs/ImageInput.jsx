@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import {withFormItem} from "./utils";
 import globalConfig from '../../config'
-import {asyncRequest} from "../../common/js/request";
+import {asyncRequest} from "../../utils/request";
 
 const imageUploadUrl = globalConfig.imageUploadUrl
 

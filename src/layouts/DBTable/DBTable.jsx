@@ -3,7 +3,7 @@ import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from 'lodash'
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 import {
   hasShowPermission,
   hasCreatePermission,

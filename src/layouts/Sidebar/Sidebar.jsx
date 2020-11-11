@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import _ from "lodash"
 import PropTypes from "prop-types";
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 
 const logger = Logger.getLogger('sidebar')
 

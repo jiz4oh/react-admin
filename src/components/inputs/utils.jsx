@@ -2,7 +2,7 @@ import { Form, Input, message, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 import { PREDICATE, RANGE_FIELD } from "./constants";
 
 const logger = Logger.getLogger('inputs');

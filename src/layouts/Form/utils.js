@@ -1,7 +1,7 @@
 import { notification } from "antd";
 import _ from 'lodash'
 
-import i18n from "../../common/js/i18n";
+import i18n from "../../utils/i18n";
 import globalConfig from "../../config";
 
 const i18nKey = globalConfig.i18nKey

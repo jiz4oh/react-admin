@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { enumMapToArray } from "../../common/js/utils";
+import { enumMapToArray } from "../../utils/utils";
 import { DBTable } from "../../layouts/DBTable";
 import models from "../../models";
 import { ImageRender } from "../../layouts/DBTable/renders";
