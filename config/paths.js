@@ -68,7 +68,7 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   i18nBuildScript: resolveApp('scripts/buildI18n.js'),
   i18nOutputPath: resolveApp('src/assets/i18n.json'),
-  i18nLocalesDir: resolveApp(appConfig.i18nLocalesDir),
+  i18nLocalesDir: resolveApp('src/locales'),
   publicUrlOrPath,
 };
 
