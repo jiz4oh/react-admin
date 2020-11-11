@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import loadable from "@loadable/component";
 
-import './common/style/frame.scss'
+import './styles/frame.scss'
 import RouteBuilder from "./components/RouteBuilder";
 import menus from './config/menus'
 import PageLoading from "./components/PageLoading"
