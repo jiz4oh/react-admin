@@ -1,25 +1,11 @@
-import globalConfig from '../config';
+import _ from "lodash"
 
-/**
- * 日志工具类 <br/>
- *
- * <p>
- * 工程变大之后, 日志就很重要了, 总不能一直console.log.
- * 本来想看看有没有现成的工具, 找到一个log4js的库, 但只能用在node环境下, 浏览器环境下似乎没什么好用的.
- * 作为一个用惯了slf4j的人, 干脆自己写个吧, 练练手.
- * 目前有以下功能:
- *   <ul>
- *       <li>支持常用的日志级别: debug/info/warn/error, 说实话其他的级别极少用到</li>
- *       <li>支持变量替换: 类似slf4j中的logger.info("a={}",a)这种, 其实console本身已经支持的</li>
- *       <li>根据日志级别设置样式: debug是黑色, info是默认, warn是黄色, error是红色, 看起来清晰很多</li>
- *       <li>定义每个logger的名字: 也算是常规功能了吧</li>
- *   </ul>
- * 我是尽量按着slf4j的习惯来设计的, 目前还比较简单.
- * 不支持pattern/appender之类的, 但对于二手前端来说, 也算够用了.
- *
- * 关于变量替换, 参考: https://developers.google.com/web/tools/chrome-devtools/console/console-write#_8
- * </p>
- */
+const logConfig = {
+  log: 'debug'
+}
+
+const stringifyPattern = pattern => typeof pattern !== 'string' ? JSON.stringify(pattern) : pattern
+
 class Logger {
 
   // 定义一些预设的日志级别
@@ -49,21 +35,16 @@ class Logger {
    * @returns {*}
    */
   static getLogger(name) {
-    if (name && name !== '') {
-      // 缓存
-      if (Logger.loggerMap.has(name)) {
-        return Logger.loggerMap.get(name);
-      }
+    if (!!name) return Logger.defaultLogger
+    // 从缓存中获取
+    if (Logger.loggerMap.has(name)) return Logger.loggerMap.get(name);
 
-      const logger = new Logger(name);
-      Logger.loggerMap.set(name, logger);
-      return logger;
-    } else {
-      return Logger.defaultLogger;
-    }
+    const logger = new Logger(name);
+    Logger.loggerMap.set(name, logger);
+    return logger;
   }
 
-  constructor(name) {
+  constructor(name = 'default') {
     this.name = name;  // logger的名字
 
     // 是否单独设置了这个logger的日志级别?
@@ -84,15 +65,12 @@ class Logger {
       return;
     }
 
-    // 如果没有单独设置, 就使用root logger level
-    const configLogLevel = globalConfig.log.level;
+    // 如果没有单独设置, 就使用全局日志级别，默认 info
+    const configLogLevel = logConfig.log.level;
     switch (configLogLevel) {
       case 'debug':
         this.logLevel = Logger.LOG_LEVEL_DEBUG;
         return
-      // case 'info':
-      //   this.logLevel = Logger.LOG_LEVEL_INFO;
-      //   return
       case 'warn':
         this.logLevel = Logger.LOG_LEVEL_WARN;
         return
@@ -100,28 +78,10 @@ class Logger {
         this.logLevel = Logger.LOG_LEVEL_ERROR;
         return
       default:
-        // 默认 info 级别
         this.error('unsupported logLevel: %s, use INFO instead', configLogLevel);
         this.logLevel = Logger.LOG_LEVEL_INFO;
         return
     }
-  }
-
-  /**
-   * 设置日志级别, 只有4种级别可选
-   *
-   * @param newLogLevel 1~4之间的一个数字
-   */
-  setLogLevel(newLogLevel) {
-    if (isNaN(newLogLevel)) {
-      this.error('setLogLevel error, not a number: %s', newLogLevel);
-    }
-
-    if (newLogLevel < 1 || newLogLevel > 4) {
-      this.error('setLogLevel error, input = %s, must between 1 and 4', newLogLevel);
-    }
-
-    this.logLevel = newLogLevel;
   }
 
   /**
@@ -135,11 +95,7 @@ class Logger {
     if (this.logLevel > Logger.LOG_LEVEL_INFO)
       return;
 
-    pattern = JSON.stringify(pattern)
-    if (this.name)
-      args.unshift(`${this.name}: ${pattern}`);
-    else
-      args.unshift(pattern);
+    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
     console.log.apply(console, args);
   }
 
@@ -153,12 +109,8 @@ class Logger {
     if (this.logLevel > Logger.LOG_LEVEL_ERROR)
       return;
 
-    pattern = JSON.stringify(pattern)
     args.unshift('background: red; color: #bada55;');
-    if (this.name)
-      args.unshift(`%c${this.name}: ${pattern}`);
-    else
-      args.unshift(`%c${pattern}`);
+    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
     console.error.apply(console, args);
   }
 
@@ -172,14 +124,8 @@ class Logger {
     if (this.logLevel > Logger.LOG_LEVEL_DEBUG)
       return;
 
-    if (typeof pattern !== 'string') {
-      pattern = JSON.stringify(pattern)
-    }
     args.unshift('background: black; color: #bada55;');
-    if (this.name)
-      args.unshift(`%c${this.name}: ${pattern}`);
-    else
-      args.unshift(`%c${pattern}`);
+    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
     console.debug.apply(console, args);
   }
 
@@ -193,21 +139,17 @@ class Logger {
     if (this.logLevel > Logger.LOG_LEVEL_WARN)
       return;
 
-    pattern = JSON.stringify(pattern)
     args.unshift('background: yellow; color: black;');
-    if (this.name)
-      args.unshift(`%c${this.name}: ${pattern}`);
-    else
-      args.unshift(`%c${pattern}`);
+    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
     console.warn.apply(console, args);
   }
 }
 
-// 初始化Logger类中的一些static变量, 类似java中的static代码块
+// 从配置中设置 logger 单独的日志级别
 ['debug', 'info', 'warn', 'error'].forEach((level) => {
-  if (globalConfig.log[level]) {
-    for (const logger of globalConfig.log[level]) {
-      Logger[`${level}Loggers`].add(logger);
+  if (_.isArray(logConfig.log[level])) {
+    for (const logger of logConfig.log[level]) {
+      Logger[`${_.lowerCase(level)}Loggers`].add(logger);
     }
   }
 });
