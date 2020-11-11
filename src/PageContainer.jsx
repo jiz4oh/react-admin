@@ -13,7 +13,7 @@ import {
   hasVisitPermission,
 } from "./components/session";
 import menus from "./config/menus";
-import { MenuItemBuilder, authoriseMenu } from "./components/MenuItemBuilder";
+import { menuItemBuilder, authoriseMenu } from "./components/menuItemBuilder";
 
 const defaultVisitablePaths = ['dashboard']
 
@@ -29,7 +29,7 @@ function PageContainer({children}) {
   const avatar = getUserInfo('avatar')
   const location = useLocation()
   const currentPaths = location.pathname.split('/')
-  const sidebarMenus = useMemo(() => MenuItemBuilder(currentUserMenus()), [])
+  const sidebarMenus = useMemo(() => menuItemBuilder(currentUserMenus()), [])
   const breadcrumbs = useMemo(() => breadcrumbItemBuilder(currentPaths, currentUserMenus()), [currentPaths])
 
   return (
