@@ -46,7 +46,7 @@ const generateRoute = (rule, parentPaths) => {
   let currentRoutePaths = [...parentPaths]
   currentRoutePaths.push(path)
 
-  const currentPath = currentRoutePaths.join('/')
+  const currentPath = currentRoutePaths.join('')
 
   return (
     <Route
@@ -91,7 +91,7 @@ const generateNestRoutes = (item, parentPaths) => {
   let currentRoutePaths = [...parentPaths]
   currentRoutePaths.push(path)
 
-  const currentPath = currentRoutePaths.join('/')
+  const currentPath = currentRoutePaths.join('')
   const result = <Switch
     children={[...recurseRoutes(subs, currentRoutePaths), _404]}/>
   return (
