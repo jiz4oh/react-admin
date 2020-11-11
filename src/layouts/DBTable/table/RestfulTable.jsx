@@ -8,7 +8,7 @@ import './index.scss'
 import Logger from "../../../common/js/Logger";
 import utils from './utils'
 import * as actionButtons from "../actions";
-import { RansackFilter } from "../../RansackFilter";
+import { RansackFilter } from "../../../components/RansackFilter";
 import { ToolBar } from "../../ToolBar";
 import globalConfig from "../../../config";
 

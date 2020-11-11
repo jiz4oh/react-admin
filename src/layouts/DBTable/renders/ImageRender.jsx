@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 
-import { logger } from '../../ImagePreviewModal/utils'
+import { logger } from '../../../components/ImagePreviewModal/utils'
 
 const renderImageArr = (strOrArr) => {
   let result = _.cloneDeep(strOrArr);

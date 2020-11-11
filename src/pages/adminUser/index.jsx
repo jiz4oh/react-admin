@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import models from "../../models";
-import { DBTable, InnerFormTable } from "../../components/DBTable";
-import { HasManyRender, ImageRender } from "../../components/DBTable/renders";
+import { DBTable, InnerFormTable } from "../../layouts/DBTable";
+import { HasManyRender, ImageRender } from "../../layouts/DBTable/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
 
 const filter = [

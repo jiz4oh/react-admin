@@ -7,7 +7,7 @@ import {
 
 import { permissionRequired } from "../components/session";
 import dynamic from "../pages";
-import PageContainer from "../PageContainer";
+import PageContainer from "../layouts/PageContainer";
 
 const menus = [
   {

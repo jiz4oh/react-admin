@@ -2,18 +2,18 @@ import React, { useMemo } from 'react';
 import { Layout } from 'antd';
 import { useLocation } from "react-router-dom";
 
-import { Header } from "./components/Header";
-import { Sidebar } from "./components/Sidebar";
-import { Breadcrumb } from "./components/Breacrumb";
-import { breadcrumbItemBuilder } from "./components/breadcumbItemBuilder";
+import { Header } from "./Header";
+import { Sidebar } from "./Sidebar";
+import { Breadcrumb } from "./Breacrumb";
+import { breadcrumbItemBuilder } from "../components/breadcumbItemBuilder";
 import {
   getUserInfo,
   clearUserInfo,
   hasIndexPermission,
   hasVisitPermission,
-} from "./components/session";
-import menus from "./config/menus";
-import { menuItemBuilder, authoriseMenu } from "./components/menuItemBuilder";
+} from "../components/session";
+import menus from "../config/menus";
+import { menuItemBuilder, authoriseMenu } from "../components/menuItemBuilder";
 
 const defaultVisitablePaths = ['dashboard']
 
