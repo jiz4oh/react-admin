@@ -9,7 +9,7 @@ import {
   hasCreatePermission,
   hasUpdatePermission,
   hasDeletePermission
-} from "../../components/session";
+} from "../../session";
 import { RestfulTable } from "./index";
 import { RestfulNewForm, RestfulEditForm } from "../Form";
 import formUtils from "../Form/utils";

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-import globalConfig from '../../config'
-import Session from "../../models/session";
+import globalConfig from '../config'
+import Session from "../models/session";
 
 const session = new Session()
 

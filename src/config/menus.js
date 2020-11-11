@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 
-import { permissionRequired } from "../components/session";
+import { permissionRequired } from "../session";
 import dynamic from "../pages";
 import PageContainer from "../layouts/PageContainer";
 

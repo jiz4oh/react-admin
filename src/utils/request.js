@@ -5,7 +5,7 @@ import { message, notification } from 'antd';
 import globalConfig from '../config'
 import Logger from "./Logger";
 import { isURLSearchParams } from "./utils";
-import { clearUserInfo } from "../components/session";
+import { clearUserInfo } from "../session";
 
 const logger = Logger.getLogger('apiRequest')
 const defaultHost = globalConfig.api.host

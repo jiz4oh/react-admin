@@ -11,7 +11,7 @@ import {
   clearUserInfo,
   hasIndexPermission,
   hasVisitPermission,
-} from "../components/session";
+} from "../session";
 import menus from "../config/menus";
 import { menuItemBuilder, authoriseMenu } from "../components/menuItemBuilder";
 

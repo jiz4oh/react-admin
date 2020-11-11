@@ -6,7 +6,7 @@ import "./LoginForm.scss"
 import VerifyCodeFactory from "../../utils/verifyCode";
 import Logger from "../../utils/Logger";
 import globalConfig from '../../config'
-import { setUserInfo } from "../../components/session";
+import { setUserInfo } from "../../session";
 import Session from "../../models/session";
 
 const logger = Logger.getLogger('login')
