@@ -10,7 +10,7 @@ import {
   hasUpdatePermission,
   hasDeletePermission
 } from "../session";
-import { RestfulTable } from "../components/DBTable";
+import { RouteFormList } from "../components/List";
 import { RestfulNewForm, RestfulEditForm } from "../components/Form";
 import formUtils from "../components/Form/utils";
 import globalConfig from "../config"
@@ -20,7 +20,7 @@ const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
 const logger = Logger.getLogger('Resource')
 
 const defaultComponentMap = {
-  list: RestfulTable,
+  list: RouteFormList,
   new: RestfulNewForm,
   edit: RestfulEditForm,
 }

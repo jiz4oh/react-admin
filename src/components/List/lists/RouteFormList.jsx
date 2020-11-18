@@ -31,7 +31,7 @@ const indexColumn = "indexColumn"
  * @param tableWidth {Number} 表格宽度
  * @param listNeedReload {boolean} 是否需要刷新列表数据
  */
-class RestfulTable extends React.PureComponent {
+class RouteFormList extends React.PureComponent {
   static propTypes = {
     model: PropTypes.shape({
                              index: PropTypes.func.isRequired,
@@ -432,4 +432,4 @@ class RestfulTable extends React.PureComponent {
 }
 
 
-export default RestfulTable
+export default RouteFormList

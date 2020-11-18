@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { Modal, Form } from "antd";
 
-import RestfulTable from "./RestfulTable";
+import RouteFormList from "./RouteFormList";
 import { RestfulEditForm, RestfulNewForm } from "../../Form";
 import formUtils from "../../Form/utils";
 import { renderNewAction, renderEditAction } from "../actions";
@@ -14,7 +14,7 @@ const modalFormMap = {
   edit: RestfulEditForm
 }
 
-function InnerFormTable(props) {
+function InnerFormList(props) {
   let {model, formFields, remote = defaultIsRemote} = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
@@ -57,7 +57,7 @@ function InnerFormTable(props) {
 
   return (
     <>
-      <RestfulTable
+      <RouteFormList
         defaultActionMap={{
           new: renderNewAction(handleClickNew),
           edit: renderEditAction(handleClickEdit)
@@ -91,10 +91,10 @@ function InnerFormTable(props) {
   )
 }
 
-InnerFormTable.propTypes = {
+InnerFormList.propTypes = {
   form: PropTypes.array,
   remote: PropTypes.bool,
   pageSize: PropTypes.number,
 };
 
-export default React.memo(InnerFormTable)
+export default React.memo(InnerFormList)

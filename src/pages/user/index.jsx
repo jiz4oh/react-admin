@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { enumMapToArray } from "../../utils/utils";
 import CRUD from "../../layouts/CRUD";
 import models from "../../models";
-import { ImageRender } from "../../components/DBTable/renders";
+import { ImageRender } from "../../components/List/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
 
 const genderMap = {

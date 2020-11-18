@@ -1,4 +1,4 @@
-import {RestfulModelFactory} from '../components/DBTable/RestfulModel'
+import {RestfulModelFactory} from '../components/List/RestfulModel'
 
 export default {
     user: RestfulModelFactory('user', 'users'),

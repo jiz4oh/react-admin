@@ -1,12 +1,12 @@
 import React from "react";
 
-import { InnerFormTable } from "../../components/DBTable";
+import { InnerFormList } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
 import models from "../../models";
 
 const config = {
   model: models.role,
-  components: {list: InnerFormTable},
+  components: {list: InnerFormList},
   filter: [
     {
       name: 'name',

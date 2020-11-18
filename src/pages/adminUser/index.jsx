@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 import models from "../../models";
-import { InnerFormTable } from "../../components/DBTable";
+import { InnerFormList } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
-import { HasManyRender, ImageRender } from "../../components/DBTable/renders";
+import { HasManyRender, ImageRender } from "../../components/List/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
 
 const filter = [
@@ -52,7 +52,7 @@ export default function (props) {
 
   return (
     <>
-      <DBTable
+      <CRUD
         {...props}
         model={models.adminUser}
         filter={filter}
@@ -96,11 +96,11 @@ export default function (props) {
                 {name: 'name',},
                 {name: 'updated_at'},
               ]}
-              components={{list: InnerFormTable}}
+              components={{list: InnerFormList}}
             />
           )
         }
-      </DBTable>
+      </CRUD>
       <ImagePreviewModal value={previewImages} onChange={setPreviewImages}/>
     </>
   )
