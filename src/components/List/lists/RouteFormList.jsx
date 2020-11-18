@@ -211,9 +211,9 @@ class RouteFormList extends React.PureComponent {
    * @returns {Object[]|}
    */
   getColumns = () => {
-    const {model, columns: columnsConfig} = this.props
+    let {model, columns} = this.props
     // 获取表格具体列
-    const columns = utils.getColumns(model.name, columnsConfig)
+    columns = utils.transColumns(columns, model.name)
     // 添加索引列
     columns.unshift({
                       title: '#',
