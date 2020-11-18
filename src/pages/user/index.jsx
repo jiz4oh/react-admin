@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { enumMapToArray } from "../../utils/utils";
-import { DBTable } from "../../components/DBTable";
+import CRUD from "../../layouts/CRUD";
 import models from "../../models";
 import { ImageRender } from "../../components/DBTable/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
@@ -47,7 +47,7 @@ export default function (props) {
 
   return (
     <>
-      <DBTable
+      <CRUD
         {...props}
         model={models.user}
         filter={filter}
@@ -104,7 +104,7 @@ export default function (props) {
           }
         ]}
       >
-      </DBTable>
+      </CRUD>
       <ImagePreviewModal value={previewImages} onChange={setPreviewImages}/>
     </>
   )

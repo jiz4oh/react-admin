@@ -1,6 +1,7 @@
 import React from "react";
 
-import { DBTable, InnerFormTable } from "../../components/DBTable";
+import { InnerFormTable } from "../../components/DBTable";
+import CRUD from "../../layouts/CRUD";
 import models from "../../models";
 
 const config = {
@@ -58,6 +59,6 @@ const config = {
 
 export default function (props) {
   return (
-    <DBTable {...props} {...config}/>
+    <CRUD {...props} {...config}/>
   )
 }

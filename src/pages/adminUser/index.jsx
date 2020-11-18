@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 import models from "../../models";
-import { DBTable, InnerFormTable } from "../../components/DBTable";
+import { InnerFormTable } from "../../components/DBTable";
+import CRUD from "../../layouts/CRUD";
 import { HasManyRender, ImageRender } from "../../components/DBTable/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
 
@@ -88,7 +89,7 @@ export default function (props) {
       >
         {
           hasExtraTable && (
-            <DBTable
+            <CRUD
               CRUD={[]}
               model={models.role}
               index={[

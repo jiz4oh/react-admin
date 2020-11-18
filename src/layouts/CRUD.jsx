@@ -3,18 +3,18 @@ import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from 'lodash'
 
-import Logger from "../../utils/Logger";
+import Logger from "../utils/Logger";
 import {
   hasShowPermission,
   hasCreatePermission,
   hasUpdatePermission,
   hasDeletePermission
-} from "../../session";
-import { RestfulTable } from "./index";
-import { RestfulNewForm, RestfulEditForm } from "../Form";
-import formUtils from "../Form/utils";
-import globalConfig from "../../config"
-import PolymorphicGrid from "../PolymorphicGrid";
+} from "../session";
+import { RestfulTable } from "../components/DBTable";
+import { RestfulNewForm, RestfulEditForm } from "../components/Form";
+import formUtils from "../components/Form/utils";
+import globalConfig from "../config"
+import PolymorphicGrid from "../components/PolymorphicGrid";
 
 const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
 const logger = Logger.getLogger('Resource')
@@ -46,7 +46,7 @@ const can = {
  * @param restConfig 其他需要传入的参数
  * @return {*}
  */
-function DBTable({
+function CRUD({
                    model,
                    CRUD = defaultCRUD,
                    form: formFields,
@@ -136,7 +136,7 @@ function DBTable({
   )
 }
 
-DBTable.propTypes = {
+CRUD.propTypes = {
   model: PropTypes.shape({
                            index: PropTypes.func.isRequired,
                            new: PropTypes.func.isRequired,
@@ -152,4 +152,4 @@ DBTable.propTypes = {
   index: PropTypes.array,
 };
 
-export default React.memo(DBTable)
+export default React.memo(CRUD)
