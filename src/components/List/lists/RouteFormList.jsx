@@ -36,6 +36,9 @@ const indexColumn = "indexColumn"
  * @param defaultActionMap {{}} 默认按钮组件的映射
  * @param tableWidth {Number} 表格宽度
  * @param listNeedReload {boolean} 是否需要刷新列表数据
+ * @param newUrl {String} 新建按钮跳转地址， 例： /users/new
+ * @param showUrl {String} 详情按钮跳转地址，可接受 :id 参数，例： /users/:id
+ * @param editUrl {String} 编辑按钮跳转地址，可接受 :id 参数，例： /users/:id/edit
  */
 class RouteFormList extends React.PureComponent {
   static propTypes = {
@@ -50,7 +53,11 @@ class RouteFormList extends React.PureComponent {
     actions: PropTypes.array,
     defaultActionMap: PropTypes.object,
     tableWidth: PropTypes.number,
-    listNeedReload: PropTypes.bool
+    listNeedReload: PropTypes.bool,
+    history: PropTypes.object,
+    showUrl: PropTypes.string,
+    newUrl: PropTypes.string,
+    editUrl: PropTypes.string,
   };
 
   state = {
@@ -329,18 +336,22 @@ class RouteFormList extends React.PureComponent {
   handleClickNew = e => {
     e.preventDefault()
     logger.debug('新建')
-    this.props.history.push(`${this.props.match.url}/new`)
+    const destinationUrl = this.props.newUrl
+    this.props.history.push(destinationUrl)
   }
 
   // 点击详情按钮
   handleClickShow = record => e => {
     logger.debug(`查看 ${record.id} 的详情`)
+    const destinationUrl = _.replace(this.props.showUrl, ':id', record.id)
+    this.props.history.push(destinationUrl)
   }
 
   // 点击编辑按钮
   handleClickEdit = record => e => {
     logger.debug(`编辑 ${record.id}`)
-    this.props.history.push(`${this.props.match.url}/${record.id}/edit`)
+    const destinationUrl = _.replace(this.props.editUrl, ':id', record.id)
+    this.props.history.push(destinationUrl)
   }
 
   // 点击删除按钮
