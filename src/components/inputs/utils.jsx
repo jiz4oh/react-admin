@@ -189,9 +189,7 @@ function withFormItem(WrappedComponent, predicate = null) {
  */
 function SpinCollection({collection: fnOrArray, children: CollectionInputComponent, ...restProps}) {
   const [spinning, setSpinning] = useState(!!_.isFunction(fnOrArray))
-  const [collection, setCollection] = useState([])
-  // collection 可能会被远端更新
-  useEffect(() => setCollection(fnOrArray), [fnOrArray])
+  const [collection, setCollection] = useState(fnOrArray)
 
   useEffect(
     () => {
