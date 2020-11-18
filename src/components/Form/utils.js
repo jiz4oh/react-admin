@@ -5,22 +5,26 @@ import i18n from "../../utils/i18n";
 import globalConfig from "../../config";
 
 const i18nKey = globalConfig.i18nKey
+const RESOURCE_TYPE_MAP = 'resource_type'
+const BELONGS_TO = 'belongs_to'
+const HAS_ONE = 'has_one'
+const HAS_MANY = 'has_many'
 
 export default {
   notifySuccess: (operationName = '操作') => {
     notification.success({
-                           message: `${operationName}成功`,
-                           description: `成功${operationName}1条数据`,
-                           duration: 3,
-                         })
+      message: `${operationName}成功`,
+      description: `成功${operationName}1条数据`,
+      duration: 3,
+    })
   },
 
   notifyError: (operationName = '操作') => {
     notification.error({
-                         message: `${operationName}失败`,
-                         description: `请检查您的输入`,
-                         duration: 3,
-                       })
+      message: `${operationName}失败`,
+      description: `请检查您的输入`,
+      duration: 3,
+    })
   },
 
   renderAntdError(errorMap = {}) {
@@ -28,38 +32,41 @@ export default {
     let errors = []
     _.forEach(errorMap, (value, key) =>
       errors.push({
-                    name: key,
-                    errors: value
-                  }))
+        name: key,
+        errors: value
+      }))
 
     return errors
   },
 
   /**
    *
-   * @param data {Object} 远程下发的数据
-   * @param inputsConfig {Object[]} 前端定义的 input 结构
+   * @param destination {Object} 远程下发的数据
+   * @param source {Object[]} 前端定义的 input 结构
    * @param tableName {string} 用于 i18n
    * @return {Object[]}
    */
-  getInputsConfigFromRemote: (data, inputsConfig, tableName) => {
+  getInputsConfigFromRemote: (destination, source, tableName) => {
+    const {
     // 远程获取表单字段类型
-    const inputMap = data['resource_type']
-    const belongsToCollection = _.cloneDeep(data['belongs_to']) || {}
-    const hasOneCollection = _.cloneDeep(data['has_one']) || {}
-    const hasManyCollection = _.cloneDeep(data['has_many']) || {}
-    const result = [...inputsConfig]
+      [RESOURCE_TYPE_MAP]: inputMap = {},
+      [BELONGS_TO]: belongsTo= {},
+      [HAS_ONE]: hasOneCollection = {},
+      [HAS_MANY]: hasManyCollection = {},
+    } = destination
+    const result = [...source]
+
     _.forEach(inputMap, (value, key) => {
       // 获取当前字段是否在前端已定义
-      let index = _.findIndex(inputsConfig, obj => obj.name === key)
-      let collection = []
+      let index = _.findIndex(source, obj => obj.name === key)
+      const i18nName = [i18nKey, tableName, key].filter(Boolean).join('.')
+      let collection
 
       switch (value) {
         case 'belongs_to':
           // 获取当前 belongs_to 的集合数据
-          collection = _.cloneDeep(belongsToCollection[key])
-          if (_.isEmpty(collection)) return
-          const i18nName = [i18nKey, tableName, key].filter(Boolean).join('.')
+          if (_.isEmpty(belongsTo[key])) return
+          collection = belongsTo[key]
 
           const belongsToDefaultInputConfig = {
             name: key,
@@ -70,12 +77,16 @@ export default {
             }],
             collection: collection,
           }
-          if (index === -1) {
+          if (!_.isUndefined(result[index])) {
             // belongs_to 选择放在最前面
             result.unshift(belongsToDefaultInputConfig)
           } else {
+            // collection 钩子
+            if (_.isFunction(result[index].collection)){
+             belongsToDefaultInputConfig.collection = result[index].collection(belongsToDefaultInputConfig.collection)
+            }
             // 获取前端已配置数据
-            result[index] = _.defaultsDeep(_.cloneDeep(inputsConfig[index]), belongsToDefaultInputConfig)
+            result[index] = _.defaultsDeep(result[index], belongsToDefaultInputConfig)
           }
           return
         case 'has_one':
@@ -93,11 +104,11 @@ export default {
             name: key,
             type: value
           }
-          if (index === -1) {
+          if (!_.isUndefined(result[index])) {
             result.push(inputConfig)
           } else {
             // 获取前端已配置数据
-            result[index] = _.defaultsDeep(_.cloneDeep(inputsConfig[index]), inputConfig)
+            result[index] = _.defaultsDeep(result[index], inputConfig)
           }
       }
     })
