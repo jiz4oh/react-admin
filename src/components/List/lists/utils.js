@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import i18n from "../../../utils/i18n";
 import Logger from "../../../utils/Logger";
-import { textRender } from "../renders";
+import { textRender } from "../index";
 import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('tableUtils')

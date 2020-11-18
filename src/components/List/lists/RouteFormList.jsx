@@ -7,7 +7,13 @@ import _ from 'lodash'
 import './index.scss'
 import Logger from "../../../utils/Logger";
 import utils from './utils'
-import * as actionButtons from "../actions";
+import {
+  renderShowAction,
+  renderNewAction,
+  renderRefreshAction,
+  renderEditAction,
+  renderDeleteAction,
+} from "../index";
 import { RansackFilter } from "../../RansackFilter";
 import { ToolBar } from "../../ToolBar";
 import globalConfig from "../../../config";
@@ -175,11 +181,11 @@ class RouteFormList extends React.PureComponent {
   get defaultActionMap() {
     const {defaultActionMap: ret = {}} = this.props
     return _.defaultsDeep(ret, {
-      edit: actionButtons.renderEditAction(this.handleClickEdit),
-      show: actionButtons.renderShowAction(this.handleClickShow),
-      delete: actionButtons.renderDeleteAction(this.handleClickDelete),
-      new: actionButtons.renderNewAction(this.handleClickNew),
-      refresh: actionButtons.renderRefreshAction(e => this.setState({listNeedReload: true}))
+      edit: renderEditAction(this.handleClickEdit),
+      show: renderShowAction(this.handleClickShow),
+      delete: renderDeleteAction(this.handleClickDelete),
+      new: renderNewAction(this.handleClickNew),
+      refresh: renderRefreshAction(e => this.setState({listNeedReload: true}))
     })
   }
 

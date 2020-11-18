@@ -5,7 +5,7 @@ import { Modal, Form } from "antd";
 import RouteFormList from "./RouteFormList";
 import { RestfulEditForm, RestfulNewForm } from "../../Form";
 import formUtils from "../../Form/utils";
-import { renderNewAction, renderEditAction } from "../actions";
+import { renderNewAction, renderEditAction } from "../index";
 import globalConfig from "../../../config"
 
 const defaultIsRemote = globalConfig.DBTable.remote || false

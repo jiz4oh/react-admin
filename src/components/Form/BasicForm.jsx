@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
-import { Form } from "antd";
+import { Button, Form } from "antd";
 import _ from 'lodash'
 
 import formUtils from './utils'
-import { renderBackAction, renderSubmitAction } from "../List/actions";
 import GenericFormLayout from "./GenericFormLayout";
 
 // antd 校验成功后的回调
@@ -44,7 +43,7 @@ function BasicForm({
   useEffect(() => {
     _.forEach(initialValues, (value, key) => {
       // 如果用户已经修改了某个字段则不设置值
-      !form.isFieldTouched(key) && form.setFieldsValue({[key]: value})
+      !form.isFieldTouched(key) && form.setFieldsValue({ [key]: value })
     })
   }, [initialValues, form])
 
@@ -65,15 +64,28 @@ function BasicForm({
 
   // 默认添加提交，返回按钮
   if (_.isUndefined(footer)) {
-    footer = [renderSubmitAction(onSubmit || handleSubmit), renderBackAction(history.goBack)]
+    footer = [
+      () => <Button
+        key='submitBtn'
+        type='primary'
+        onClick={onSubmit || handleSubmit}
+      >
+        提交
+      </Button>,
+      () => <Button
+        onClick={history.goBack}
+      >
+        返回
+      </Button>
+    ]
   }
 
   return (
     <GenericFormLayout spinning={value} footer={footer}>
       <Form
         form={form}
-        labelCol={{span: 8}}
-        wrapperCol={{span: 8}}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 8 }}
         initialValues={initialValues}
         onFinish={finish}
         onFinishFailed={finishFailed}

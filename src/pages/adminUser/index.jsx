@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
 import models from "../../models";
-import { InnerFormList } from "../../components/List";
+import { InnerFormList, HasManyRender, ImageRender } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
-import { HasManyRender, ImageRender } from "../../components/List/renders";
 import { ImagePreviewModal } from "../../components/ImagePreviewModal";
 
 const filter = [
