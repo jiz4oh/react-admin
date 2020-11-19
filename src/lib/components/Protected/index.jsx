@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 const Protected = ({ children, rules, onFail: globalOnFail }) => {
   const location = useLocation()
 
-  for (let rule in rules) {
+  for (const rule of rules) {
     const { require, onFail = globalOnFail } = rule
     if (!(require({ location }))) {
       // 如果验证不通过，执行失败回调
