@@ -81,12 +81,15 @@ function CRUD({
     history.goBack()
   }
 
+  const newUrl = `${match.path}/new`
+  const editUrl = `${match.path}/:id/edit`
+
   return (
     <Switch>
       {canNew && (
         <Route
-          path={`${match.path}/new`}
-          key={`${match.path}/new`}
+          path={newUrl}
+          key={newUrl}
           render={() =>
             <NewForm
               model={model}
@@ -99,8 +102,8 @@ function CRUD({
       )}
       {canEdit && (
         <Route
-          path={`${match.path}/:id/edit`}
-          key={`${match.path}/:id/edit`}
+          path={editUrl}
+          key={editUrl}
           render={props =>
             <EditForm
               model={model}
@@ -126,6 +129,8 @@ function CRUD({
               canEdit={canEdit}
               canShow={canShow}
               canDelete={canDelete}
+              newUrl={newUrl}
+              editUrl={editUrl}
               {...restConfig}
             />
             {children}

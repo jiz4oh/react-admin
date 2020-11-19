@@ -17,23 +17,23 @@ const notifyAfterDeleted = () => {
   if (successCount > 0) {
     if (failCount > 0) {
       notification.warning({
-                             message: '部分删除成功',
-                             description: `${successCount}条数据删除成功，${failCount}条数据删除失败`,
-                             duration: 5,
-                           })
+        message: '部分删除成功',
+        description: `${successCount}条数据删除成功，${failCount}条数据删除失败`,
+        duration: 5,
+      })
     } else {
       notification.success({
-                             message: '删除成功',
-                             description: `成功删除${successCount}条数据`,
-                             duration: 3,
-                           })
+        message: '删除成功',
+        description: `成功删除${successCount}条数据`,
+        duration: 3,
+      })
     }
   } else {
     notification.error({
-                         message: '删除失败',
-                         description: '请尝试重新删除',
-                         duration: 3,
-                       })
+      message: '删除失败',
+      description: '请尝试重新删除',
+      duration: 3,
+    })
   }
 }
 
@@ -49,7 +49,7 @@ export default {
   deleteFromDb(model,
                ids,
                onSuccess = (data, status) => logger.info(`删除成功:${status}，${data}`),
-               onFail    = (data, status) => logger.info(`删除失败:${status}，${data}`)
+               onFail = (data, status) => logger.info(`删除失败:${status}，${data}`)
   ) {
     logger.debug('准备后端删除数据。。。')
     deleting();
@@ -117,27 +117,26 @@ export default {
     }
   },
 
-  getColumns: (tableName, preColumns = []) => {
-    let columns = [...preColumns]
+  transColumns: (columns = [], tableName = null) => {
     if (_.isEmpty(columns)) {
       logger.warn(`需要配置 columns`)
       return []
     }
-
-    _.forEach(columns, column => {
+    return columns.map(column => {
+      // 使用 name 代替 antd 的 dataIndex 属性
       column.dataIndex = column.name || column.dataIndex
       delete column.name
       // 默认使用 i18n 翻译，可通过 columns 中的 title 设置覆盖
       const i18nName = [i18nKey, tableName, column.dataIndex].filter(Boolean).join('.')
       column.title = column.title || i18n.t(`${i18nName}`) || column.dataIndex
 
-      // render 为一个映射或者一个数组
+      // render 为一个对象或者一个数组
       if (_.isObjectLike(column.render)) {
         column.render = textRender(column.render)
       }
-    })
 
-    return columns
+      return column
+    })
   },
 
   getTableWidth: (columnsLength) => {
