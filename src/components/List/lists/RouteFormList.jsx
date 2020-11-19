@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Modal, notification, Table as AntdTable } from "antd";
+import { Button, Modal, notification } from "antd";
 import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import _ from 'lodash'
 
@@ -15,8 +15,8 @@ import {
   renderDeleteAction,
 } from "../index";
 import { RansackFilter } from "../../RansackFilter";
-import { ToolBar } from "../../ToolBar";
 import globalConfig from "../../../config";
+import ActionTable from "../../../lib/components/ActionTable/ActionTable";
 
 const logger = Logger.getLogger('RestfulTable')
 const defaultSize = globalConfig.DBTable.pageSize || 10
@@ -43,8 +43,8 @@ const indexColumn = "indexColumn"
 class RouteFormList extends React.PureComponent {
   static propTypes = {
     model: PropTypes.shape({
-                             index: PropTypes.func.isRequired,
-                           }),
+      index: PropTypes.func.isRequired,
+    }),
     filter: PropTypes.array,
     columns: PropTypes.array.isRequired,
     pageSize: PropTypes.number,
@@ -77,65 +77,72 @@ class RouteFormList extends React.PureComponent {
     isFullScreen: false,
   }
 
+  constructor(props) {
+    super(props);
+
+    // 获取表格具体列
+    this._columns = this.getColumns()
+    // 处理 actions
+    this._actions = this.getActions()
+    // 处理 BatchActions
+    this._batchActions = this.getBatchActions()
+    // 处理 ActionItems
+    this._actionItems = this.getActionItems()
+  }
+
   toggleFullScreen = () => {
     this.state.isFullScreen ? utils.exitFullscreen() : utils.requestFullScreen()
-    this.setState({isFullScreen: !this.state.isFullScreen})
+    this.setState({ isFullScreen: !this.state.isFullScreen })
   };
 
   componentDidMount() {
     // 从后端获取数据
     // 配置了 columns 才能显示数据，否则会显示多行白条
-    !_.isEmpty(this.getColumns()) && this.fetchTableData({
-                                                           page: 1
-                                                         })
+    !_.isEmpty(this._columns) && this.fetchTableData({
+      page: 1
+    })
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {fetchListPending, listNeedReload, pageSize, currentPage} = this.state
+    const { fetchListPending, listNeedReload, pageSize, currentPage } = this.state
     // 当未在拉取数据且需要刷新列表时向后端拉取数据
     if (!fetchListPending && listNeedReload) {
       this.fetchTableData({
-                            page: currentPage,
-                            size: pageSize
-                          })
+        page: currentPage,
+        size: pageSize
+      })
     }
   }
-
-  /**
-   * 处理多选操作
-   * @param selectedRowKeys {Number[]} 选中的 AntDesign Table 行 key
-   */
-  handleTableSelectChange = (selectedRowKeys) => this.setState({selectedRowKeys})
 
   /**
    * 从后端获取数据
    * @param params
    */
   fetchTableData = (params = {}) => {
-    const {model} = this.props
-    const {currentPage, pageSize} = this.state
+    const { model } = this.props
+    const { currentPage, pageSize } = this.state
     params = _.defaultsDeep(params, {
       page: currentPage,
       size: pageSize
     })
     logger.debug('从后端获取数据。。。')
     this.setState({
-                    fetchListPending: true,
-                    fetchListError: null,
-                    listNeedReload: false,
-                  })
+      fetchListPending: true,
+      fetchListError: null,
+      listNeedReload: false,
+    })
     model.index(
       {
         data: params,
         showErrorMessage: true,
         onSuccess: data => {
-          const {resources, pagination = {}} = data
+          const { resources, pagination = {} } = data
           const {
-                  current_page: currentPage,
-                  prev_page: prevPage,
-                  next_page: nextPage,
-                  total_count: total
-                } = pagination
+            current_page: currentPage,
+            prev_page: prevPage,
+            next_page: nextPage,
+            total_count: total
+          } = pagination
 
           const byId = {};
           const ids = [];
@@ -160,23 +167,23 @@ class RouteFormList extends React.PureComponent {
 
           handleData(items)
           this.setState({
-                          byId,
-                          ids,
-                          items,
-                          currentPage,
-                          prevPage,
-                          nextPage,
-                          total,
-                          pageSize,
-                          fetchListPending: false,
-                          fetchListError: null,
-                        })
+            byId,
+            ids,
+            items,
+            currentPage,
+            prevPage,
+            nextPage,
+            total,
+            pageSize,
+            fetchListPending: false,
+            fetchListError: null,
+          })
         },
         onFail: data => {
           this.setState({
-                          fetchListPending: false,
-                          fetchListError: data,
-                        })
+            fetchListPending: false,
+            fetchListError: data,
+          })
         }
       })
   }
@@ -186,24 +193,42 @@ class RouteFormList extends React.PureComponent {
    * @returns {{new: (function(*): *), edit: (function(*): function(*=): *), show: (function(*): function(*=): *), refresh: (function(*): *), delete: (function(*, *=): *)}}
    */
   get defaultActionMap() {
-    const {defaultActionMap: ret = {}} = this.props
+    const { defaultActionMap: ret = {} } = this.props
     return _.defaultsDeep(ret, {
       edit: renderEditAction(this.handleClickEdit),
       show: renderShowAction(this.handleClickShow),
       delete: renderDeleteAction(this.handleClickDelete),
       new: renderNewAction(this.handleClickNew),
-      refresh: renderRefreshAction(e => this.setState({listNeedReload: true}))
+      refresh: renderRefreshAction(e => this.setState({ listNeedReload: true }))
     })
   }
 
   /**
-   * 获取表格宽度
-   * @param length
-   * @returns {Number}
+   * 表单记录列表
+   * @returns {[]}
    */
-  getTableWidth = (length = this.getColumns().length) => {
-    // 获取全表宽度
-    return this.props.tableWidth || utils.getTableWidth(length)
+  getDataSource = () => {
+    const { items = [] } = this.state
+    return items
+  }
+
+  /**
+   * 设置 AntDesign 的页码属性
+   */
+  getPagination = () => {
+    const { currentPage, prevPage, nextPage, total, pageSize } = this.state;
+    return {
+      currentPage,
+      prevPage,
+      nextPage,
+      total,
+      pageSize,
+      onChange: this.handlePageChange,
+      responsive: true,
+      showSizeChanger: true,
+      onShowSizeChange: this.handlePageSizeChange,
+      showQuickJumper: true,
+    }
   }
 
   /**
@@ -230,31 +255,13 @@ class RouteFormList extends React.PureComponent {
   }
 
   /**
-   * 表单记录列表
-   * @returns {[]}
+   * 获取表格宽度
+   * @param length
+   * @returns {Number}
    */
-  getDataSource = () => {
-    const {items = []} = this.state
-    return items
-  }
-
-  /**
-   * 设置 AntDesign 的页码属性
-   */
-  getPagination = () => {
-    const {currentPage, prevPage, nextPage, total, pageSize} = this.state;
-    return {
-      currentPage,
-      prevPage,
-      nextPage,
-      total,
-      pageSize,
-      onChange: this.handlePageChange,
-      responsive: true,
-      showSizeChanger: true,
-      onShowSizeChange: this.handlePageSizeChange,
-      showQuickJumper: true,
-    }
+  getTableWidth = (length = this._columns.length) => {
+    // 获取全表宽度
+    return this.props.tableWidth || utils.getTableWidth(length)
   }
 
   /**
@@ -271,7 +278,7 @@ class RouteFormList extends React.PureComponent {
    * @returns {Function[]}
    */
   getActions = () => {
-    let {actions = [], canShow = false, canEdit = true,} = this.props
+    let { actions = [], canShow = false, canEdit = true, } = this.props
     actions = _.cloneDeep(actions)
 
     canEdit && actions.push(this.defaultActionMap.edit)
@@ -284,7 +291,7 @@ class RouteFormList extends React.PureComponent {
    * @returns {Function[]}
    */
   getBatchActions = () => {
-    let {batchActions = [], canDelete = true} = this.props
+    let { batchActions = [], canDelete = true } = this.props
     batchActions = _.cloneDeep(batchActions)
 
     canDelete && batchActions.unshift(this.defaultActionMap.delete)
@@ -296,7 +303,7 @@ class RouteFormList extends React.PureComponent {
    * @returns {Function[]}
    */
   getActionItems = () => {
-    let {actionItems = [], canNew = true} = this.props
+    let { actionItems = [], canNew = true } = this.props
     actionItems = _.cloneDeep(actionItems)
 
     canNew && actionItems.push(this.defaultActionMap.new)
@@ -320,16 +327,16 @@ class RouteFormList extends React.PureComponent {
   // 点击按钮页
   handlePageChange = (page) => {
     logger.debug(`切换到第${page}页`)
-    this.fetchTableData({page})
+    this.fetchTableData({ page })
   }
 
   // 点击修改每页大小
   handlePageSizeChange = (page, size) => {
     logger.debug(`页码尺寸改为 ${size}`)
     this.fetchTableData({
-                          page,
-                          size
-                        })
+      page,
+      size
+    })
   }
 
   // 点击新建按钮
@@ -356,42 +363,32 @@ class RouteFormList extends React.PureComponent {
 
   // 点击删除按钮
   handleClickDelete = records => e => {
-    const {model} = this.props
+    const { model } = this.props
     e.preventDefault()
     logger.debug('删除')
     const batchKeys = records.map(o => o.id)
 
     Modal.confirm({
-                    title: batchKeys.length > 1 ? '确认批量删除' : '确认删除',
-                    content: `当前被选中的行: ${batchKeys.join(', ')}`,
-                    onOk: () => {
-                      if (globalConfig.debug) {
-                        notification.success({
-                                               message: '测试删除成功',
-                                               description: `成功删除${batchKeys.length}条数据`,
-                                               duration: 3,
-                                             })
-                      } else {
-                        utils.deleteFromDb(model, batchKeys, this.fetchTableData)
-                      }
-                    },
-                  });
+      title: batchKeys.length > 1 ? '确认批量删除' : '确认删除',
+      content: `当前被选中的行: ${batchKeys.join(', ')}`,
+      onOk: () => {
+        if (globalConfig.debug) {
+          notification.success({
+            message: '测试删除成功',
+            description: `成功删除${batchKeys.length}条数据`,
+            duration: 3,
+          })
+        } else {
+          utils.deleteFromDb(model, batchKeys, this.fetchTableData)
+        }
+      },
+    });
   }
 
   render() {
-    let {
-          model, filter: filterFields,
-          rowSelection = {}, expandable = {},
-        } = this.props
+    let { model, filter: filterFields, expandable = {}, ...restProps } = this.props
 
-    const {selectedRowKeys, fetchListPending} = this.state
-    // 配置默认的 rowSelection
-    // 因为 selectedRowKeys 需要从 state 中获取，所以放在 render 中
-    rowSelection = !_.isEmpty(this.getBatchActions()) && _.defaultsDeep(rowSelection, {
-      selectedRowKeys: selectedRowKeys,
-      onChange: this.handleTableSelectChange,
-      checkStrictly: false
-    })
+    const { fetchListPending } = this.state
 
     expandable = _.defaultsDeep(expandable, {
       // 通过点击行来展开子行
@@ -411,37 +408,17 @@ class RouteFormList extends React.PureComponent {
           )
         }
 
-        <ToolBar
-          actionItems={this.getActionItems()}
-          batchActions={this.getBatchActions()}
-          value={this.getSelectedRows()}
-        />
-
-        <AntdTable
-          onRow={record => {
-            return {
-              onDoubleClick: e => {
-                if (selectedRowKeys.includes(record.key)) {
-                  this.handleTableSelectChange(selectedRowKeys.filter(key => key !== record.key))
-                } else {
-                  this.handleTableSelectChange([record.key])
-                }
-              },
-            }
-          }}
-          rowSelection={rowSelection}
-          columns={this.getColumns()}
+        <ActionTable
+          actions={this._actions}
+          actionItems={this._actionItems}
+          batchActions={this._batchActions}
+          columns={this._columns}
           dataSource={this.getDataSource()}
           pagination={this.getPagination()}
           loading={fetchListPending}
           expandable={expandable}
           showSizeChanger={false}
-          scroll={{
-            // 设置整个表格宽度，以固定列
-            x: this.getTableWidth(),
-            // // 设置整个表格高度，以固定表格行
-            // y: 800
-          }}
+          {...restProps}
         />
       </>
     );
