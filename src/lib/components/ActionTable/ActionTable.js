@@ -36,9 +36,10 @@ function ActionTable({
   )
 
   columns = useMemo(() => {
-    columns.unshift(renderIndexColumn(indexColumn))
-    !_.isEmpty(actions) && columns.push(renderActionsColumn(actions))
-    return columns
+    let c = _.cloneDeep(columns)
+    c.unshift(renderIndexColumn(indexColumn))
+    !_.isEmpty(actions) && c.push(renderActionsColumn(actions))
+    return c
   }, [columns, actions, indexColumn])
 
   tableWidth = useMemo(
