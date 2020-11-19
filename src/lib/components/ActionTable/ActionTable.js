@@ -97,4 +97,4 @@ ActionTable.propTypes = {
   indexColumn: PropTypes.string
 };
 
-export default ActionTable
+export default React.memo(ActionTable)
