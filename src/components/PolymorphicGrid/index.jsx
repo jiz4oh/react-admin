@@ -18,7 +18,7 @@ export default function PolymorphicGrid({
                                             gutter = [8, 8]
                                           }) {
   if (columns === 1) return children
-  if (_.isNil(children) && _.isObject(children)) return children
+  if (_.isNil(children) || _.isObject(children)) return children
   children = children.flat().filter(Boolean)
   const rows = [];
   const colspan = BASE_ROW_LENGTH / columns
