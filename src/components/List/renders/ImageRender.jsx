@@ -14,18 +14,16 @@ const renderImageArr = (strOrArr) => {
   })
 }
 
-const ImageRender = (onClick) =>
+const ImageRender = (onClickFn) =>
   (rawText, _record) => {
     // 若有多张图片，取第一张为缩略图
     const thumb = _.isArray(rawText) ? rawText[0] : rawText
+    const onClick = () => thumb && _.isFunction(onClickFn) && onClickFn(renderImageArr(rawText))
     return <img
       src={thumb}
       alt={'图片加载失败'}
       style={{width: '100%'}}
-      onClick={() => {
-        const imgArr = renderImageArr(rawText)
-        _.isFunction(onClick) && onClick(imgArr)
-      }}
+      onClick={onClick}
     />
   }
 
