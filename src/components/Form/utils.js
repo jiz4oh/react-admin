@@ -5,7 +5,7 @@ import i18n from "../../utils/i18n";
 import globalConfig from "../../config";
 
 const i18nKey = globalConfig.i18nKey
-const RESOURCE_TYPE_MAP = 'resource_type'
+const RESOURCE_TYPE_MAP = 'data_type'
 const BELONGS_TO = 'belongs_to'
 const HAS_ONE = 'has_one'
 const HAS_MANY = 'has_many'
