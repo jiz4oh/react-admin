@@ -4,7 +4,7 @@ import { enumMapToArray } from "../../utils/utils";
 import CRUD from "../../layouts/CRUD";
 import models from "../../models";
 import { ImageRender } from "../../components/List";
-import { ImagePreviewModal } from "../../components/ImagePreviewModal";
+import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
 
 const genderMap = {
   unknown: '未知',

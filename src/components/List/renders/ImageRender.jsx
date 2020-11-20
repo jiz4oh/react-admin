@@ -1,8 +1,6 @@
 import React from "react";
 import _ from "lodash";
 
-import { logger } from '../../ImagePreviewModal/utils'
-
 const renderImageArr = (strOrArr) => {
   let result = _.cloneDeep(strOrArr);
   if (!_.isArray(result)) {
@@ -25,7 +23,6 @@ const ImageRender = (onClick) =>
       alt={'图片加载失败'}
       style={{width: '100%'}}
       onClick={() => {
-        logger.debug('点击预览')
         const imgArr = renderImageArr(rawText)
         _.isFunction(onClick) && onClick(imgArr)
       }}

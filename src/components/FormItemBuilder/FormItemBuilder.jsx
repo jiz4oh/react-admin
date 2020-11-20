@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 
-import PolymorphicGrid from "../PolymorphicGrid";
+import PolymorphicGrid from "../../lib/components/PolymorphicGrid";
 import i18n from '../../utils/i18n'
 import Logger from '../../utils/Logger'
 import globalConfig from "../../config";

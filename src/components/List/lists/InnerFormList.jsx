@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Modal, Form } from "antd";
 
@@ -15,17 +15,25 @@ const modalFormMap = {
 }
 
 function InnerFormList(props) {
-  let {model, formFields, remote = defaultIsRemote} = props
+  let { model, form, formFields, remote = defaultIsRemote } = props
   const [recordId, setRecordId] = useState('')
   const [showForm, setShowForm] = useState('')
   const [listNeedReload, setListNeedReload] = useState(false)
+  const [formRef] = Form.useForm(form)
 
-  const handleClickEdit = useCallback(record => e => {
-    setRecordId(record.id)
-    setShowForm('edit')
+  const actionMap = useMemo(() => {
+    const handleClickEdit = record => e => {
+      setRecordId(record.id)
+      setShowForm('edit')
+    }
+
+    const handleClickNew = e => setShowForm('new')
+
+    return {
+      new: renderNewAction(handleClickNew),
+      edit: renderEditAction(handleClickEdit)
+    }
   }, [])
-
-  const handleClickNew = useCallback(e => setShowForm('new'), [])
 
   // 隐藏 modal 并刷新列表
   const handleHideModal = useCallback(e => {
@@ -34,8 +42,7 @@ function InnerFormList(props) {
     setListNeedReload(true)
   }, [])
 
-  const [form] = Form.useForm()
-  const handleOkModal = useCallback(e => form.submit(), [form])
+  const handleOkModal = useCallback(e => formRef.submit(), [formRef])
 
   const onNewFinish = useCallback(() => {
     formUtils.notifySuccess('创建')
@@ -58,10 +65,7 @@ function InnerFormList(props) {
   return (
     <>
       <RouteFormList
-        defaultActionMap={{
-          new: renderNewAction(handleClickNew),
-          edit: renderEditAction(handleClickEdit)
-        }}
+        defaultActionMap={actionMap}
         listNeedReload={listNeedReload}
         {...props}
       />
@@ -77,7 +81,7 @@ function InnerFormList(props) {
         >
           <FormComponent
             model={model}
-            form={form}
+            form={formRef}
             fields={formFields}
             remote={remote}
             pk={recordId}

@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from "react";
 import { Modal } from "antd";
 import _ from 'lodash'
+import PropTypes from "prop-types";
 
 import './ImagePreviewModal.scss'
 import ImageSlider from "./ImageSlider";
-import PropTypes from "prop-types";
 
 function ImagePreviewModal({
                              onChange,

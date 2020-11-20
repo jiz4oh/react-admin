@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import models from "../../models";
 import { InnerFormList, HasManyRender, ImageRender } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
-import { ImagePreviewModal } from "../../components/ImagePreviewModal";
+import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
 
 const filter = [
   {
