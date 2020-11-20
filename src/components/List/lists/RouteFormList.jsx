@@ -135,8 +135,8 @@ class RouteFormList extends React.PureComponent {
       {
         data: params,
         showErrorMessage: true,
-        onSuccess: data => {
-          const { resources, pagination = {} } = data
+        onSuccess: res => {
+          const { data, pagination = {} } = res
           const {
             current_page: currentPage,
             prev_page: prevPage,
@@ -147,7 +147,7 @@ class RouteFormList extends React.PureComponent {
           const byId = {};
           const ids = [];
           let num = 1
-          const items = _.cloneDeep(resources)
+          const items = _.cloneDeep(data)
 
           const handleData = arr =>
             _.forEach(arr, item => {
