@@ -5,7 +5,7 @@ import { Modal, Form } from "antd";
 import RouteFormList from "./RouteFormList";
 import { RestfulEditForm, RestfulNewForm } from "../../Form";
 import formUtils from "../../Form/utils";
-import { renderNewAction, EditAction } from "../index";
+import { NewAction, EditAction } from "../index";
 import globalConfig from "../../../config"
 
 const defaultIsRemote = globalConfig.DBTable.remote || false
@@ -30,7 +30,7 @@ function InnerFormList(props) {
     const handleClickNew = e => setShowForm('new')
 
     return {
-      new: renderNewAction(handleClickNew),
+      new: <NewAction key='NewBtn' onClick={handleClickNew}/>,
       edit: <EditAction className={'actions-option'} key='EditBtn' onClick={handleClickEdit}/>
     }
   }, [])

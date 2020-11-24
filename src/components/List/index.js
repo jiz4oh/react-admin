@@ -1,6 +1,6 @@
 // lists
-export {default as RouteFormList} from './lists/RouteFormList'
-export {default as InnerFormList} from './lists/InnerFormList'
+export { default as RouteFormList } from './lists/RouteFormList'
+export { default as InnerFormList } from './lists/InnerFormList'
 
 // actions
 /**
@@ -11,17 +11,12 @@ export {default as InnerFormList} from './lists/InnerFormList'
  * 3. actionItem 对当前页面进行的操作，不接受参数，例如新建
  */
 export { DeleteAction } from './actions/batchActions'
-export {
-  renderNewAction,
-  renderRefreshAction,
-  renderSubmitAction,
-  renderBackAction
-} from './actions/actionItems'
+export { NewAction, RefreshAction } from './actions/actionItems'
 export { EditAction, ShowAction } from './actions/actions'
 
 // renders
-export {default as textRender} from "./renders/textRender"
-export {default as FileRender} from "./renders/FileRender"
-export {default as ImageRender} from "./renders/ImageRender"
-export {default as HasManyRender} from "./renders/HasManyRender"
+export { default as textRender } from "./renders/textRender"
+export { default as FileRender } from "./renders/FileRender"
+export { default as ImageRender } from "./renders/ImageRender"
+export { default as HasManyRender } from "./renders/HasManyRender"
 

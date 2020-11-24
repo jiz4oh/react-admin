@@ -9,8 +9,8 @@ import Logger from "../../../utils/Logger";
 import utils from './utils'
 import {
   ShowAction,
-  renderNewAction,
-  renderRefreshAction,
+  NewAction,
+  RefreshAction,
   EditAction,
   DeleteAction,
 } from "../index";
@@ -197,8 +197,8 @@ class RouteFormList extends React.PureComponent {
       edit: <EditAction className={'actions-option'} key='EditBtn' onClick={this.handleClickEdit}/>,
       show: <ShowAction className={'actions-option'} key='ShowBtn' onClick={this.handleClickShow}/>,
       delete: <DeleteAction key='DeleteBtn' onClick={this.handleClickDelete}/>,
-      new: renderNewAction(this.handleClickNew),
-      refresh: renderRefreshAction(e => this.setState({ listNeedReload: true }))
+      new: <NewAction key='NewBtn' onClick={this.handleClickNew}/>,
+      refresh: <RefreshAction key='RefreshBtn' onClick={e => this.setState({ listNeedReload: true })}/>
     })
   }
 
