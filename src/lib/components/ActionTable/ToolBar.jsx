@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Space } from "antd";
-import _ from "lodash"
 
 import './ToolBar.scss'
 
@@ -21,26 +20,21 @@ function ToolBar({
                    restProps
                  }) {
 
-  batchActions = batchActions.map((BatchAction, index) => {
-    if (React.isValidElement(BatchAction)) {
-      BatchAction.props = _.defaults(
-        { value: batchKeys },
-        BatchAction.props,
-        { key: BatchAction.name || index }
-      )
-      return BatchAction
-    }
-    return <BatchAction key={BatchAction.name || index} value={batchKeys}/>
-  })
+  batchActions = batchActions.map((BatchAction, index) =>
+    React.isValidElement(BatchAction)
+      ? React.cloneElement(BatchAction, { value: batchKeys })
+      : <BatchAction key={BatchAction.name || index} value={batchKeys}/>
+  )
 
-  actionItems = actionItems.map((ActionItem, index) => {
-    return React.isValidElement(ActionItem)
+  actionItems = actionItems.map((ActionItem, index) =>
+    React.isValidElement(ActionItem)
       ? ActionItem
       : <ActionItem key={ActionItem.name || index}/>
-  })
+  )
 
   return (
-    <div className={`M-table-tool-bar clearfix ${className || ''}`} {...restProps}>
+    <div
+      className={`M-table-tool-bar clearfix ${className || ''}`} {...restProps}>
       <Space
         key={'left'}
         className='M-table-tool-bar-batch-actions'
