@@ -17,9 +17,8 @@ export default function PolymorphicGrid({
                                             columns = 1,
                                             gutter = [8, 8]
                                           }) {
+  children = React.Children.toArray(children)
   if (columns === 1) return children
-  if (_.isNil(children) || _.isPlainObject(children)) return children
-  children = children.flat().filter(Boolean)
   const rows = [];
   const colspan = BASE_ROW_LENGTH / columns
 
