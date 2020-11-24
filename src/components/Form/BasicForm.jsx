@@ -3,7 +3,8 @@ import { useHistory } from 'react-router-dom'
 import { Button, Form, Row, Space, Spin } from "antd";
 import _ from 'lodash'
 
-import formUtils from './utils'
+import "./BasicForm.scss"
+import formUtils from "./utils"
 
 // antd 校验成功后的回调
 const finish = _validatedValues => formUtils.notifySuccess()
@@ -80,36 +81,38 @@ function BasicForm({
   }
 
   return (
-    <Spin spinning={value} delay={100}>
-      <Form
-        form={form}
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 8 }}
-        initialValues={initialValues}
-        onFinish={finish}
-        onFinishFailed={finishFailed}
-        scrollToFirstError
-        {...restProps}
-      >
-        {children}
-      </Form>
-      {
-        !_.isEmpty(footer) && (
-          <Row
-            align='middle'
-            justify='center'
-          >
-            <Space>
-              {footer.map((Action, index) =>
-                React.isValidElement(Action)
-                  ? Action
-                  : <Action key={Action.name || index}/>
-              )}
-            </Space>
-          </Row>
-        )
-      }
-    </Spin>
+    <div className={'basic-form'}>
+      <Spin spinning={value} delay={100}>
+        <Form
+          form={form}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 8 }}
+          initialValues={initialValues}
+          onFinish={finish}
+          onFinishFailed={finishFailed}
+          scrollToFirstError
+          {...restProps}
+        >
+          {children}
+        </Form>
+        {
+          !_.isEmpty(footer) && (
+            <Row
+              align='middle'
+              justify='center'
+            >
+              <Space>
+                {footer.map((Action, index) =>
+                  React.isValidElement(Action)
+                    ? Action
+                    : <Action key={Action.name || index}/>
+                )}
+              </Space>
+            </Row>
+          )
+        }
+      </Spin>
+    </div>
   )
 }
 
