@@ -2,18 +2,19 @@ import React, { useMemo } from 'react';
 import { Layout } from 'antd';
 import { useLocation } from "react-router-dom";
 
-import { Header } from "./Header";
-import { Sidebar } from "./Sidebar";
-import { Breadcrumb } from "./Breacrumb";
-import { breadcrumbItemBuilder } from "../components/breadcumbItemBuilder";
+import "./index.scss"
+import { Header } from "../Header";
+import { Sidebar } from "../Sidebar";
+import { Breadcrumb } from "../Breacrumb";
+import { breadcrumbItemBuilder } from "../../components/breadcumbItemBuilder";
 import {
   getUserInfo,
   clearUserInfo,
   hasIndexPermission,
   hasVisitPermission,
-} from "../session";
-import menus from "../config/menus";
-import { menuItemBuilder, authoriseMenu } from "../components/menuItemBuilder";
+} from "../../session";
+import menus from "../../config/menus";
+import { menuItemBuilder, authoriseMenu } from "../../components/menuItemBuilder";
 
 const defaultVisitablePaths = ['dashboard']
 
@@ -59,4 +60,4 @@ function PageContainer({ children }) {
   );
 }
 
-export default PageContainer
+export default React.memo(PageContainer)

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Table } from "antd";
 import _ from 'lodash'
 
+import "./ActionTable.scss"
 import ToolBar from "./ToolBar";
 import { calTableWidth, renderIndexColumn, renderActionsColumn } from './utils'
 
@@ -56,13 +57,15 @@ function ActionTable({
   )
 
   return (
-    <div>
+    <div className='action-table'>
       <ToolBar
+        className='action-table-tool-bar'
         actionItems={actionItems}
         batchActions={batchActions}
         batchKeys={selectedRow}
       />
       <Table
+        className='action-table-table'
         onRow={record => {
           return {
             onDoubleClick: e => {

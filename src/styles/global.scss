@@ -14,28 +14,6 @@ body {
   align-items: center;
 }
 
-.G-app-layout {
-  position: relative;
-  height: 100%;
-
-  .G-app-content {
-    margin: 16px 16px 0 16px;
-    flex: 1 1 0;
-    // 取消 ant design 默认的 min-height
-    min-height: unset;
-
-    .G-site-main-layout {
-      padding: 24px;
-      height: 100%;
-      background: #fff;
-    }
-  }
-
-  .G-app-footer {
-    text-align: center;
-  }
-}
-
 .G-hide {
   display: none;
 }

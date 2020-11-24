@@ -1,0 +1,24 @@
+.app-layout {
+  position: relative;
+  height: 100%;
+
+  .app-layout-main {
+    flex-direction: column;
+
+    .app-layout-header {
+
+    }
+
+    .app-layout-content {
+      margin: 16px 16px 0 16px;
+      flex: 1 1 0;
+      // 取消 ant design 默认的 min-height
+      min-height: unset;
+    }
+
+    .app-layout-footer {
+      color: rgba(0, 0, 0, .45);
+      text-align: center;
+    }
+  }
+}
