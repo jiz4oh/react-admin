@@ -8,7 +8,7 @@ const HasManyRender = (onClick) =>
       type={'text'}
       onClick={onClick}
       size='small'
-      className={'C-option'}
+      style={{ color: '#1890FF' }}
     >
       显示更多
     </Button>
