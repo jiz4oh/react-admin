@@ -1,7 +1,9 @@
 import _ from "lodash"
 
 const logConfig = {
-  log: 'debug'
+  log: {
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
+  }
 }
 
 const stringifyPattern = pattern => typeof pattern !== 'string' ? JSON.stringify(pattern) : pattern
