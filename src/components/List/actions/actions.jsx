@@ -4,14 +4,14 @@ import { Button } from "antd";
 /**
  * 接受点击事件，快速生成编辑按钮
  * @param onClickFn {Function} 点击事件
- * @returns {function({record?: Object}): React.ReactNode} React 组件，接受 record 参数
+ * @returns {function({value?: Object}): React.ReactNode} React 组件，接受 value 参数
  */
 export const renderEditAction = onClickFn =>
-  ({ record, ...restProps }) => (
+  ({ value, ...restProps }) => (
     <Button
       key='editBtn'
       type={'text'}
-      onClick={onClickFn(record)}
+      onClick={onClickFn(value)}
       size='small'
       {...restProps}
     >
@@ -22,14 +22,14 @@ export const renderEditAction = onClickFn =>
 /**
  * 接受点击事件，快速生成详情按钮
  * @param onClickFn {Function} 点击事件
- * @returns {function({record?: Object}): React.ReactNode} React 组件，接受 record 参数
+ * @returns {function({value?: Object}): React.ReactNode} React 组件，接受 value 参数
  */
 export const renderShowAction = onClickFn =>
-  ({ record, ...restProps }) => (
+  ({ value, ...restProps }) => (
     <Button
       key='showBtn'
       type={'text'}
-      onClick={onClickFn(record)}
+      onClick={onClickFn(value)}
       size='small'
       {...restProps}
     >

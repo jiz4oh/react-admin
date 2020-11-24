@@ -34,13 +34,13 @@ export function renderActionsColumn(actions) {
               const key = Action.name || index
               if (React.isValidElement(Action)) {
                 Action.props = _.defaults(
-                  { record },
+                  { value: record },
                   Action.props,
                   { key }
                 )
                 return Action
               }
-              return <Action key={key} record={record}/>
+              return <Action key={key} value={record}/>
             })
           }
         </Space>
