@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
-import { Button, Form } from "antd";
+import { Button, Form, Row, Space, Spin } from "antd";
 import _ from 'lodash'
 
 import formUtils from './utils'
-import GenericFormLayout from "./GenericFormLayout";
 
 // antd 校验成功后的回调
-const finish = validatedValues => formUtils.notifySuccess()
+const finish = _validatedValues => formUtils.notifySuccess()
 
 // antd 校验失败后的回调
-const finishFailed = err => formUtils.notifyError()
+const finishFailed = _err => formUtils.notifyError()
 
 /**
  *
@@ -18,7 +17,7 @@ const finishFailed = err => formUtils.notifyError()
  * @param form {Object} Antd 的 FormInstance
  * @param onSubmit {Function} 提交提交按钮的回调
  * @param initialValues {[]} 表单默认值
- * @param footer {Function[]} form 表单底部组件列表
+ * @param footer {(React.Component || JSX.Element)[]} form 表单底部组件列表
  * @param onChange {Function} 表单显示控制函数
  * @param value {Boolean} 是否显示表单加载中
  * @param staticContext {any} 接收该参数避免 react warning
@@ -65,14 +64,14 @@ function BasicForm({
   // 默认添加提交，返回按钮
   if (_.isUndefined(footer)) {
     footer = [
-      () => <Button
+      <Button
         key='submitBtn'
         type='primary'
         onClick={onSubmit || handleSubmit}
       >
         提交
       </Button>,
-      () => <Button
+      <Button
         onClick={history.goBack}
       >
         返回
@@ -81,7 +80,7 @@ function BasicForm({
   }
 
   return (
-    <GenericFormLayout spinning={value} footer={footer}>
+    <Spin spinning={value} delay={100}>
       <Form
         form={form}
         labelCol={{ span: 8 }}
@@ -94,7 +93,23 @@ function BasicForm({
       >
         {children}
       </Form>
-    </GenericFormLayout>
+      {
+        !_.isEmpty(footer) && (
+          <Row
+            align='middle'
+            justify='center'
+          >
+            <Space>
+              {footer.map((Action, index) =>
+                React.isValidElement(Action)
+                  ? Action
+                  : <Action key={Action.name || index}/>
+              )}
+            </Space>
+          </Row>
+        )
+      }
+    </Spin>
   )
 }
 
