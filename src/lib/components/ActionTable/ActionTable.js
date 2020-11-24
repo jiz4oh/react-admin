@@ -17,6 +17,7 @@ import { calTableWidth, renderIndexColumn, renderActionsColumn } from './utils'
  * @param actions {[]} 列表页单条记录的操作按钮
  * @param tableWidth {Number} 表格宽度
  * @param indexColumn {string} 索引列名
+ * @param className {String} 样式类名
  * @param restProps 其他传递给 antd Table 组件的参数
  */
 function ActionTable({
@@ -28,6 +29,7 @@ function ActionTable({
                        tableWidth,
                        indexColumn = 'indexColumn',
                        rowSelection,
+                       className,
                        ...restProps
                      }) {
   const [selectedRowKeys, selectRow] = useState([])
@@ -57,7 +59,7 @@ function ActionTable({
   )
 
   return (
-    <div className='action-table'>
+    <div className={'action-table' + className}>
       <ToolBar
         className='action-table-tool-bar'
         actionItems={actionItems}
