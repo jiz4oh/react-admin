@@ -24,13 +24,13 @@ function ToolBar({
   batchActions = batchActions.map((BatchAction, index) => {
     if (React.isValidElement(BatchAction)) {
       BatchAction.props = _.defaults(
-        { records: batchKeys },
+        { value: batchKeys },
         BatchAction.props,
         { key: BatchAction.name || index }
       )
       return BatchAction
     }
-    return <BatchAction key={BatchAction.name || index} records={batchKeys}/>
+    return <BatchAction key={BatchAction.name || index} value={batchKeys}/>
   })
 
   actionItems = actionItems.map((ActionItem, index) => {
