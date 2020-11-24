@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Space } from "antd";
+import _ from "lodash"
 
 import './ToolBar.scss'
 
@@ -20,14 +21,22 @@ function ToolBar({
                    restProps
                  }) {
 
-  batchActions = batchActions.map((Action, index) => {
-    if (React.isValidElement(Action)) return Action
-    return <Action key={Action.name || index} records={batchKeys}/>
+  batchActions = batchActions.map((BatchAction, index) => {
+    if (React.isValidElement(BatchAction)) {
+      BatchAction.props = _.defaults(
+        { records: batchKeys },
+        BatchAction.props,
+        { key: BatchAction.name || index }
+      )
+      return BatchAction
+    }
+    return <BatchAction key={BatchAction.name || index} records={batchKeys}/>
   })
 
-  actionItems = actionItems.map((Action, index) => {
-    if (React.isValidElement(Action)) return Action
-    return <Action key={Action.name || index}/>
+  actionItems = actionItems.map((ActionItem, index) => {
+    return React.isValidElement(ActionItem)
+      ? ActionItem
+      : <ActionItem key={ActionItem.name || index}/>
   })
 
   return (
