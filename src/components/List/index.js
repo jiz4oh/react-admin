@@ -17,7 +17,7 @@ export {
   renderSubmitAction,
   renderBackAction
 } from './actions/actionItems'
-export { renderEditAction, renderShowAction } from './actions/actions'
+export { EditAction, ShowAction } from './actions/actions'
 
 // renders
 export {default as textRender} from "./renders/textRender"

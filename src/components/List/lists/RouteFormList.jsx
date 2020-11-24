@@ -8,10 +8,10 @@ import './RouteFormList.scss'
 import Logger from "../../../utils/Logger";
 import utils from './utils'
 import {
-  renderShowAction,
+  ShowAction,
   renderNewAction,
   renderRefreshAction,
-  renderEditAction,
+  EditAction,
   renderDeleteAction,
 } from "../index";
 import { RansackFilter } from "../../RansackFilter";
@@ -190,15 +190,12 @@ class RouteFormList extends React.PureComponent {
 
   /**
    * 当前组件需要使用的默认按钮组件
-   * @returns {{new: (function(*): *), edit: (function(*): function(*=): *), show: (function(*): function(*=): *), refresh: (function(*): *), delete: (function(*, *=): *)}}
    */
   get defaultActionMap() {
     const { defaultActionMap: ret = {} } = this.props
-    const Edit = renderEditAction(this.handleClickEdit)
-    const Show = renderShowAction(this.handleClickShow)
-    return _.defaultsDeep({ ...ret }, {
-      edit: <Edit className={'actions-option'} key='EditBtn'/>,
-      show: <Show className={'actions-option'} key='ShowBtn'/>,
+    return _.defaults({...ret}, {
+      edit: <EditAction className={'actions-option'} key='EditBtn' onClick={this.handleClickEdit}/>,
+      show: <ShowAction className={'actions-option'} key='ShowBtn' onClick={this.handleClickShow}/>,
       delete: renderDeleteAction(this.handleClickDelete),
       new: renderNewAction(this.handleClickNew),
       refresh: renderRefreshAction(e => this.setState({ listNeedReload: true }))
