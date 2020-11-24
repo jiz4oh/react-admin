@@ -12,7 +12,7 @@ import {
   renderNewAction,
   renderRefreshAction,
   EditAction,
-  renderDeleteAction,
+  DeleteAction,
 } from "../index";
 import { RansackFilter } from "../../RansackFilter";
 import globalConfig from "../../../config";
@@ -196,7 +196,7 @@ class RouteFormList extends React.PureComponent {
     return _.defaults({...ret}, {
       edit: <EditAction className={'actions-option'} key='EditBtn' onClick={this.handleClickEdit}/>,
       show: <ShowAction className={'actions-option'} key='ShowBtn' onClick={this.handleClickShow}/>,
-      delete: renderDeleteAction(this.handleClickDelete),
+      delete: <DeleteAction key='DeleteBtn' onClick={this.handleClickDelete}/>,
       new: renderNewAction(this.handleClickNew),
       refresh: renderRefreshAction(e => this.setState({ listNeedReload: true }))
     })
