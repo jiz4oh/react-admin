@@ -194,9 +194,11 @@ class RouteFormList extends React.PureComponent {
    */
   get defaultActionMap() {
     const { defaultActionMap: ret = {} } = this.props
+    const Edit = renderEditAction(this.handleClickEdit)
+    const Show = renderShowAction(this.handleClickShow)
     return _.defaultsDeep(ret, {
-      edit: renderEditAction(this.handleClickEdit),
-      show: renderShowAction(this.handleClickShow),
+      edit: <Edit className={'C-option'} key='EditBtn'/>,
+      show: <Show className={'C-option'} key='ShowBtn'/>,
       delete: renderDeleteAction(this.handleClickDelete),
       new: renderNewAction(this.handleClickNew),
       refresh: renderRefreshAction(e => this.setState({ listNeedReload: true }))

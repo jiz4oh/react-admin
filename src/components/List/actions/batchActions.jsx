@@ -9,13 +9,14 @@ import { DeleteOutlined } from "@ant-design/icons";
  * @returns {function({records?: Object[]}): JSX.ElementClass} React 组件，接受 records 参数
  */
 export const renderDeleteAction = onClickFn =>
-  ({records}) =>
+  ({ records, ...restProps }) =>
     <Button
       key='deleteBtn'
       type="primary"
       danger
       disabled={_.isEmpty(records)}
       onClick={onClickFn(records)}
+      {...restProps}
     >
       <DeleteOutlined/>
       {
