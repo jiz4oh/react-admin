@@ -59,7 +59,7 @@ function ActionTable({
   )
 
   return (
-    <div className={'action-table' + className}>
+    <div className={`action-table ${className || ''}`}>
       <ToolBar
         className='action-table-tool-bar'
         actionItems={actionItems}
