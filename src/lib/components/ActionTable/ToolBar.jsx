@@ -40,7 +40,7 @@ function ToolBar({
   })
 
   return (
-    <div className={"M-table-tool-bar clearfix " + className} {...restProps}>
+    <div className={`M-table-tool-bar clearfix ${className || ''}`} {...restProps}>
       <Space
         key={'left'}
         className='M-table-tool-bar-batch-actions'
