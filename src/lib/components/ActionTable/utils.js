@@ -1,5 +1,6 @@
 import React from "react";
 import { Space } from "antd";
+import _ from "lodash";
 
 export function calTableWidth(length) {
   // 默认自动判断
@@ -29,10 +30,18 @@ export function renderActionsColumn(actions) {
       return (
         <Space>
           {
-            actions.map(
-              (Action, index) =>
-                <Action key={Action.name || index} record={record}/>
-            )
+            actions.map((Action, index) => {
+              const key = Action.name || index
+              if (React.isValidElement(Action)) {
+                Action.props = _.defaults(
+                  { record },
+                  Action.props,
+                  { key }
+                )
+                return Action
+              }
+              return <Action key={key} record={record}/>
+            })
           }
         </Space>
       )
