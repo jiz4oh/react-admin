@@ -4,7 +4,7 @@ import { Button, Modal, notification } from "antd";
 import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import _ from 'lodash'
 
-import './index.scss'
+import './RouteFormList.scss'
 import Logger from "../../../utils/Logger";
 import utils from './utils'
 import {
@@ -197,8 +197,8 @@ class RouteFormList extends React.PureComponent {
     const Edit = renderEditAction(this.handleClickEdit)
     const Show = renderShowAction(this.handleClickShow)
     return _.defaultsDeep(ret, {
-      edit: <Edit className={'C-option'} key='EditBtn'/>,
-      show: <Show className={'C-option'} key='ShowBtn'/>,
+      edit: <Edit className={'actions-option'} key='EditBtn'/>,
+      show: <Show className={'actions-option'} key='ShowBtn'/>,
       delete: renderDeleteAction(this.handleClickDelete),
       new: renderNewAction(this.handleClickNew),
       refresh: renderRefreshAction(e => this.setState({ listNeedReload: true }))
