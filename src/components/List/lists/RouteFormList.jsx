@@ -196,7 +196,7 @@ class RouteFormList extends React.PureComponent {
     const { defaultActionMap: ret = {} } = this.props
     const Edit = renderEditAction(this.handleClickEdit)
     const Show = renderShowAction(this.handleClickShow)
-    return _.defaultsDeep(ret, {
+    return _.defaultsDeep({ ...ret }, {
       edit: <Edit className={'actions-option'} key='EditBtn'/>,
       show: <Show className={'actions-option'} key='ShowBtn'/>,
       delete: renderDeleteAction(this.handleClickDelete),
@@ -238,17 +238,17 @@ class RouteFormList extends React.PureComponent {
    * @returns {Object[]|}
    */
   getColumns = () => {
-    let {model, columns} = this.props
+    let { model, columns } = this.props
     // 获取表格具体列
     columns = utils.transColumns(columns, model.name)
     // 添加索引列
     columns.unshift({
-                      title: '#',
-                      dataIndex: indexColumn,
-                      // 固定 # 列
-                      fixed: 'left',
-                      width: 130
-                    })
+      title: '#',
+      dataIndex: indexColumn,
+      // 固定 # 列
+      fixed: 'left',
+      width: 130
+    })
     // 添加操作列
     const actions = this.getActions()
     !_.isEmpty(actions) && columns.push(utils.actionsColumn(actions))
