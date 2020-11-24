@@ -22,9 +22,9 @@ const currentUserMenus = () =>
     i => authoriseMenu(i, path => hasIndexPermission('all') || defaultVisitablePaths.includes(path) || hasVisitPermission(path)),
   ).flat(1).filter(Boolean)
 
-const {Content, Footer} = Layout
+const { Content, Footer } = Layout
 
-function PageContainer({children}) {
+function PageContainer({ children }) {
   const userName = getUserInfo('userName')
   const avatar = getUserInfo('avatar')
   const location = useLocation()
@@ -33,22 +33,25 @@ function PageContainer({children}) {
   const breadcrumbs = useMemo(() => breadcrumbItemBuilder(currentPaths, currentUserMenus()), [currentPaths])
 
   return (
-    <Layout className="G-app-layout">
+    <Layout className="app-layout">
       <Sidebar currentPaths={location.pathname}>
         {sidebarMenus}
       </Sidebar>
-      <Layout style={{flexDirection: 'column'}}>
-        <Header userName={userName} avatar={avatar} logout={clearUserInfo}>
+      <Layout className="app-layout-main">
+        <Header
+          className="app-layout-header"
+          userName={userName}
+          avatar={avatar}
+          logout={clearUserInfo}
+        >
           <Breadcrumb>
             {breadcrumbs}
           </Breadcrumb>
         </Header>
-        <Content className='clearfix G-app-content'>
-          <div className='G-site-main-layout clearfix'>
-            {children}
-          </div>
+        <Content className='clearfix app-layout-content'>
+          {children}
         </Content>
-        <Footer className="G-app-footer">
+        <Footer className="app-layout-footer">
           React-Admin ©2020 Created by jiz4oh@gmail.com
         </Footer>
       </Layout>
