@@ -8,7 +8,7 @@ import formUtils from './utils'
 import BasicForm from "./BasicForm";
 import globalConfig from "../../config"
 import { renderInputBy } from "../inputs";
-import { FormItemBuilder }  from "../FormItemBuilder";
+import { FormItemBuilder } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = globalConfig.DBTable.remote || false
@@ -44,13 +44,14 @@ function RestfulNewForm({
     logger.debug('从后端获取新建表单数据。。。')
 
     model.new({
-                showErrorMessage: true,
-                onSuccess: data => {
-                  const res = formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name)
-                  setInputsConfig(res)
-                  closeForm(false)
-                }
-              })
+      showErrorMessage: true,
+      onSuccess: data => {
+        const res = formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name)
+        setInputsConfig(res)
+        closeForm(false)
+      },
+      onFail: () => closeForm(false)
+    })
     // eslint-disable-next-line
   }, [model])
 
@@ -72,7 +73,8 @@ function RestfulNewForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    return model.create(validatedValues, {
+    return model.create({
+      data: validatedValues,
       onSuccess,
       onFail,
     })
@@ -99,9 +101,9 @@ function RestfulNewForm({
 
 RestfulNewForm.propTypes = {
   model: PropTypes.shape({
-                           new: PropTypes.func.isRequired,
-                           create: PropTypes.func.isRequired,
-                         }),
+    new: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
+  }),
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }

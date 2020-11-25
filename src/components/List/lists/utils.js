@@ -76,7 +76,8 @@ export default {
 
     _.forEach(ids, id => {
       try {
-        model.delete(id, {
+        model.delete({
+          pk: id,
           showErrorMessage: true,
           onSuccess: successCallback,
           onFail: failCallback
