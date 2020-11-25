@@ -48,7 +48,7 @@ function RestfulEditForm({
       showErrorMessage: true,
       onSuccess: data => {
         // 获取 edit form 所需要的 initValues
-        setInitValues(data['resource'])
+        setInitValues(data['data'])
         closeForm(false)
         remote && setInputsConfig(formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name))
       }
