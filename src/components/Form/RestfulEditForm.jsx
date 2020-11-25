@@ -44,7 +44,8 @@ function RestfulEditForm({
   useEffect(() => {
     logger.debug('从后端获取编辑表单数据。。。')
 
-    model.edit(pk, {
+    model.edit({
+      pk,
       showErrorMessage: true,
       onSuccess: data => {
         // 获取 edit form 所需要的 initValues
@@ -74,7 +75,9 @@ function RestfulEditForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    return model.update(pk, validatedValues, {
+    return model.update({
+      pk,
+      data: validatedValues,
       onSuccess,
       onFail,
     })

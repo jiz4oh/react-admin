@@ -10,7 +10,7 @@ const debug = globalConfig.debug
  */
 class RestfulModel {
   constructor(config) {
-    const {name, url} = config
+    const { name, url } = config
     this.name = name
     this.url = url
   }
@@ -22,32 +22,32 @@ class RestfulModel {
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  index({onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  index({ onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: this.url,
-                           method: 'get',
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: this.url,
+      method: 'get',
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
    * 单个资源查询接口
-   * @param id {number} 资源索引号，通常为 id
+   * @param pk {number} 资源索引号，通常为 id
    * @param onSuccess {Function} 成功回调
    * @param onFail {Function} 失败回调
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  show(id, {onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  show({ pk, onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: `${this.url}/${id}`,
-                           method: 'get',
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: `${this.url}/${pk}`,
+      method: 'get',
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
@@ -57,14 +57,14 @@ class RestfulModel {
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  new({onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  new({ onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: `${this.url}/new`,
-                           method: 'get',
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: `${this.url}/new`,
+      method: 'get',
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
@@ -75,71 +75,71 @@ class RestfulModel {
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  create(data, {onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  create({ data, onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: this.url,
-                           method: 'post',
-                           data,
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: this.url,
+      method: 'post',
+      data,
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
    * 资源编辑表单接口
-   * @param id {Number} 资源索引号，通常为 id
+   * @param pk {Number} 资源索引号，通常为 id
    * @param onSuccess {Function} 成功回调
    * @param onFail {Function} 失败回调
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  edit(id, {onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  edit({ pk, onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: `${this.url}/${id}/edit`,
-                           method: 'get',
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: `${this.url}/${pk}/edit`,
+      method: 'get',
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
    * 资源更新接口，后端需要响应 put 请求
-   * @param id {Number} 资源索引号，通常为 id
+   * @param pk {Number} 资源索引号，通常为 id
    * @param data {Object} 需要提交的表单数据
    * @param onSuccess {Function} 成功回调
    * @param onFail {Function} 失败回调
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  update(id, data, {onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  update({ pk, data, onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: `${this.url}/${id}`,
-                           method: 'put',
-                           data,
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: `${this.url}/${pk}`,
+      method: 'put',
+      data,
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
    * 资源删除接口，后端需要响应 delete 请求
-   * @param id {Number} 资源索引号，通常为 id
+   * @param pk {Number} 资源索引号，通常为 id
    * @param onSuccess {Function} 成功回调
    * @param onFail {Function} 失败回调
    * @param args {any} 其他 _request 接受的参数
    * @returns {*|void}
    */
-  delete(id, {onSuccess = this._onSuccess, onFail = this._onFail, ...args}) {
+  delete({ pk, onSuccess = this._onSuccess, onFail = this._onFail, ...args }) {
     return this._request({
-                           url: `${this.url}/${id}`,
-                           method: 'delete',
-                           onSuccess,
-                           onFail,
-                           ...args,
-                         })
+      url: `${this.url}/${pk}`,
+      method: 'delete',
+      onSuccess,
+      onFail,
+      ...args,
+    })
   }
 
   /**
@@ -178,9 +178,9 @@ class RestfulModel {
 
 function RestfulModelFactory(name, url) {
   return new RestfulModel({
-                            name,
-                            url
-                          })
+    name,
+    url
+  })
 }
 
 export { RestfulModel, RestfulModelFactory }

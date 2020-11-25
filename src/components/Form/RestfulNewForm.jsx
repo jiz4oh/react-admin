@@ -72,7 +72,8 @@ function RestfulNewForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    return model.create(validatedValues, {
+    return model.create({
+      data: validatedValues,
       onSuccess,
       onFail,
     })
