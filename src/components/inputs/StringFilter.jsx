@@ -18,7 +18,6 @@ function StringFilter({
     <Form.Item
       key={name}
       label={label}
-      labelCol={{ span: 8 }}
     >
       <Input.Group compact>
         <Form.Item
@@ -39,10 +38,12 @@ function StringFilter({
           name={name}
           rules={rules}
           extra={extra}
+          noStyle
         >
           <Input
             key={`${name}-filter`}
             size="default"
+            style={{ width: '50%' }}
             allowClear
             placeholder={placeholder}
             value={value}

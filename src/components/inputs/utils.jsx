@@ -170,7 +170,6 @@ function withFormItem(WrappedComponent, predicate = null) {
           label={label}
           rules={rules}
           extra={extra}
-          labelCol={{ span: 8 }}
           {...formOptions}
         >
           <WrappedComponent name={name} {...restProps}/>

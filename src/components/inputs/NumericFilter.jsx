@@ -18,7 +18,6 @@ function NumericFilter({
     <Form.Item
       key={name}
       label={label}
-      labelCol={{ span: 8 }}
     >
       <Input.Group compact>
         <Form.Item
