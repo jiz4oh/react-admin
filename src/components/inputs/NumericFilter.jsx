@@ -1,26 +1,13 @@
-import {Form, Input, Select} from "antd";
-import React, {useMemo} from "react";
+import { Form, Input, InputNumber, Select } from "antd";
+import React from "react";
 
-import {withFormItem} from "./utils";
-import {PREDICATE} from './constants'
-
-const selectBefore = name => (
-  <Form.Item
-    key={`${name}${PREDICATE}`}
-    name={`${name}${PREDICATE}`}
-    initialValue='eq'
-    noStyle
-  >
-    <Select>
-      <Select.Option value="eq">等于</Select.Option>
-      <Select.Option value="gteq">大于</Select.Option>
-      <Select.Option value="lteq">小于</Select.Option>
-    </Select>
-  </Form.Item>
-)
+import { PREDICATE } from './constants'
 
 function NumericFilter({
                          name,
+                         label,
+                         rules,
+                         extra,
                          placeholder,
                          inputOptions = {},
                          value,
@@ -28,18 +15,45 @@ function NumericFilter({
                          ...restProps
                        }) {
   return (
-    <Input
-      key={`${name}-filter`}
-      size="default"
-      addonBefore={useMemo(() => selectBefore(name), [name])}
-      allowClear
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      {...restProps}
-      {...inputOptions}
-    />
+    <Form.Item
+      key={name}
+      label={label}
+      labelCol={{ span: 8 }}
+    >
+      <Input.Group compact>
+        <Form.Item
+          key={`${name}${PREDICATE}`}
+          name={`${name}${PREDICATE}`}
+          initialValue='eq'
+          noStyle
+        >
+          <Select>
+            <Select.Option value="eq">等于</Select.Option>
+            <Select.Option value="gteq">大于</Select.Option>
+            <Select.Option value="lteq">小于</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          key={name}
+          name={name}
+          rules={rules}
+          extra={extra}
+        >
+          <InputNumber
+            key={`${name}-filter`}
+            size="default"
+            allowClear
+            placeholder={placeholder}
+            formatter={Math.ceil}
+            value={value}
+            onChange={onChange}
+            {...restProps}
+            {...inputOptions}
+          />
+        </Form.Item>
+      </Input.Group>
+    </Form.Item>
   )
 }
 
-export default withFormItem(NumericFilter)
+export default NumericFilter
