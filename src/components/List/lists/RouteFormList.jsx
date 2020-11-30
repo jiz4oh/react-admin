@@ -22,7 +22,7 @@ const logger = Logger.getLogger('RestfulTable')
 const defaultSize = globalConfig.DBTable.pageSize || 10
 const childrenColumnName = "children"
 const indexColumn = "indexColumn"
-
+const isDebug = process.env.REACT_APP_ENV === 'development'
 /**
  *
  * @param model {Object} 需要具有 index 方法
@@ -371,7 +371,7 @@ class RouteFormList extends React.PureComponent {
       title: batchKeys.length > 1 ? '确认批量删除' : '确认删除',
       content: `当前被选中的行: ${batchKeys.join(', ')}`,
       onOk: () => {
-        if (globalConfig.debug) {
+        if (isDebug) {
           notification.success({
             message: '测试删除成功',
             description: `成功删除${batchKeys.length}条数据`,

@@ -1,7 +1,6 @@
 import { asyncRequest, syncRequest } from "../../utils/request"
-import globalConfig from "../../config";
 
-const debug = globalConfig.debug
+const isDebug = process.env.REACT_APP_ENV === 'development'
 
 /**
  * rest 风格的 model，用于和后端传输数据，封装 index show new edit create update destroy 方法
@@ -171,7 +170,7 @@ class RestfulModel {
    * @private
    */
   _request(options, async = true) {
-    if (debug) return options.onSuccess && options.onSuccess({})
+    if (isDebug) return options.onSuccess && options.onSuccess({})
     return async ? asyncRequest(options) : syncRequest(options)
   }
 }
