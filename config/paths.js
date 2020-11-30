@@ -48,8 +48,6 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
-const appConfig = require('../src/config')
-
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
@@ -66,9 +64,6 @@ module.exports = {
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
   proxySetup: resolveApp('src/setupProxy.js'),
   appNodeModules: resolveApp('node_modules'),
-  i18nBuildScript: resolveApp('scripts/buildI18n.js'),
-  i18nOutputPath: resolveApp('src/assets/i18n.json'),
-  i18nLocalesDir: resolveApp('src/locales'),
   publicUrlOrPath,
 };
 

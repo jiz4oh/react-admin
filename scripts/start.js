@@ -40,18 +40,6 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
-// begin 自动构建 i18n 文件
-if (checkRequiredFiles([paths.i18nBuildScript])) {
-  const createI18nFileBy = require(paths.i18nBuildScript)
-  const i18n = createI18nFileBy(paths.i18nLocalesDir)
-  // 每次都重新构建文件
-  fs.existsSync(paths.i18nOutputPath) && fs.unlinkSync(paths.i18nOutputPath)
-  fs.writeFileSync(paths.i18nOutputPath, JSON.stringify(i18n))
-} else {
-  console.warn('i18n.js 文件丢失')
-}
-// end
-
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';

@@ -1,5 +1,7 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
+const i18nOutputPath = 'src/assets/i18n.json'
+const i18nLocalesDir = 'src/locales/'
 
 /**
  *
@@ -55,4 +57,11 @@ const recurseFilesBy = (dirPath, result) => {
  * @param localesDir {String} i18n 文件夹存放地址
  * @returns {Object} i18n 翻译文件合成的对象
  */
-module.exports = localesDir => recurseFilesBy(localesDir, {})
+const createI18nFileBy = localesDir => recurseFilesBy(localesDir, {})
+
+// begin 自动构建 i18n 文件
+const i18n = createI18nFileBy(i18nLocalesDir)
+// 每次都重新构建文件
+fs.existsSync(i18nOutputPath) && fs.unlinkSync(i18nOutputPath)
+fs.writeFileSync(i18nOutputPath, JSON.stringify(i18n))
+// end
