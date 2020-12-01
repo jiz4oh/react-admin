@@ -6,12 +6,11 @@ import PropTypes from "prop-types";
 import Logger from "../../utils/Logger";
 import BasicForm from './BasicForm'
 import formUtils from './utils'
-import globalConfig from "../../config"
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = globalConfig.DBTable.remote || false
+const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 /**
  *

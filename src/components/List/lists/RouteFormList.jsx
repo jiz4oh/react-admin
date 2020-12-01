@@ -15,14 +15,13 @@ import {
   DeleteAction,
 } from "../index";
 import { RansackFilter } from "../../RansackFilter";
-import globalConfig from "../../../config";
 import ActionTable from "../../../lib/components/ActionTable/ActionTable";
 
 const logger = Logger.getLogger('RestfulTable')
-const defaultSize = globalConfig.DBTable.pageSize || 10
+const defaultSize = Number(process.env.REACT_APP_TABLE_PAGE_SIZE) || 10
+const isDebug = process.env.REACT_APP_ENV === 'development'
 const childrenColumnName = "children"
 const indexColumn = "indexColumn"
-const isDebug = process.env.REACT_APP_ENV === 'development'
 /**
  *
  * @param model {Object} 需要具有 index 方法

@@ -2,7 +2,11 @@ import _ from "lodash"
 
 const logConfig = {
   log: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    debug: (process.env.REACT_APP_DEBUG_LOGGER || '').split(',').filter(Boolean),
+    info: (process.env.REACT_APP_INFO_LOGGER || '').split(',').filter(Boolean),
+    warn: (process.env.REACT_APP_WARN_LOGGER || '').split(',').filter(Boolean),
+    error: (process.env.REACT_APP_ERROR_LOGGER || '').split(',').filter(Boolean),
   }
 }
 

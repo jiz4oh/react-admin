@@ -1,15 +1,14 @@
 import _ from 'lodash'
 
-import globalConfig from '../config'
 import Session from "../models/session";
 
 const session = new Session()
 
 const isDebug = process.env.REACT_APP_ENV === 'development'
 const _cookie_name = {
-  USER_INFO: globalConfig.userInfoCookieKey,
-  LOGIN: globalConfig.loginCookieKey,
-  PERMISSIONS: globalConfig.permissionKey
+  USER_INFO: process.env.REACT_APP_USER_INFO_KEY,
+  LOGIN: process.env.REACT_APP_SESSION_KEY,
+  PERMISSIONS: process.env.REACT_APP_PERMISSIONS_KEY
 }
 
 export function setUserInfo(permissions) {

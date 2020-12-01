@@ -4,9 +4,8 @@ import React from "react";
 
 import {withFormItem} from "./utils";
 import Logger from "../../utils/Logger";
-import globalConfig from "../../config";
 
-const fileUploadUrl = globalConfig.fileUploadUrl
+const fileUploadUrl = process.env.REACT_APP_FILE_UPLOAD_PATH
 
 const logger = Logger.getLogger('file')
 

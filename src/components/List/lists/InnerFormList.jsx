@@ -6,9 +6,8 @@ import RouteFormList from "./RouteFormList";
 import { RestfulEditForm, RestfulNewForm } from "../../Form";
 import formUtils from "../../Form/utils";
 import { NewAction, EditAction } from "../index";
-import globalConfig from "../../../config"
 
-const defaultIsRemote = globalConfig.DBTable.remote || false
+const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 const modalFormMap = {
   new: RestfulNewForm,
   edit: RestfulEditForm

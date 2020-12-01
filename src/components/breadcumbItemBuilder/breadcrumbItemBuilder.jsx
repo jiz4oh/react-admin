@@ -3,8 +3,7 @@ import { Breadcrumb as AntdBreadcrumb } from "antd";
 import { Link } from "react-router-dom";
 import _ from 'lodash'
 
-import globalConfig from "../../config";
-const appRootPath = globalConfig.appRootPath || ''
+const appRootPath = process.env.REACT_APP_ROOT_PATH || ''
 const notBreadcrumbs = [appRootPath, 'dashboard']
 
 /**

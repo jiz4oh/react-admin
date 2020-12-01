@@ -4,10 +4,10 @@ import React, {useCallback, useState} from "react";
 import _ from 'lodash'
 
 import {withFormItem} from "./utils";
-import globalConfig from '../../config'
 import {asyncRequest} from "../../utils/request";
 
-const imageUploadUrl = globalConfig.imageUploadUrl
+const imageUploadUrl = process.env.REACT_APP_IMAGE_UPLOAD_PATH
+const backendHost = process.env.REACT_APP_BACKEND_HOST
 
 const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ const getPath = (url) => {
   let result = url.split('!')[0]
   // 以绝对路径开头，则需加上后端地址
   if (_.startsWith(url, '/')) {
-    result = `${globalConfig.api.host}${result}`
+    result = `${backendHost}${result}`
   }
   return result
 }

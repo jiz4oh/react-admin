@@ -2,9 +2,8 @@ import { notification } from "antd";
 import _ from 'lodash'
 
 import i18n from "../../utils/i18n";
-import globalConfig from "../../config";
 
-const i18nKey = globalConfig.i18nKey
+const i18nKey = process.env.REACT_APP_I18N_KEY
 const RESOURCE_TYPE_MAP = 'data_type'
 const BELONGS_TO = 'belongs_to'
 const HAS_ONE = 'has_one'
