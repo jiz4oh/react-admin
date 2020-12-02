@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export function hasOneRender(name, definedInputConfig = {}, collection) {
+export function hasManyInputConfigRender(name, definedInputConfig = {}, collection, label) {
   if (_.isEmpty(collection)) return definedInputConfig
 
   // collection 钩子
@@ -9,7 +9,7 @@ export function hasOneRender(name, definedInputConfig = {}, collection) {
   }
   
   // TODO 嵌套更新写入 input
-  const hasOneDefaultInputConfig = {}
+  const hasManyDefaultInputConfig = {}
   // 获取前端已配置数据
-  return _.defaultsDeep(definedInputConfig, hasOneDefaultInputConfig)
+  return _.defaultsDeep(definedInputConfig, hasManyDefaultInputConfig)
 }

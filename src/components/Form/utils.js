@@ -2,9 +2,9 @@ import { notification } from "antd";
 import _ from 'lodash'
 
 import i18n from "@/utils/i18n";
-import { belongsToRender } from "@/components/Form/belongsToRender";
-import { hasOneRender } from "@/components/Form/hasOneRender";
-import { hasManyRender } from "@/components/Form/hasManyRender";
+import { belongsToInputConfigRender } from "@/components/Form/belongsToInputConfigRender";
+import { hasOneInputConfigRender } from "@/components/Form/hasOneInputConfigRender";
+import { hasManyInputConfigRender } from "@/components/Form/hasManyInputConfigRender";
 
 const i18nKey = process.env.REACT_APP_I18N_KEY
 const RESOURCE_TYPE_MAP = 'data_type'
@@ -62,11 +62,11 @@ export default {
       const label = i18n.t([i18nKey, tableName, key].filter(Boolean).join('.'))
       switch (value) {
       case BELONGS_TO:
-        return belongsToRender(key, definedInputConfig, belongsToCollection[key], label)
+        return belongsToInputConfigRender(key, definedInputConfig, belongsToCollection[key], label)
       case HAS_ONE:
-        return hasOneRender(key, definedInputConfig, hasOneCollection[key], label)
+        return hasOneInputConfigRender(key, definedInputConfig, hasOneCollection[key], label)
       case HAS_MANY:
-        return hasManyRender(key, definedInputConfig, hasManyCollection[key], label)
+        return hasManyInputConfigRender(key, definedInputConfig, hasManyCollection[key], label)
       default:
         // 合并前端已配置数据
         return _.defaultsDeep(definedInputConfig, {

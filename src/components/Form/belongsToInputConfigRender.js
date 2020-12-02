@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export function belongsToRender(name, definedInputConfig = {}, collection, label) {
+export function belongsToInputConfigRender(name, definedInputConfig = {}, collection, label) {
   if (_.isEmpty(collection)) return definedInputConfig
 
   // collection 钩子
