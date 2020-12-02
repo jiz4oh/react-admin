@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import { enumMapToArray } from "../../utils/utils";
+import { enumMapToArray } from "@/utils/utils";
 import CRUD from "../../layouts/CRUD";
-import models from "../../models";
+import model from "../../models/user";
 import { ImageRender } from "../../components/List";
 import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
 
@@ -49,7 +49,7 @@ export default function (props) {
     <>
       <CRUD
         {...props}
-        model={models.user}
+        model={model}
         filter={filter}
         CRUD={[]}
         index={[

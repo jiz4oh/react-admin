@@ -2,13 +2,13 @@ import React from "react";
 
 import { InnerFormList } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
-import models from "../../models";
+import model from "../../models/role";
 
 export default function(props) {
   return (
     <CRUD
       {...props}
-      model={models.role}
+      model={model}
       components={{ list: InnerFormList }}
       filter={[
         {
@@ -36,7 +36,7 @@ export default function(props) {
           as: 'checkbox',
           collection: (onSuccess) => {
             let result = []
-            models.role.new(
+            model.new(
               {
                 onSuccess: data => {
                   const { permissions = [] } = data
