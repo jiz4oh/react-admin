@@ -73,6 +73,7 @@ function BasicForm({
         提交
       </Button>,
       <Button
+        key='goBackBtn'
         onClick={history.goBack}
       >
         返回
