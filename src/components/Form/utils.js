@@ -47,9 +47,9 @@ export default {
    */
   getInputsConfigFromRemote: (destination, source, tableName) => {
     const {
-    // 远程获取表单字段类型
+      // 远程获取表单字段类型
       [RESOURCE_TYPE_MAP]: inputMap = {},
-      [BELONGS_TO]: belongsTo= {},
+      [BELONGS_TO]: belongsTo = {},
       [HAS_ONE]: hasOneCollection = {},
       [HAS_MANY]: hasManyCollection = {},
     } = destination
@@ -62,53 +62,53 @@ export default {
       let collection
 
       switch (value) {
-        case 'belongs_to':
-          // 获取当前 belongs_to 的集合数据
-          if (_.isEmpty(belongsTo[key])) return
-          collection = belongsTo[key]
+      case BELONGS_TO:
+        // 获取当前 belongs_to 的集合数据
+        if (_.isEmpty(belongsTo[key])) return
+        collection = belongsTo[key]
 
-          const belongsToDefaultInputConfig = {
-            name: key,
-            as: 'select',
-            rules: [{
-              required: true,
-              message: `必须填写所属${i18n.t(`${i18nName}`)}`
-            }],
-            collection: collection,
+        const belongsToDefaultInputConfig = {
+          name: key,
+          as: 'select',
+          rules: [{
+            required: true,
+            message: `必须填写所属${i18n.t(`${i18nName}`)}`
+          }],
+          collection: collection,
+        }
+        if (!_.isUndefined(result[index])) {
+          // belongs_to 选择放在最前面
+          result.unshift(belongsToDefaultInputConfig)
+        } else {
+          // collection 钩子
+          if (_.isFunction(result[index].collection)) {
+            belongsToDefaultInputConfig.collection = result[index].collection(belongsToDefaultInputConfig.collection)
           }
-          if (!_.isUndefined(result[index])) {
-            // belongs_to 选择放在最前面
-            result.unshift(belongsToDefaultInputConfig)
-          } else {
-            // collection 钩子
-            if (_.isFunction(result[index].collection)){
-             belongsToDefaultInputConfig.collection = result[index].collection(belongsToDefaultInputConfig.collection)
-            }
-            // 获取前端已配置数据
-            result[index] = _.defaultsDeep(result[index], belongsToDefaultInputConfig)
-          }
-          return
-        case 'has_one':
-          collection = _.cloneDeep(hasOneCollection[key])
-          if (_.isEmpty(collection)) return
-          // TODO 嵌套更新写入 input
-          return
-        case 'has_many':
-          collection = _.cloneDeep(hasManyCollection[key])
-          if (_.isEmpty(collection)) return
-          // TODO 嵌套更新写入 input
-          return
-        default:
-          const inputConfig = {
-            name: key,
-            type: value
-          }
-          if (!_.isUndefined(result[index])) {
-            result.push(inputConfig)
-          } else {
-            // 获取前端已配置数据
-            result[index] = _.defaultsDeep(result[index], inputConfig)
-          }
+          // 获取前端已配置数据
+          result[index] = _.defaultsDeep(result[index], belongsToDefaultInputConfig)
+        }
+        return
+      case HAS_ONE:
+        collection = _.cloneDeep(hasOneCollection[key])
+        if (_.isEmpty(collection)) return
+        // TODO 嵌套更新写入 input
+        return
+      case HAS_MANY:
+        collection = _.cloneDeep(hasManyCollection[key])
+        if (_.isEmpty(collection)) return
+        // TODO 嵌套更新写入 input
+        return
+      default:
+        const inputConfig = {
+          name: key,
+          type: value
+        }
+        if (!_.isUndefined(result[index])) {
+          result.push(inputConfig)
+        } else {
+          // 获取前端已配置数据
+          result[index] = _.defaultsDeep(result[index], inputConfig)
+        }
       }
     })
 
