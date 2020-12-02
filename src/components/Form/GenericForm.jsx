@@ -15,8 +15,7 @@ const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || fals
 /**
  *
  * @param name {String} 表名，用于搜索 i18n
- * @param get {function} 表单内容远程请求函数
- * @param post {function} 表单内容提交函数
+ * @param model {{}} 表单内容提交函数
  * @param remote {Boolean} 是否从远端更新表单字段，默认 true
  * @param form {Object} Antd 的 FormInstance
  * @param fields {Object[]} form 表单字段
@@ -26,10 +25,9 @@ const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || fals
  * @param restProps
  */
 function GenericForm({
-                       name = '',
-                       get,
-                       post,
                        form: antdFormInstance,
+                       name = '',
+                       model = {},
                        pk,
                        fields = [],
                        remote = defaultIsRemote,
@@ -43,11 +41,9 @@ function GenericForm({
   const [initValues, setInitValues] = useState({})
 
   useEffect(() => {
-    if (!_.isFunction(get)) return logger.warn('未传入有效 get 方法')
-
     logger.debug(`从后端获取${pk ? '编辑' : '新建'}表单数据。。。`)
 
-    get({
+    const params = {
       pk,
       showErrorMessage: true,
       onSuccess: data => {
@@ -56,9 +52,10 @@ function GenericForm({
         remote && setInputsConfig(formUtils.getInputsConfigFromRemote(data, inputsConfig, name))
       },
       onFail: () => pk && closeForm(false)
-    })
+    }
+    pk ? model.edit(params) : model.new(params)
     // eslint-disable-next-line
-  }, [get, pk])
+  }, [model, pk])
 
   const handleFinishFailed = useCallback(data => {
     closeForm(false)
@@ -78,16 +75,14 @@ function GenericForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    if (!_.isFunction(post)) return logger.warn('未传入有效 post 方法')
-
-    return post({
+    const params = {
       pk,
       data: validatedValues,
       onSuccess,
       onFail,
-    })
-    // 前端校验不通过
-  }, [post, pk, form, handleFinishFailed, onFinish])
+    }
+    return pk ? model.update(params) : model.create(params)
+  }, [model, pk, form, handleFinishFailed, onFinish])
 
   return (
     <BasicForm
@@ -115,6 +110,12 @@ GenericForm.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
+  model: PropTypes.shape({
+    edit: PropTypes.func,
+    update: PropTypes.func,
+    new: PropTypes.func,
+    create: PropTypes.func,
+  }),
   fields: PropTypes.array,
   remote: PropTypes.bool,
   onFinish: PropTypes.func,
