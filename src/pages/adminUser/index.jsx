@@ -82,7 +82,6 @@ export default function (props) {
             name: 'created_at',
           }
         ]}
-        remote={false}
         form={form}
         columns={columns}
       >

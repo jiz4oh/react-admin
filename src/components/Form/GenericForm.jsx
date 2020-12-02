@@ -49,7 +49,7 @@ function GenericForm({
       onSuccess: data => {
         pk && setInitValues(data['data'])
         pk && closeForm(false)
-        remote && setInputsConfig(formUtils.getInputsConfigFromRemote(data, inputsConfig, name))
+        remote && setInputsConfig(formUtils.mergeInputsConfig(data, inputsConfig, name))
       },
       onFail: () => pk && closeForm(false)
     }

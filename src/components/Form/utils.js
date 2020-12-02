@@ -1,7 +1,10 @@
 import { notification } from "antd";
 import _ from 'lodash'
 
-import i18n from "../../utils/i18n";
+import i18n from "@/utils/i18n";
+import { belongsToRender } from "@/components/Form/belongsToRender";
+import { hasOneRender } from "@/components/Form/hasOneRender";
+import { hasManyRender } from "@/components/Form/hasManyRender";
 
 const i18nKey = process.env.REACT_APP_I18N_KEY
 const RESOURCE_TYPE_MAP = 'data_type'
@@ -43,75 +46,34 @@ export default {
    * @param destination {Object} 远程下发的数据
    * @param source {Object[]} 前端定义的 input 结构
    * @param tableName {string} 用于 i18n
-   * @return {Object[]}
+   * @return {Object[]} return new InputsConfig
    */
-  getInputsConfigFromRemote: (destination, source, tableName) => {
+  mergeInputsConfig: (destination, source, tableName) => {
     const {
       // 远程获取表单字段类型
       [RESOURCE_TYPE_MAP]: inputMap = {},
-      [BELONGS_TO]: belongsTo = {},
+      [BELONGS_TO]: belongsToCollection = {},
       [HAS_ONE]: hasOneCollection = {},
       [HAS_MANY]: hasManyCollection = {},
     } = destination
-    const result = [...source]
 
-    _.forEach(inputMap, (value, key) => {
-      // 获取当前字段是否在前端已定义
-      let index = _.findIndex(source, obj => obj.name === key)
-      const i18nName = [i18nKey, tableName, key].filter(Boolean).join('.')
-      let collection
-
+    return _.map(inputMap, (value, key) => {
+      const definedInputConfig = _.find(source, obj => obj.name === key) || {}
+      const label = i18n.t([i18nKey, tableName, key].filter(Boolean).join('.'))
       switch (value) {
       case BELONGS_TO:
-        // 获取当前 belongs_to 的集合数据
-        if (_.isEmpty(belongsTo[key])) return
-        collection = belongsTo[key]
-
-        const belongsToDefaultInputConfig = {
-          name: key,
-          as: 'select',
-          rules: [{
-            required: true,
-            message: `必须填写所属${i18n.t(`${i18nName}`)}`
-          }],
-          collection: collection,
-        }
-        if (!_.isUndefined(result[index])) {
-          // belongs_to 选择放在最前面
-          result.unshift(belongsToDefaultInputConfig)
-        } else {
-          // collection 钩子
-          if (_.isFunction(result[index].collection)) {
-            belongsToDefaultInputConfig.collection = result[index].collection(belongsToDefaultInputConfig.collection)
-          }
-          // 获取前端已配置数据
-          result[index] = _.defaultsDeep(result[index], belongsToDefaultInputConfig)
-        }
-        return
+        return belongsToRender(key, definedInputConfig, belongsToCollection[key], label)
       case HAS_ONE:
-        collection = _.cloneDeep(hasOneCollection[key])
-        if (_.isEmpty(collection)) return
-        // TODO 嵌套更新写入 input
-        return
+        return hasOneRender(key, definedInputConfig, hasOneCollection[key], label)
       case HAS_MANY:
-        collection = _.cloneDeep(hasManyCollection[key])
-        if (_.isEmpty(collection)) return
-        // TODO 嵌套更新写入 input
-        return
+        return hasManyRender(key, definedInputConfig, hasManyCollection[key], label)
       default:
-        const inputConfig = {
+        // 合并前端已配置数据
+        return _.defaultsDeep(definedInputConfig, {
           name: key,
           type: value
-        }
-        if (!_.isUndefined(result[index])) {
-          result.push(inputConfig)
-        } else {
-          // 获取前端已配置数据
-          result[index] = _.defaultsDeep(result[index], inputConfig)
-        }
+        })
       }
     })
-
-    return result
   }
 }

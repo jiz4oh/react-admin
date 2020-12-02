@@ -45,7 +45,7 @@ function RestfulNewForm({
     model.new({
       showErrorMessage: true,
       onSuccess: data => {
-        const res = formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name)
+        const res = formUtils.mergeInputsConfig(data, inputsConfig, model.name)
         setInputsConfig(res)
         closeForm(false)
       },
