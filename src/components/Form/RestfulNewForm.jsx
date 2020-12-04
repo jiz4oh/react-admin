@@ -90,7 +90,7 @@ function RestfulNewForm({
     >
       <FormItemBuilder
         tableName={model.name}
-        fields={fields}
+        fields={inputsConfig}
         onTypecast={renderInputBy}
         formType={'new'}
       />

@@ -97,7 +97,7 @@ function GenericForm({
     >
       <FormItemBuilder
         name={name}
-        fields={fields}
+        fields={inputsConfig}
         onTypecast={renderInputBy}
         formType={pk ? 'edit' : 'new'}
       />
