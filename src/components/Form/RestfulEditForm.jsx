@@ -11,6 +11,7 @@ import { FormItemBuilder } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const DATA = 'data'
 
 /**
  *
@@ -48,9 +49,10 @@ function RestfulEditForm({
       showErrorMessage: true,
       onSuccess: data => {
         // 获取 edit form 所需要的 initValues
-        setInitValues(data['data'])
+        setInitValues(data[DATA])
         closeForm(false)
-        remote && setInputsConfig(formUtils.mergeInputsConfig(data, inputsConfig, model.name))
+        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, model.name)
+        remote && setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
       }
     })
     // eslint-disable-next-line

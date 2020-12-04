@@ -49,7 +49,8 @@ function GenericForm({
       onSuccess: data => {
         pk && setInitValues(data['data'])
         pk && closeForm(false)
-        remote && setInputsConfig(formUtils.mergeInputsConfig(data, inputsConfig, name))
+        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, name)
+        remote && setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
       },
       onFail: () => pk && closeForm(false)
     }

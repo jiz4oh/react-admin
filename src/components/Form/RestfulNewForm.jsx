@@ -45,9 +45,9 @@ function RestfulNewForm({
     model.new({
       showErrorMessage: true,
       onSuccess: data => {
-        const res = formUtils.mergeInputsConfig(data, inputsConfig, model.name)
-        setInputsConfig(res)
         closeForm(false)
+        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, model.name)
+        setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
       },
       onFail: () => closeForm(false)
     })

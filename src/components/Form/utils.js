@@ -11,6 +11,7 @@ const RESOURCE_TYPE_MAP = 'data_type'
 const BELONGS_TO = 'belongs_to'
 const HAS_ONE = 'has_one'
 const HAS_MANY = 'has_many'
+const COLLECTION = 'collection'
 
 export default {
   notifySuccess: (operationName = '操作') => {
@@ -52,9 +53,8 @@ export default {
     const {
       // 远程获取表单字段类型
       [RESOURCE_TYPE_MAP]: inputMap = {},
-      [BELONGS_TO]: belongsToCollection = {},
-      [HAS_ONE]: hasOneCollection = {},
-      [HAS_MANY]: hasManyCollection = {},
+      [HAS_ONE]: hasOneFields = {},
+      [HAS_MANY]: hasManyFields = {},
     } = destination
 
     return _.map(inputMap, (value, key) => {
@@ -62,11 +62,11 @@ export default {
       const label = i18n.t([i18nKey, tableName, key].filter(Boolean).join('.'))
       switch (value) {
       case BELONGS_TO:
-        return belongsToInputConfigRender(key, definedInputConfig, belongsToCollection[key], label)
+        return belongsToInputConfigRender(key, definedInputConfig, label)
       case HAS_ONE:
-        return hasOneInputConfigRender(key, definedInputConfig, hasOneCollection[key], label)
+        return hasOneInputConfigRender(key, definedInputConfig, hasOneFields[key])
       case HAS_MANY:
-        return hasManyInputConfigRender(key, definedInputConfig, hasManyCollection[key], label)
+        return hasManyInputConfigRender(key, definedInputConfig, hasManyFields[key])
       default:
         // 合并前端已配置数据
         return _.defaultsDeep(definedInputConfig, {
@@ -74,6 +74,30 @@ export default {
           type: value
         })
       }
+    })
+  },
+  /**
+   * 将 COLLECTION 中的内容合并到 inputsConfig 中对应字段的 collection 属性中
+   * @param inputsConfig {Object[]}
+   * @param data {{COLLECTION: {}}}
+   * @return {Object[]}
+   */
+  mergeCollection: (inputsConfig, data) => {
+    const { [COLLECTION]: collections = {}}  = data
+    return _.map(inputsConfig, inputConfig => {
+      const collection = collections[inputConfig.name]
+      // 如果 collection 中未有当前字段的设置则返回
+      if (_.isNil(collection)) return inputConfig
+
+      const result = _.cloneDeep(inputConfig)
+      // collection 钩子
+      if (_.isFunction(result.collection)) {
+        result.collection = result.collection(collection)
+      } else {
+        result.collection = collection
+      }
+
+      return result
     })
   }
 }
