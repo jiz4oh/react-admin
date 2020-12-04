@@ -32,30 +32,8 @@ export default function(props) {
           }],
         },
         {
-          name: 'permissions',
+          name: 'permissions_attributes',
           as: 'checkbox',
-          collection: (onSuccess) => {
-            let result = []
-            model.new(
-              {
-                onSuccess: data => {
-                  const { permissions = [] } = data
-                  const tmpCollection = permissions.map(permission => (
-                    {
-                      label: permission[0],
-                      value: permission[1],
-                    }
-                  ))
-
-                  result = result.concat(tmpCollection)
-                  onSuccess && onSuccess(result)
-                },
-                onFail: data => console.log(data)
-              }
-            )
-
-            return result
-          }
         },
       ]}
     />

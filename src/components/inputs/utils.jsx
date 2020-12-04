@@ -1,5 +1,5 @@
-import { Form, Input, message, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import { Form, Input } from "antd";
+import React from "react";
 import _ from "lodash";
 
 import Logger from "../../utils/Logger";
@@ -179,54 +179,8 @@ function withFormItem(WrappedComponent, predicate = null) {
   }
 }
 
-/**
- * 选择框的 collection 如果是个函数，则从执行函数从后端获取 collection
- * @param fnOrArray {Function | Object[]} 函数或者数组
- * @param children {React.ReactComponentElement} input 组件
- * @param restProps {[]} 其他传入 input 组件的参数
- * @returns {JSX.Element}
- */
-function SpinCollection({ collection: fnOrArray, children: CollectionInputComponent, ...restProps }) {
-  const [spinning, setSpinning] = useState(!!_.isFunction(fnOrArray))
-  const [collection, setCollection] = useState(fnOrArray)
-
-  useEffect(
-    () => {
-      // 如果传入的是一个函数，执行并传入成功回调函数
-      if (_.isFunction(fnOrArray)) {
-        fnOrArray((res) => {
-          setSpinning(false)
-          setCollection(res)
-        })
-        const timeId = setTimeout(() => {
-          // 2 秒之后网络请求尚未完毕
-          if (!!spinning) {
-            setSpinning(false)
-            message.warn('您的网络不稳定，刷新后再试')
-          }
-        }, 2000)
-
-        // 清除 effect
-        return () => clearTimeout(timeId)
-      }
-    }, [fnOrArray, spinning]
-  )
-
-  return (
-    <Spin spinning={spinning}>
-      <CollectionInputComponent collection={collection} {...restProps}/>
-    </Spin>
-  )
-}
-
 function withCollection(WrappedComponent) {
-  return function(props) {
-    return (
-      <SpinCollection {...props}>
-        {withFormItem(WrappedComponent)}
-      </SpinCollection>
-    )
-  }
+  return withFormItem(WrappedComponent)
 }
 
 function withEq(WrappedComponent) {
@@ -238,13 +192,7 @@ function withRange(WrappedComponent) {
 }
 
 function withIn(WrappedComponent) {
-  return function(props) {
-    return (
-      <SpinCollection {...props}>
-        {withFormItem(WrappedComponent, 'in')}
-      </SpinCollection>
-    )
-  }
+  return withFormItem(WrappedComponent, 'in')
 }
 
 export {
