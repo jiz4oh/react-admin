@@ -1,7 +1,7 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
 const i18nOutputPath = 'src/assets/i18n.json'
-const i18nLocalesDir = 'src/locales/'
+const i18nLocalesDir = process.env.REACT_APP_I18N_LOCALES_DIR || 'src/locales/'
 
 /**
  *

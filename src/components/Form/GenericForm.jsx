@@ -1,34 +1,33 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Form, Row, Space, Spin } from "antd";
-import { useHistory } from "react-router-dom";
+import { Form } from "antd";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
 import Logger from "../../utils/Logger";
 import formUtils from './utils'
-import globalConfig from "../../config"
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
+import BasicForm from "@/components/Form/BasicForm";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = globalConfig.DBTable.remote || false
+const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 /**
  *
  * @param name {String} 表名，用于搜索 i18n
+ * @param model {{}} 表单内容提交函数
+ * @param remote {Boolean} 是否从远端更新表单字段，默认 true
  * @param form {Object} Antd 的 FormInstance
  * @param fields {Object[]} form 表单字段
- * @param remote {Boolean} 是否从远端更新表单字段，默认 true
  * @param pk {Number} 发送给后端的主键
  * @param onFinish {Function} 前后端同时验证成功回调
  * @param onFinishFailed {Function} 前端或后端验证失败回调
  * @param restProps
  */
 function GenericForm({
-                       name = '',
-                       get,
-                       post,
                        form: antdFormInstance,
+                       name = '',
+                       model = {},
                        pk,
                        fields = [],
                        remote = defaultIsRemote,
@@ -37,28 +36,27 @@ function GenericForm({
                        ...restProps
                      }) {
   const [form] = Form.useForm(antdFormInstance)
-  const history = useHistory()
   const [inputsConfig, setInputsConfig] = useState(fields)
   const [isCloseForm, closeForm] = useState(!!pk && remote)
   const [initValues, setInitValues] = useState({})
 
   useEffect(() => {
-    if (!_.isFunction(get)) return logger.warn('未传入有效 get 方法')
-
     logger.debug(`从后端获取${pk ? '编辑' : '新建'}表单数据。。。`)
 
-    get({
+    const params = {
       pk,
       showErrorMessage: true,
       onSuccess: data => {
         pk && setInitValues(data['data'])
         pk && closeForm(false)
-        remote && setInputsConfig(formUtils.getInputsConfigFromRemote(data, inputsConfig, name))
+        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, name)
+        remote && setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
       },
       onFail: () => pk && closeForm(false)
-    })
+    }
+    pk ? model.edit(params) : model.new(params)
     // eslint-disable-next-line
-  }, [get, pk])
+  }, [model, pk])
 
   const handleFinishFailed = useCallback(data => {
     closeForm(false)
@@ -78,82 +76,47 @@ function GenericForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    if (!_.isFunction(post)) return logger.warn('未传入有效 post 方法')
-
-    return post({
+    const params = {
       pk,
       data: validatedValues,
       onSuccess,
       onFail,
-    })
-    // 前端校验不通过
-  }, [post, pk, form, handleFinishFailed, onFinish])
-
-  const handleSubmit = useCallback(
-    e => {
-      closeForm(true)
-      const resetError = {}
-      // 先清空错误信息
-      _.forEach(form.getFieldsValue(), (value, key) => {
-        resetError[key] = null
-      })
-      form.setFields(formUtils.renderAntdError(resetError))
-
-      form.submit()
-    },
-    [form]
-  )
+    }
+    return pk ? model.update(params) : model.create(params)
+  }, [model, pk, form, handleFinishFailed, onFinish])
 
   return (
-    <div className={'basic-form'}>
-      <Spin spinning={isCloseForm} delay={100}>
-        <Form
-          form={form}
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 8 }}
-          initialValues={initValues}
-          onFinish={handleFinish}
-          onFinishFailed={handleFinishFailed}
-          scrollToFirstError
-          {...restProps}
-        >
-          <FormItemBuilder
-            name={name}
-            fields={fields}
-            onTypecast={renderInputBy}
-            formType={'edit'}
-          />
-        </Form>
-        <Row
-          align='middle'
-          justify='center'
-        >
-          <Space>
-            <Button
-              key='submitBtn'
-              type='primary'
-              onClick={handleSubmit}
-            >
-              提交
-            </Button>,
-            <Button
-              onClick={history.goBack}
-            >
-              返回
-            </Button>
-          </Space>
-        </Row>
-      </Spin>
-    </div>
+    <BasicForm
+      form={form}
+      onChange={closeForm}
+      value={isCloseForm}
+      initialValues={initValues}
+      onFinish={handleFinish}
+      onFinishFailed={handleFinishFailed}
+      {...restProps}
+    >
+      <FormItemBuilder
+        name={name}
+        fields={inputsConfig}
+        onTypecast={renderInputBy}
+        formType={pk ? 'edit' : 'new'}
+      />
+    </BasicForm>
   )
 }
 
 GenericForm.propTypes = {
   name: PropTypes.string,
   pk: PropTypes.oneOfType([
-                            PropTypes.string,
-                            PropTypes.number
-                          ]),
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  model: PropTypes.shape({
+    edit: PropTypes.func,
+    update: PropTypes.func,
+    new: PropTypes.func,
+    create: PropTypes.func,
+  }),
   fields: PropTypes.array,
   remote: PropTypes.bool,
   onFinish: PropTypes.func,

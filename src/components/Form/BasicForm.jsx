@@ -16,9 +16,9 @@ const finishFailed = _err => formUtils.notifyError()
  *
  * @param children {JSX.Element[]} 需要渲染的 input 组件数组
  * @param form {Object} Antd 的 FormInstance
- * @param onSubmit {Function} 提交提交按钮的回调
+ * @param className {String} 样式
  * @param initialValues {[]} 表单默认值
- * @param footer {(React.Component || JSX.Element)[]} form 表单底部组件列表
+ * @param footer {(React.Component[] || JSX.Element)[]} form 表单底部组件列表
  * @param onChange {Function} 表单显示控制函数
  * @param value {Boolean} 是否显示表单加载中
  * @param staticContext {any} 接收该参数避免 react warning
@@ -27,7 +27,7 @@ const finishFailed = _err => formUtils.notifyError()
 function BasicForm({
                      children,
                      form: antdFormInstance,
-                     onSubmit,
+                     className,
                      initialValues = [],
                      footer,
                      onChange,
@@ -68,11 +68,12 @@ function BasicForm({
       <Button
         key='submitBtn'
         type='primary'
-        onClick={onSubmit || handleSubmit}
+        onClick={handleSubmit}
       >
         提交
       </Button>,
       <Button
+        key='goBackBtn'
         onClick={history.goBack}
       >
         返回
@@ -81,7 +82,7 @@ function BasicForm({
   }
 
   return (
-    <div className={'basic-form'}>
+    <div className={`basic-form ${className || ''}`}>
       <Spin spinning={value} delay={100}>
         <Form
           form={form}

@@ -1,15 +1,14 @@
 import _ from 'lodash'
 
-import globalConfig from '../config'
 import Session from "../models/session";
 
 const session = new Session()
 
-const DEBUG = globalConfig.debug
+const isDebug = process.env.REACT_APP_ENV === 'development'
 const _cookie_name = {
-  USER_INFO: globalConfig.userInfoCookieKey,
-  LOGIN: globalConfig.loginCookieKey,
-  PERMISSIONS: globalConfig.permissionKey
+  USER_INFO: process.env.REACT_APP_USER_INFO_KEY,
+  LOGIN: process.env.REACT_APP_SESSION_KEY,
+  PERMISSIONS: process.env.REACT_APP_PERMISSIONS_KEY
 }
 
 export function setUserInfo(permissions) {
@@ -17,7 +16,7 @@ export function setUserInfo(permissions) {
 }
 
 export function clearUserInfo() {
-  session.logout({onSuccess: data => console.log('注销登录')})
+  session.logout({ onSuccess: data => console.log('注销登录') })
   _delCookie(_cookie_name.USER_INFO)
   window.localStorage.removeItem(_cookie_name.PERMISSIONS)
 }
@@ -43,9 +42,9 @@ function _userInfo() {
     actual = JSON.parse(JSON.parse(atob((decryptedData['_rails']['message']))))
   }
   return {
-    shopId: DEBUG ? 0 : actual['shop_id'],
-    userName: DEBUG ? 'debug' : actual['user_name'],
-    avatar: DEBUG ? '' : actual['avatar'],
+    shopId: isDebug ? 0 : actual['shop_id'],
+    userName: isDebug ? 'debug' : actual['user_name'],
+    avatar: isDebug ? '' : actual['avatar'],
   }
 }
 

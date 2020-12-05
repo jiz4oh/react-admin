@@ -6,9 +6,8 @@ import _ from 'lodash'
 import { Result, Button } from "antd";
 
 import Protected from "../../lib/components/Protected";
-import globalConfig from "../../config"
 
-const appRootPath = globalConfig.appRootPath || ''
+const appRootPath = process.env.REACT_APP_ROOT_PATH || ''
 
 const _404 = (
   <Route

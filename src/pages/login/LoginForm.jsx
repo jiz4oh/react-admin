@@ -5,12 +5,11 @@ import { withRouter } from 'react-router-dom';
 import "./LoginForm.scss"
 import VerifyCodeFactory from "../../utils/verifyCode";
 import Logger from "../../utils/Logger";
-import globalConfig from '../../config'
 import { setUserInfo } from "../../session";
 import Session from "../../models/session";
 
 const logger = Logger.getLogger('login')
-const IS_DEBUG = globalConfig.debug
+const isDebug = process.env.REACT_APP_ENV === 'development'
 const session = new Session()
 
 class Login extends React.Component {
@@ -38,7 +37,7 @@ class Login extends React.Component {
     const loading = () => message.loading('正在验证...', 0);
 
     // 在非 debug 模式开启验证码
-    if (!IS_DEBUG) {
+    if (!isDebug) {
       if (!this.verifyCode.validate(verifyCode) || !verifyCode) {
         message.warn('验证码错误')
         return

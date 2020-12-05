@@ -2,7 +2,11 @@ import _ from "lodash"
 
 const logConfig = {
   log: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    debug: (process.env.REACT_APP_DEBUG_LOGGER || '').split(',').filter(Boolean),
+    info: (process.env.REACT_APP_INFO_LOGGER || '').split(',').filter(Boolean),
+    warn: (process.env.REACT_APP_WARN_LOGGER || '').split(',').filter(Boolean),
+    error: (process.env.REACT_APP_ERROR_LOGGER || '').split(',').filter(Boolean),
   }
 }
 
@@ -37,7 +41,7 @@ class Logger {
    * @returns {*}
    */
   static getLogger(name) {
-    if (!!name) return Logger.defaultLogger
+    if (!name) return Logger.defaultLogger
     // 从缓存中获取
     if (Logger.loggerMap.has(name)) return Logger.loggerMap.get(name);
 
@@ -97,7 +101,7 @@ class Logger {
     if (this.logLevel > Logger.LOG_LEVEL_INFO)
       return;
 
-    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
+    args.unshift(`%c${this.name}: ${stringifyPattern(pattern)}`);
     console.log.apply(console, args);
   }
 
@@ -112,7 +116,7 @@ class Logger {
       return;
 
     args.unshift('background: red; color: #bada55;');
-    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
+    args.unshift(`%c${this.name}: ${stringifyPattern(pattern)}`);
     console.error.apply(console, args);
   }
 
@@ -127,7 +131,7 @@ class Logger {
       return;
 
     args.unshift('background: black; color: #bada55;');
-    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
+    args.unshift(`%c${this.name}: ${stringifyPattern(pattern)}`);
     console.debug.apply(console, args);
   }
 
@@ -142,7 +146,7 @@ class Logger {
       return;
 
     args.unshift('background: yellow; color: black;');
-    args.unshift(`${this.name}: ${stringifyPattern(pattern)}`);
+    args.unshift(`%c${this.name}: ${stringifyPattern(pattern)}`);
     console.warn.apply(console, args);
   }
 }

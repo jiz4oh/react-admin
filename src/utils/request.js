@@ -2,14 +2,13 @@ import _ from 'lodash'
 import axios from 'axios'
 import { message, notification } from 'antd';
 
-import globalConfig from '../config'
 import Logger from "./Logger";
 import { isURLSearchParams } from "./utils";
 import { clearUserInfo } from "../session";
 
 const logger = Logger.getLogger('apiRequest')
-const defaultHost = globalConfig.api.host
-const defaultPath = globalConfig.api.path
+const defaultHost = process.env.REACT_APP_BACKEND_HOST
+const defaultPath = process.env.REACT_APP_BACKEND_PATH
 
 axios.defaults.baseURL = defaultHost
 axios.defaults.withCredentials = true

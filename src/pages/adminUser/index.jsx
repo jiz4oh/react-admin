@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import models from "../../models";
+import model from "../../models/adminUser";
 import { InnerFormList, HasManyRender, ImageRender } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
 import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
@@ -53,7 +53,7 @@ export default function (props) {
     <>
       <CRUD
         {...props}
-        model={models.adminUser}
+        model={model}
         filter={filter}
         index={[
           {
@@ -82,7 +82,6 @@ export default function (props) {
             name: 'created_at',
           }
         ]}
-        remote={false}
         form={form}
         columns={columns}
       >
@@ -90,7 +89,7 @@ export default function (props) {
           hasExtraTable && (
             <CRUD
               CRUD={[]}
-              model={models.role}
+              model={model}
               index={[
                 {name: 'name',},
                 {name: 'updated_at'},

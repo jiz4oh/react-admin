@@ -13,10 +13,9 @@ import {
 import { RouteFormList } from "../components/List";
 import { RestfulNewForm, RestfulEditForm } from "../components/Form";
 import formUtils from "../components/Form/utils";
-import globalConfig from "../config"
 import PolymorphicGrid from "../lib/components/PolymorphicGrid";
 
-const defaultCRUD = globalConfig.DBTable.CRUD || ['new', 'edit', 'delete']
+const defaultCRUD = (process.env.REACT_APP_TABLE_CRUD || '').split(',').filter(Boolean)
 const logger = Logger.getLogger('Resource')
 
 const defaultComponentMap = {

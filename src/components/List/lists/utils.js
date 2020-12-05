@@ -5,10 +5,9 @@ import _ from 'lodash'
 import i18n from "../../../utils/i18n";
 import Logger from "../../../utils/Logger";
 import { textRender } from "../index";
-import globalConfig from "../../../config";
 
 const logger = Logger.getLogger('tableUtils')
-const i18nKey = globalConfig.i18nKey
+const i18nKey = process.env.REACT_APP_I18N_KEY
 
 const deleting = () => message.loading('正在删除...', 5)
 let successCount = 0

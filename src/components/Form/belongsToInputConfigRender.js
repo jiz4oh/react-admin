@@ -1,0 +1,14 @@
+import _ from "lodash";
+
+export function belongsToInputConfigRender(name, definedInputConfig = {}, collection, label) {
+  const belongsToDefaultInputConfig = {
+    name,
+    as: 'select',
+    rules: [{
+      required: true,
+      message: `必须填写所属${label}`
+    }],
+  }
+  // 获取前端已配置数据
+  return _.defaultsDeep(definedInputConfig, belongsToDefaultInputConfig)
+}

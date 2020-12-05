@@ -6,12 +6,11 @@ import { Form } from "antd";
 import Logger from "../../utils/Logger";
 import formUtils from './utils'
 import BasicForm from "./BasicForm";
-import globalConfig from "../../config"
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = globalConfig.DBTable.remote || false
+const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 /**
  *
@@ -46,9 +45,9 @@ function RestfulNewForm({
     model.new({
       showErrorMessage: true,
       onSuccess: data => {
-        const res = formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name)
-        setInputsConfig(res)
         closeForm(false)
+        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, model.name)
+        setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
       },
       onFail: () => closeForm(false)
     })
@@ -91,7 +90,7 @@ function RestfulNewForm({
     >
       <FormItemBuilder
         tableName={model.name}
-        fields={fields}
+        fields={inputsConfig}
         onTypecast={renderInputBy}
         formType={'new'}
       />

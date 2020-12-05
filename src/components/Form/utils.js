@@ -1,14 +1,17 @@
 import { notification } from "antd";
 import _ from 'lodash'
 
-import i18n from "../../utils/i18n";
-import globalConfig from "../../config";
+import i18n from "@/utils/i18n";
+import { belongsToInputConfigRender } from "@/components/Form/belongsToInputConfigRender";
+import { hasOneInputConfigRender } from "@/components/Form/hasOneInputConfigRender";
+import { hasManyInputConfigRender } from "@/components/Form/hasManyInputConfigRender";
 
-const i18nKey = globalConfig.i18nKey
+const i18nKey = process.env.REACT_APP_I18N_KEY
 const RESOURCE_TYPE_MAP = 'data_type'
 const BELONGS_TO = 'belongs_to'
 const HAS_ONE = 'has_one'
 const HAS_MANY = 'has_many'
+const COLLECTION = 'collection'
 
 export default {
   notifySuccess: (operationName = '操作') => {
@@ -44,75 +47,57 @@ export default {
    * @param destination {Object} 远程下发的数据
    * @param source {Object[]} 前端定义的 input 结构
    * @param tableName {string} 用于 i18n
-   * @return {Object[]}
+   * @return {Object[]} return new InputsConfig
    */
-  getInputsConfigFromRemote: (destination, source, tableName) => {
+  mergeInputsConfig: (destination, source, tableName) => {
     const {
-    // 远程获取表单字段类型
+      // 远程获取表单字段类型
       [RESOURCE_TYPE_MAP]: inputMap = {},
-      [BELONGS_TO]: belongsTo= {},
-      [HAS_ONE]: hasOneCollection = {},
-      [HAS_MANY]: hasManyCollection = {},
+      [HAS_ONE]: hasOneFields = {},
+      [HAS_MANY]: hasManyFields = {},
     } = destination
-    const result = [...source]
 
-    _.forEach(inputMap, (value, key) => {
-      // 获取当前字段是否在前端已定义
-      let index = _.findIndex(source, obj => obj.name === key)
-      const i18nName = [i18nKey, tableName, key].filter(Boolean).join('.')
-      let collection
-
+    return _.map(inputMap, (value, key) => {
+      const definedInputConfig = _.find(source, obj => obj.name === key) || {}
+      const label = i18n.t([i18nKey, tableName, key].filter(Boolean).join('.'))
       switch (value) {
-        case 'belongs_to':
-          // 获取当前 belongs_to 的集合数据
-          if (_.isEmpty(belongsTo[key])) return
-          collection = belongsTo[key]
-
-          const belongsToDefaultInputConfig = {
-            name: key,
-            as: 'select',
-            rules: [{
-              required: true,
-              message: `必须填写所属${i18n.t(`${i18nName}`)}`
-            }],
-            collection: collection,
-          }
-          if (!_.isUndefined(result[index])) {
-            // belongs_to 选择放在最前面
-            result.unshift(belongsToDefaultInputConfig)
-          } else {
-            // collection 钩子
-            if (_.isFunction(result[index].collection)){
-             belongsToDefaultInputConfig.collection = result[index].collection(belongsToDefaultInputConfig.collection)
-            }
-            // 获取前端已配置数据
-            result[index] = _.defaultsDeep(result[index], belongsToDefaultInputConfig)
-          }
-          return
-        case 'has_one':
-          collection = _.cloneDeep(hasOneCollection[key])
-          if (_.isEmpty(collection)) return
-          // TODO 嵌套更新写入 input
-          return
-        case 'has_many':
-          collection = _.cloneDeep(hasManyCollection[key])
-          if (_.isEmpty(collection)) return
-          // TODO 嵌套更新写入 input
-          return
-        default:
-          const inputConfig = {
-            name: key,
-            type: value
-          }
-          if (!_.isUndefined(result[index])) {
-            result.push(inputConfig)
-          } else {
-            // 获取前端已配置数据
-            result[index] = _.defaultsDeep(result[index], inputConfig)
-          }
+      case BELONGS_TO:
+        return belongsToInputConfigRender(key, definedInputConfig, label)
+      case HAS_ONE:
+        return hasOneInputConfigRender(key, definedInputConfig, hasOneFields[key])
+      case HAS_MANY:
+        return hasManyInputConfigRender(key, definedInputConfig, hasManyFields[key])
+      default:
+        // 合并前端已配置数据
+        return _.defaultsDeep(definedInputConfig, {
+          name: key,
+          type: value
+        })
       }
     })
+  },
+  /**
+   * 将 COLLECTION 中的内容合并到 inputsConfig 中对应字段的 collection 属性中
+   * @param inputsConfig {Object[]}
+   * @param data {{COLLECTION: {}}}
+   * @return {Object[]}
+   */
+  mergeCollection: (inputsConfig, data) => {
+    const { [COLLECTION]: collections = {}}  = data
+    return _.map(inputsConfig, inputConfig => {
+      const collection = collections[inputConfig.name]
+      // 如果 collection 中未有当前字段的设置则返回
+      if (_.isNil(collection)) return inputConfig
 
-    return result
+      const result = _.cloneDeep(inputConfig)
+      // collection 钩子
+      if (_.isFunction(result.collection)) {
+        result.collection = result.collection(collection)
+      } else {
+        result.collection = collection
+      }
+
+      return result
+    })
   }
 }
