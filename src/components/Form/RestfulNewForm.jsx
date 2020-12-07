@@ -10,7 +10,7 @@ import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 /**
  *

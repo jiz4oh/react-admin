@@ -4,7 +4,7 @@ import _ from "lodash"
 import formUtils from "@/components/Form/utils";
 import GenericForm from "@/components/Form/GenericForm";
 
-const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 function ModalForm({
                      model,

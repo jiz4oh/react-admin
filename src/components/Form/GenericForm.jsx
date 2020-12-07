@@ -10,7 +10,8 @@ import { FormItemBuilder } from "../FormItemBuilder";
 import BasicForm from "@/components/Form/BasicForm";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const DATA = process.env.REACT_APP_FORM_DATA_KEY
 
 /**
  *
@@ -37,7 +38,7 @@ function GenericForm({
                      }) {
   const [form] = Form.useForm(antdFormInstance)
   const [inputsConfig, setInputsConfig] = useState(fields)
-  const [isCloseForm, closeForm] = useState(!!pk && remote)
+  const [isCloseForm, closeForm] = useState(remote)
   const [initValues, setInitValues] = useState({})
 
   useEffect(() => {
@@ -47,12 +48,14 @@ function GenericForm({
       pk,
       showErrorMessage: true,
       onSuccess: data => {
-        pk && setInitValues(data['data'])
-        pk && closeForm(false)
-        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, name)
-        remote && setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
+        pk && setInitValues(data[DATA])
+        if (remote) {
+          closeForm(false)
+          const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, name)
+          setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
+        }
       },
-      onFail: () => pk && closeForm(false)
+      onFail: () => remote && closeForm(false)
     }
     pk ? model.edit(params) : model.new(params)
     // eslint-disable-next-line

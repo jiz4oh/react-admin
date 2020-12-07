@@ -7,11 +7,11 @@ import { hasOneInputConfigRender } from "@/components/Form/hasOneInputConfigRend
 import { hasManyInputConfigRender } from "@/components/Form/hasManyInputConfigRender";
 
 const i18nKey = process.env.REACT_APP_I18N_KEY
-const RESOURCE_TYPE_MAP = 'data_type'
-const BELONGS_TO = 'belongs_to'
-const HAS_ONE = 'has_one'
-const HAS_MANY = 'has_many'
-const COLLECTION = 'collection'
+const DATA_TYPE_MAP = process.env.REACT_APP_FORM_DATA_TYPE_KEY
+const BELONGS_TO = process.env.REACT_APP_FORM_BELONGS_TO_KEY
+const HAS_ONE = process.env.REACT_APP_FORM_HAS_ONE_KEY
+const HAS_MANY = process.env.REACT_APP_FORM_HAS_MANY_KEY
+const COLLECTION = process.env.REACT_APP_FORM_COLLECTION_KEY
 
 export default {
   notifySuccess: (operationName = '操作') => {
@@ -52,12 +52,12 @@ export default {
   mergeInputsConfig: (destination, source, tableName) => {
     const {
       // 远程获取表单字段类型
-      [RESOURCE_TYPE_MAP]: inputMap = {},
+      [DATA_TYPE_MAP]: dataTypeMap = {},
       [HAS_ONE]: hasOneFields = {},
       [HAS_MANY]: hasManyFields = {},
     } = destination
 
-    return _.map(inputMap, (value, key) => {
+    return _.map(dataTypeMap, (value, key) => {
       const definedInputConfig = _.find(source, obj => obj.name === key) || {}
       const label = i18n.t([i18nKey, tableName, key].filter(Boolean).join('.'))
       switch (value) {

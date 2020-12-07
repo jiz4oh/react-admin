@@ -6,7 +6,7 @@ import RouteFormList from "./RouteFormList";
 import { ModalForm } from "../../Form";
 import { NewAction, EditAction } from "../index";
 
-const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 function InnerFormList({
                          model,

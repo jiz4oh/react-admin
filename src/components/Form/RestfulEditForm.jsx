@@ -10,8 +10,8 @@ import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
-const DATA = 'data'
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const DATA = process.env.REACT_APP_FORM_DATA_KEY
 
 /**
  *
