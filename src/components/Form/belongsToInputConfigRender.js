@@ -1,8 +1,7 @@
 import _ from "lodash";
 
-export function belongsToInputConfigRender(name, definedInputConfig = {}, collection, label) {
+export function belongsToInputConfigRender(definedInputConfig = {}, collection, label) {
   const belongsToDefaultInputConfig = {
-    name,
     as: 'select',
     rules: [{
       required: true,

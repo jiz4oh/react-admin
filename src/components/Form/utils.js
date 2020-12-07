@@ -62,17 +62,14 @@ export default {
       const label = i18n.t([i18nKey, tableName, key].filter(Boolean).join('.'))
       switch (value) {
       case BELONGS_TO:
-        return belongsToInputConfigRender(key, definedInputConfig, label)
+        return _.defaultsDeep(value,{name: key}, belongsToInputConfigRender(definedInputConfig, label))
       case HAS_ONE:
-        return hasOneInputConfigRender(key, definedInputConfig, hasOneFields[key])
+        return _.defaultsDeep(value,{name: key}, hasOneInputConfigRender(definedInputConfig, hasOneFields[key]))
       case HAS_MANY:
-        return hasManyInputConfigRender(key, definedInputConfig, hasManyFields[key])
+        return _.defaultsDeep(value,{name: key}, hasManyInputConfigRender(definedInputConfig, hasManyFields[key]))
       default:
-        // 合并前端已配置数据
-        return _.defaultsDeep(definedInputConfig, {
-          name: key,
-          type: value
-        })
+        // 合并前端已配置数据，后端传入时必须是个对象
+        return _.defaultsDeep(value, definedInputConfig)
       }
     })
   },
