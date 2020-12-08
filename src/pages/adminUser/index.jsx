@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 
 import model from "../../models/adminUser";
-import { InnerFormList, HasManyRender, ImageRender } from "../../components/List";
+import {
+  InnerFormList,
+  HasManyRender,
+  ImageRender
+} from "../../components/List";
 import CRUD from "../../layouts/CRUD";
 import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
 
@@ -44,7 +48,7 @@ const form = [
   }
 ]
 
-export default function (props) {
+export default function(props) {
   const [hasExtraTable, showExtraTable] = useState(false)
   const [previewImages, setPreviewImages] = useState([])
   const columns = hasExtraTable ? 2 : 1
@@ -55,6 +59,7 @@ export default function (props) {
         {...props}
         model={model}
         filter={filter}
+        components={{ list: InnerFormList }}
         index={[
           {
             name: 'username',

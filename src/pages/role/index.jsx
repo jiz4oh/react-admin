@@ -9,7 +9,6 @@ export default function(props) {
     <CRUD
       {...props}
       model={model}
-      components={{ list: InnerFormList }}
       filter={[
         {
           name: 'name',
