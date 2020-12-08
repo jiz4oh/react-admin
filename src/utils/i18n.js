@@ -1,6 +1,11 @@
 const i18nFile = require('../assets/i18n.json')
 
 const locate = process.env.REACT_APP_LOCATE
+
+function NotFoundException(message) {
+  this.message = message
+}
+
 /**
  * @param path {Array} 对象的嵌套 key 数组
  * @example ["activerecord", "attributes", "commodity", "name"]
@@ -8,11 +13,14 @@ const locate = process.env.REACT_APP_LOCATE
  */
 const findBy = (path) => {
   const current = path.pop()
-  let result = i18nFile[locate]
+  let obj = i18nFile[locate]
   if (path.length !== 0) {
-    result = findBy(path)
+    obj = findBy(path)
   }
-  return result[current]
+  const result = obj[current]
+  if (!result) throw new NotFoundException(`未找到 ${current} 对应翻译`)
+
+  return result
 }
 
 const translateMap = new Map()
@@ -45,7 +53,9 @@ const translate = (name) => {
   try {
     result = byName(path)
   } catch (e) {
-    console.info(`未找到 ${field} 对应翻译`)
+    if (e instanceof NotFoundException) {
+      console.info(`未找到 ${field} 对应翻译`)
+    }
   }
   return result
 }
