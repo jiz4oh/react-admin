@@ -8,6 +8,7 @@ import BasicForm from './BasicForm'
 import formUtils from './utils'
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
+import { mergeInputsConfig, mergeCollection } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
@@ -51,8 +52,8 @@ function RestfulEditForm({
         // 获取 edit form 所需要的 initValues
         setInitValues(data[DATA])
         closeForm(false)
-        const mergedInputsConfig = formUtils.mergeInputsConfig(data, inputsConfig, model.name)
-        remote && setInputsConfig(formUtils.mergeCollection(mergedInputsConfig, data))
+        const mergedInputsConfig = mergeInputsConfig(data, inputsConfig, model.name)
+        remote && setInputsConfig(mergeCollection(mergedInputsConfig, data))
       }
     })
     // eslint-disable-next-line
@@ -107,13 +108,13 @@ function RestfulEditForm({
 
 RestfulEditForm.propTypes = {
   model: PropTypes.shape({
-                           edit: PropTypes.func.isRequired,
-                           update: PropTypes.func.isRequired,
-                         }),
+    edit: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+  }),
   pk: PropTypes.oneOfType([
-                            PropTypes.string,
-                            PropTypes.number
-                          ]).isRequired,
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }
