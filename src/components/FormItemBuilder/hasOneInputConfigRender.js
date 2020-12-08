@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export function hasOneInputConfigRender(definedInputConfig = {}, fields) {
+export function hasOneInputConfigRender(inputConfig, definedInputConfig = {}, key) {
   // TODO 根据字段生成 inputConfig
   const hasOneDefaultInputConfig = {
   }

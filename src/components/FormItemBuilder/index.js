@@ -1,5 +1,5 @@
 export { default as FormItemBuilder } from "./FormItemBuilder"
-export { mergeInputsConfig } from "./mergeInputsConfig"
+export { mergeInputConfigs } from "./mergeInputConfigs"
 export { mergeCollection } from "./mergeCollection"
 export { belongsToInputConfigRender } from "./belongsToInputConfigRender"
 export { hasOneInputConfigRender } from "./hasOneInputConfigRender"

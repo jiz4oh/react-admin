@@ -8,7 +8,7 @@ import formUtils from './utils'
 import BasicForm from "./BasicForm";
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
-import { mergeInputsConfig, mergeCollection } from "../FormItemBuilder";
+import { mergeInputConfigs, mergeCollection } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
@@ -47,7 +47,7 @@ function RestfulNewForm({
       showErrorMessage: true,
       onSuccess: data => {
         closeForm(false)
-        const mergedInputsConfig = mergeInputsConfig(data, inputsConfig, model.name)
+        const mergedInputsConfig = mergeInputConfigs(data, inputsConfig, model.name)
         setInputsConfig(mergeCollection(mergedInputsConfig, data))
       },
       onFail: () => closeForm(false)

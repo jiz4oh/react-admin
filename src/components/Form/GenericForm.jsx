@@ -8,7 +8,7 @@ import formUtils from './utils'
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
 import BasicForm from "@/components/Form/BasicForm";
-import { mergeInputsConfig, mergeCollection } from "../FormItemBuilder";
+import { mergeInputConfigs, mergeCollection } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
@@ -52,7 +52,7 @@ function GenericForm({
         pk && setInitValues(data[DATA])
         if (remote) {
           closeForm(false)
-          const mergedInputsConfig = mergeInputsConfig(data, inputsConfig, name)
+          const mergedInputsConfig = mergeInputConfigs(data, inputsConfig, name)
           setInputsConfig(mergeCollection(mergedInputsConfig, data))
         }
       },
