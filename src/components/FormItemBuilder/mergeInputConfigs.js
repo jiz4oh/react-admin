@@ -20,19 +20,16 @@ function mergeInputConfig(destination, source, key, label) {
   switch (destination.type) {
   case BELONGS_TO:
     return _.defaultsDeep(
-      destination,
       { name: key },
       belongsToInputConfigRender(destination, source, key, label)
     )
   case HAS_ONE:
     return _.defaultsDeep(
-      destination,
       { name: key },
       hasOneInputConfigRender(destination, source, key, label)
     )
   case HAS_MANY:
     return _.defaultsDeep(
-      destination,
       { name: key },
       hasManyInputConfigRender(destination, source, key, label)
     )

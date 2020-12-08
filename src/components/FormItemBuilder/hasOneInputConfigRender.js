@@ -5,5 +5,5 @@ export function hasOneInputConfigRender(inputConfig, definedInputConfig = {}, ke
   const hasOneDefaultInputConfig = {
   }
   // 获取前端已配置数据
-  return _.defaultsDeep(definedInputConfig, hasOneDefaultInputConfig)
+  return _.defaultsDeep(hasOneDefaultInputConfig, inputConfig, definedInputConfig)
 }
