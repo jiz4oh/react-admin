@@ -1,6 +1,5 @@
 import _ from "lodash";
 import i18n from "@/utils/i18n";
-import { belongsToInputConfigRender } from "./belongsToInputConfigRender";
 
 const i18nKey = process.env.REACT_APP_I18N_KEY
 const INPUT_CONFIG_MAP = process.env.REACT_APP_FORM_DATA_TYPE_KEY
@@ -59,8 +58,17 @@ function mergeInputConfig(destination, source, {
     }, source, destination)
   case BELONGS_TO:
     return _.defaultsDeep(
-      { name },
-      belongsToInputConfigRender(destination, source, name, label)
+      {},
+      source,
+      {
+        name,
+        as: 'select',
+        rules: [{
+          required: true,
+          message: `必须填写所属${label}`
+        }],
+      },
+      destination,
     )
   default:
     // 合并前端已配置数据，后端传入时必须是个对象

@@ -50,6 +50,7 @@ const defaultInputType = (fieldName, type) => {
  * @returns string
  */
 const findInputTypeBy = (fieldName) => {
+  fieldName = String(fieldName)
   if (fieldName.match(/id/)) return 'int'
   if (fieldName.match(/password/)) return 'password'
   if (fieldName.match(/country$/)) return 'country'
@@ -147,10 +148,12 @@ function withFormItem(WrappedComponent, predicate = null) {
                     extra,
                     rules,
                     widget,
+                    fieldKey,
+                    isListField,
                     formOptions = {},
                     ...restProps
                   }) {
-    logger.debug(`transform field ${JSON.stringify(restProps)} to ${WrappedComponent.name} component`);
+    logger.debug(`transform field ${JSON.stringify(name)} to ${WrappedComponent.name} component`);
 
     return widget || (
       <>
@@ -170,6 +173,8 @@ function withFormItem(WrappedComponent, predicate = null) {
           label={label}
           rules={rules}
           extra={extra}
+          fieldKey={fieldKey}
+          isListField={isListField}
           {...formOptions}
         >
           <WrappedComponent name={name} {...restProps}/>
