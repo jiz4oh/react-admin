@@ -4,7 +4,7 @@ import { message, notification } from 'antd';
 
 import Logger from "./Logger";
 import { isURLSearchParams } from "./utils";
-import { clearUserInfo } from "../session";
+import { clearUserInfo } from "@/session";
 
 const logger = Logger.getLogger('apiRequest')
 const defaultHost = process.env.REACT_APP_BACKEND_HOST
@@ -33,14 +33,7 @@ const asyncRequest = ({
                         ...others
                       }) => {
   const options = {...others}
-  options.onSuccess = onSuccess || ((data, status) => {
-    _logDetail(data);
-    if (!String(status).startsWith('2')) {
-      logger.warn(`网络请求出错：${status}-${data.error}`)
-      showErrorMessage && message.error(`网络请求出错：${data.error}`);
-    }
-  })
-  options.onFail = onFail || ((data, status, err) => {
+  onFail = onFail || ((data, status, err) => {
     _logDetail(data);
     if (axios.isCancel(data)) {
       // TODO 取消了请求后的操作
