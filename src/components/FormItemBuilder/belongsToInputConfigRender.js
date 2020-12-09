@@ -9,5 +9,5 @@ export function belongsToInputConfigRender(inputConfig, definedInputConfig = {},
     }],
   }
   // 获取前端已配置数据
-  return _.defaultsDeep(belongsToDefaultInputConfig, inputConfig, definedInputConfig)
+  return _.defaultsDeep(definedInputConfig, belongsToDefaultInputConfig, inputConfig)
 }

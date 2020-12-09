@@ -8,7 +8,7 @@ import BasicForm from './BasicForm'
 import formUtils from './utils'
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
-import { mergeInputConfigs, mergeCollection } from "../FormItemBuilder";
+import { mergeInputConfigs } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
 const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
@@ -52,8 +52,7 @@ function RestfulEditForm({
         // 获取 edit form 所需要的 initValues
         setInitValues(data[DATA])
         closeForm(false)
-        const mergedInputsConfig = mergeInputConfigs(data, inputsConfig, model.name)
-        remote && setInputsConfig(mergeCollection(mergedInputsConfig, data))
+        remote && setInputsConfig(mergeInputConfigs(data, inputsConfig, model.name))
       }
     })
     // eslint-disable-next-line
