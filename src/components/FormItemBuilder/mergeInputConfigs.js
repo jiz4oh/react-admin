@@ -83,8 +83,9 @@ function mergeInputConfig(destination, source, {
  * @returns {Object}
  */
 function mergeCollection(destination, source) {
-  const collection = source[COLLECTION]
-  // 如果 collection 中未有当前字段的设置则返回
+  const collectionMap = source[COLLECTION]
+  if (_.isEmpty(collectionMap)) return destination
+  const collection = collectionMap[destination.name]
   if (_.isEmpty(collection)) return destination
 
   // collection 钩子
