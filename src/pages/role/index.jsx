@@ -1,6 +1,5 @@
 import React from "react";
 
-import { InnerFormList } from "../../components/List";
 import CRUD from "../../layouts/CRUD";
 import model from "../../models/role";
 
