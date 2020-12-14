@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import { clearUserInfo } from "./session";
 import { hasVisitPermission, isLoggedIn } from "./permissions";
 
-function Logout({location}) {
+function Logout(location) {
   // 未登录跳转登录
   clearUserInfo() && message.error('用户信息获取失败。。。')
   return (
@@ -22,6 +22,6 @@ export default {
     onFail: Logout
   },
   hasVisitPermission: {
-    require: ({location}) => !!hasVisitPermission(location.pathname)
+    require: (location) => !!hasVisitPermission(location.pathname)
   },
 }
