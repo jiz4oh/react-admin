@@ -1,4 +1,4 @@
-import { asyncRequest } from "../common/js/request";
+import { asyncRequest } from "../utils/request";
 
 export default class Session {
   logout(options) {

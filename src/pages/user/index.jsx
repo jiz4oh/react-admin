@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { enumMapToArray } from "../../common/js/utils";
-import { DBTable } from "../../components/DBTable";
-import models from "../../models";
-import { ImageRender } from "../../components/DBTable/renders";
-import { ImagePreviewModal } from "../../components/ImagePreviewModal";
+import { enumMapToArray } from "@/utils/utils";
+import CRUD from "../../layouts/CRUD";
+import model from "../../models/user";
+import { ImageRender } from "../../components/List";
+import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
 
 const genderMap = {
   unknown: '未知',
@@ -47,9 +47,9 @@ export default function (props) {
 
   return (
     <>
-      <DBTable
+      <CRUD
         {...props}
-        model={models.user}
+        model={model}
         filter={filter}
         CRUD={[]}
         index={[
@@ -104,7 +104,7 @@ export default function (props) {
           }
         ]}
       >
-      </DBTable>
+      </CRUD>
       <ImagePreviewModal value={previewImages} onChange={setPreviewImages}/>
     </>
   )

@@ -3,15 +3,16 @@ import { Form } from "antd";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 import BasicForm from './BasicForm'
 import formUtils from './utils'
-import globalConfig from "../../config"
 import { renderInputBy } from "../inputs";
 import { FormItemBuilder } from "../FormItemBuilder";
+import { mergeInputConfigs } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = globalConfig.DBTable.remote || false
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
+const DATA = process.env.REACT_APP_FORM_DATA_KEY
 
 /**
  *
@@ -44,13 +45,14 @@ function RestfulEditForm({
   useEffect(() => {
     logger.debug('从后端获取编辑表单数据。。。')
 
-    model.edit(pk, {
+    model.edit({
+      pk,
       showErrorMessage: true,
       onSuccess: data => {
         // 获取 edit form 所需要的 initValues
-        setInitValues(data['resource'])
+        setInitValues(data[DATA])
         closeForm(false)
-        remote && setInputsConfig(formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name))
+        remote && setInputsConfig(mergeInputConfigs(data, inputsConfig, model.name))
       }
     })
     // eslint-disable-next-line
@@ -74,7 +76,9 @@ function RestfulEditForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    return model.update(pk, validatedValues, {
+    return model.update({
+      pk,
+      data: validatedValues,
       onSuccess,
       onFail,
     })
@@ -93,7 +97,7 @@ function RestfulEditForm({
     >
       <FormItemBuilder
         tableName={model.name}
-        fields={fields}
+        fields={inputsConfig}
         onTypecast={renderInputBy}
         formType={'edit'}
       />
@@ -103,13 +107,13 @@ function RestfulEditForm({
 
 RestfulEditForm.propTypes = {
   model: PropTypes.shape({
-                           edit: PropTypes.func.isRequired,
-                           update: PropTypes.func.isRequired,
-                         }),
+    edit: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+  }),
   pk: PropTypes.oneOfType([
-                            PropTypes.string,
-                            PropTypes.number
-                          ]).isRequired,
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }

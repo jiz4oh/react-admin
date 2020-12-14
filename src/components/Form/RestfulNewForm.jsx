@@ -3,15 +3,15 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import { Form } from "antd";
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 import formUtils from './utils'
 import BasicForm from "./BasicForm";
-import globalConfig from "../../config"
 import { renderInputBy } from "../inputs";
-import { FormItemBuilder }  from "../FormItemBuilder";
+import { FormItemBuilder } from "../FormItemBuilder";
+import { mergeInputConfigs } from "../FormItemBuilder";
 
 const logger = Logger.getLogger('form')
-const defaultIsRemote = globalConfig.DBTable.remote || false
+const defaultIsRemote = !!Number(process.env.REACT_APP_FORM_REMOTE_CONFIG) || false
 
 /**
  *
@@ -44,13 +44,13 @@ function RestfulNewForm({
     logger.debug('从后端获取新建表单数据。。。')
 
     model.new({
-                showErrorMessage: true,
-                onSuccess: data => {
-                  const res = formUtils.getInputsConfigFromRemote(data, inputsConfig, model.name)
-                  setInputsConfig(res)
-                  closeForm(false)
-                }
-              })
+      showErrorMessage: true,
+      onSuccess: data => {
+        closeForm(false)
+        setInputsConfig(mergeInputConfigs(data, inputsConfig, model.name))
+      },
+      onFail: () => closeForm(false)
+    })
     // eslint-disable-next-line
   }, [model])
 
@@ -72,7 +72,8 @@ function RestfulNewForm({
       form.setFields(formUtils.renderAntdError(data.error))
     }
 
-    return model.create(validatedValues, {
+    return model.create({
+      data: validatedValues,
       onSuccess,
       onFail,
     })
@@ -89,7 +90,7 @@ function RestfulNewForm({
     >
       <FormItemBuilder
         tableName={model.name}
-        fields={fields}
+        fields={inputsConfig}
         onTypecast={renderInputBy}
         formType={'new'}
       />
@@ -99,9 +100,9 @@ function RestfulNewForm({
 
 RestfulNewForm.propTypes = {
   model: PropTypes.shape({
-                           new: PropTypes.func.isRequired,
-                           create: PropTypes.func.isRequired,
-                         }),
+    new: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
+  }),
   fields: PropTypes.array,
   remote: PropTypes.bool,
 }

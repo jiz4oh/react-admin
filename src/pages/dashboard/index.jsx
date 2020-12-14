@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 
 import './index.scss'
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 
 const logger = Logger.getLogger('Dashboard')
 const deadline = Date.now() + 1000 * (60 * 60 * 24 * 2 + 30); // Moment is also OK

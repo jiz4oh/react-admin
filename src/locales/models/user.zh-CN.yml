@@ -1,0 +1,24 @@
+---
+zh-CN:
+  activerecord:
+    attributes:
+      user:
+        shop_id: 所属商铺
+        nickname: 昵称
+        avatar: 头像
+        country_code: 国家代码
+        phone: 手机号码
+        email: 邮箱
+        gender: 性别
+        gender_name: 性别
+        age: 年龄
+        bio: 个性签名
+        birthday: 生日
+        new_user: 新用户？
+        src: 来源
+        src_name: 来源
+        addresses: 收货地址
+        last_sign_in_at: 最后登录时间
+        created_at: 注册于
+        updated_at: 最后修改于
+        deleted_at: 删除于

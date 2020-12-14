@@ -9,7 +9,7 @@ import { FormItemBuilder } from "../FormItemBuilder";
 import { renderFilterBy } from "../inputs";
 import { PREDICATE, RANGE_FIELD } from '../inputs/constants'
 
-import Logger from "../../common/js/Logger";
+import Logger from "../../utils/Logger";
 
 const logger = Logger.getLogger('RansackFilter')
 
@@ -66,10 +66,14 @@ class RansackFilter extends React.PureComponent {
   }
 
   render() {
-    const {tableName, fields} = this.props
+    const { tableName, fields } = this.props
     return (
       <div className='M-filter-container'>
-        <Form ref={this.formRef}>
+        <Form
+          ref={this.formRef}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 24 }}
+        >
           <FormItemBuilder
             tableName={tableName}
             fields={fields}
@@ -80,8 +84,10 @@ class RansackFilter extends React.PureComponent {
         </Form>
 
         <Row>
-          <Col span={12} offset={12}
-               style={{textAlign: 'right'}}
+          <Col
+            span={12}
+            offset={12}
+            style={{ textAlign: 'right' }}
           >
             <Button onClick={this.handleClickQuery} type="primary">
               <SearchOutlined/>查询

@@ -3,10 +3,9 @@ import {InboxOutlined} from "@ant-design/icons";
 import React from "react";
 
 import {withFormItem} from "./utils";
-import Logger from "../../common/js/Logger";
-import globalConfig from "../../config";
+import Logger from "../../utils/Logger";
 
-const fileUploadUrl = globalConfig.fileUploadUrl
+const fileUploadUrl = process.env.REACT_APP_FILE_UPLOAD_PATH
 
 const logger = Logger.getLogger('file')
 

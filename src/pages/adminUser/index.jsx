@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 
-import models from "../../models";
-import { DBTable, InnerFormTable } from "../../components/DBTable";
-import { HasManyRender, ImageRender } from "../../components/DBTable/renders";
-import { ImagePreviewModal } from "../../components/ImagePreviewModal";
+import model from "../../models/adminUser";
+import {
+  InnerFormList,
+  HasManyRender,
+  ImageRender
+} from "../../components/List";
+import CRUD from "../../layouts/CRUD";
+import { ImagePreviewModal } from "../../lib/components/ImagePreviewModal";
 
 const filter = [
   {
@@ -44,17 +48,18 @@ const form = [
   }
 ]
 
-export default function (props) {
+export default function(props) {
   const [hasExtraTable, showExtraTable] = useState(false)
   const [previewImages, setPreviewImages] = useState([])
   const columns = hasExtraTable ? 2 : 1
 
   return (
     <>
-      <DBTable
+      <CRUD
         {...props}
-        model={models.adminUser}
+        model={model}
         filter={filter}
+        components={{ list: InnerFormList }}
         index={[
           {
             name: 'username',
@@ -82,24 +87,23 @@ export default function (props) {
             name: 'created_at',
           }
         ]}
-        remote={false}
         form={form}
         columns={columns}
       >
         {
           hasExtraTable && (
-            <DBTable
+            <CRUD
               CRUD={[]}
-              model={models.role}
+              model={model}
               index={[
                 {name: 'name',},
                 {name: 'updated_at'},
               ]}
-              components={{list: InnerFormTable}}
+              components={{list: InnerFormList}}
             />
           )
         }
-      </DBTable>
+      </CRUD>
       <ImagePreviewModal value={previewImages} onChange={setPreviewImages}/>
     </>
   )

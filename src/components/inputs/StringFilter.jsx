@@ -1,27 +1,13 @@
-import {Form, Input, Select} from "antd";
-import React, {useMemo} from "react";
+import { Form, Input, Select } from "antd";
+import React from "react";
 
-import {withFormItem} from "./utils";
-import {PREDICATE} from './constants'
-
-const selectBefore = name => (
-  <Form.Item
-    key={`${name}${PREDICATE}`}
-    name={`${name}${PREDICATE}`}
-    initialValue='cont'
-    noStyle
-  >
-    <Select>
-      <Select.Option value="cont">包含</Select.Option>
-      <Select.Option value="eq">等于</Select.Option>
-      <Select.Option value="start">开头</Select.Option>
-      <Select.Option value="end">完于</Select.Option>
-    </Select>
-  </Form.Item>
-)
+import { PREDICATE } from './constants'
 
 function StringFilter({
                         name,
+                        label,
+                        rules,
+                        extra,
                         placeholder,
                         inputOptions = {},
                         value,
@@ -29,18 +15,46 @@ function StringFilter({
                         ...restProps
                       }) {
   return (
-    <Input
-      key={`${name}-filter`}
-      size="default"
-      addonBefore={useMemo(() => selectBefore(name), [name])}
-      allowClear
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      {...restProps}
-      {...inputOptions}
-    />
+    <Form.Item
+      key={name}
+      label={label}
+    >
+      <Input.Group compact>
+        <Form.Item
+          key={`${name}${PREDICATE}`}
+          name={`${name}${PREDICATE}`}
+          initialValue='cont'
+          noStyle
+        >
+          <Select>
+            <Select.Option value="cont">包含</Select.Option>
+            <Select.Option value="eq">等于</Select.Option>
+            <Select.Option value="start">开头</Select.Option>
+            <Select.Option value="end">完于</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          key={name}
+          name={name}
+          rules={rules}
+          extra={extra}
+          noStyle
+        >
+          <Input
+            key={`${name}-filter`}
+            size="default"
+            style={{ width: '50%' }}
+            allowClear
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            {...restProps}
+            {...inputOptions}
+          />
+        </Form.Item>
+      </Input.Group>
+    </Form.Item>
   )
 }
 
-export default withFormItem(StringFilter)
+export default StringFilter

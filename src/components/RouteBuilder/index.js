@@ -5,10 +5,9 @@ import queryString from 'query-string';
 import _ from 'lodash'
 import { Result, Button } from "antd";
 
-import ProtectedComponent from "../ProtectedComponent";
-import globalConfig from "../../config"
+import Protected from "../../lib/components/Protected";
 
-const appRootPath = globalConfig.appRootPath || ''
+const appRootPath = process.env.REACT_APP_ROOT_PATH || ''
 
 const _404 = (
   <Route
@@ -34,19 +33,19 @@ const _404 = (
 // 生成路由
 const generateRoute = (rule, parentPaths) => {
   const {
-          component: Component,
-          path,
-          label,
-          layout: Layout,
-          rules
-        } = rule
+    component: Component,
+    path,
+    label,
+    layout: Layout,
+    rules
+  } = rule
   // Component 存在才挂载路由
   if (!Component) return
 
   let currentRoutePaths = [...parentPaths]
   currentRoutePaths.push(path)
 
-  const currentPath = currentRoutePaths.join('/')
+  const currentPath = currentRoutePaths.join('')
 
   return (
     <Route
@@ -57,11 +56,11 @@ const generateRoute = (rule, parentPaths) => {
         // 匹配?及其以后字符串
         const queryParams = window.location.hash.match(reg);
         // 去除?的参数
-        const {params} = props.match;
+        const { params } = props.match;
         _.forEach(params, (value, key) => {
           params[key] = value && value.replace(reg, '');
         });
-        props.match.params = {...params};
+        props.match.params = { ...params };
         const merge = {
           ...props,
           q:
@@ -74,7 +73,30 @@ const generateRoute = (rule, parentPaths) => {
         const decoratedComponent = Layout ?
           <Layout children={rawComponent}/> : rawComponent
         const isProtected = rules
-          ? <ProtectedComponent rules={rules} children={decoratedComponent}/>
+          ? <Protected
+            rules={rules}
+            children={decoratedComponent}
+            onFail={() => (
+              <Result
+                status="403"
+                title={"403"}
+                subTitle={"对不起，您没有权限访问该页面"}
+                extra={
+                  <>
+                    <Button
+                      type="primary"
+                      onClick={() => props.history.push('/dashboard')}
+                    >
+                      返回控制面板
+                    </Button>
+                    <Button onClick={() => props.history.goBack()}>
+                      返回上一页
+                    </Button>
+                  </>
+                }
+              />
+            )}
+          />
           : decoratedComponent
         return (
           <DocumentTitle title={label}>
@@ -87,11 +109,11 @@ const generateRoute = (rule, parentPaths) => {
 }
 
 const generateNestRoutes = (item, parentPaths) => {
-  const {path, component: Component, subs} = item
+  const { path, component: Component, subs } = item
   let currentRoutePaths = [...parentPaths]
   currentRoutePaths.push(path)
 
-  const currentPath = currentRoutePaths.join('/')
+  const currentPath = currentRoutePaths.join('')
   const result = <Switch
     children={[...recurseRoutes(subs, currentRoutePaths), _404]}/>
   return (
@@ -112,7 +134,7 @@ const recurseRoutes = (subs, currentPaths) =>
  * @param routes {Object} Json 路由配置表
  * @return {ReactNode} 返回一份路由表
  */
-const RouteBuilder = ({routes}) =>
+const RouteBuilder = ({ routes }) =>
   <Switch children={[...recurseRoutes(routes, [appRootPath]), _404]}/>
 
 export default RouteBuilder
