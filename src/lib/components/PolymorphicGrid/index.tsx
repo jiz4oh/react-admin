@@ -1,8 +1,15 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import _ from "lodash";
-import { Col, Row } from "antd";
+import {Col, Row} from "antd";
+import {Gutter} from "antd/lib/grid/row";
 
 const BASE_ROW_LENGTH = 24
+
+export interface Props {
+  children: ReactNode | ReactNode[]
+  columns: number
+  gutter: Gutter | [Gutter, Gutter]
+}
 
 /**
  * 将布局下的所有组件按照 columns 均分布置
@@ -13,16 +20,16 @@ const BASE_ROW_LENGTH = 24
  * @constructor
  */
 export default function PolymorphicGrid({
-                                            children,
-                                            columns = 1,
-                                            gutter = [8, 8]
-                                          }) {
+                                          children,
+                                          columns = 1,
+                                          gutter = [8, 8]
+                                        }: Props){
   children = React.Children.toArray(children)
   if (columns === 1) return children
   const rows = [];
   const colspan = BASE_ROW_LENGTH / columns
 
-  for (let i = 0; i < children.length; i += columns) {
+  for (let i = 0; "length" in children && i < children.length; i += columns) {
     const cols = []
     for (let j = 0; j < columns; j += 1) {
       let Component = children[i + j]
